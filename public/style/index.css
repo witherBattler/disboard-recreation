@@ -5,8 +5,8 @@
     --display-font: 'Poppins', sans-serif;
     --main-font: 'Roboto', sans-serif;
     --text-color: #ffffff;
-    --navbar-background: #ffffff;
-    --navbar-color: #000000;
+    --navbar-background: #303030;
+    --navbar-color: #ffffff;
     --special-color-1: #ff00ee;
     --special-button-decoration-color: #000000;
     --intro-background: black;
@@ -26,6 +26,9 @@ body {
 }
 img {
     user-select: none;
+}
+a {
+    text-decoration: none;
 }
 
 #navbar {
@@ -66,6 +69,7 @@ img {
     cursor: pointer;
     user-select: none;
     font-weight: 600;
+    color: var(--navbar-color);
 }
 #navbar-right-align > .special-button > span {
     margin-left: 15px;
@@ -82,6 +86,7 @@ img {
     cursor: pointer;
     font-weight: 600;
     font-family: var(--display-font);
+    color: var(--navbar-color);
 }
 #search-button {
     margin-right: 25px;
@@ -132,7 +137,7 @@ img {
 
 
 
-@media only screen and (max-width: 1450px) {
+@media only screen and (max-width: 1600px) {
     #arguments {
         grid-template-columns: repeat(1, 700px);
     }
