@@ -1,15 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&family=Roboto:wght@400;700&display=swap');
 
 :root {
     --background: #000000;
     --display-font: 'Poppins', sans-serif;
     --main-font: 'Roboto', sans-serif;
     --text-color: #ffffff;
+    --navbar-background: #ffffff;
+    --navbar-color: #000000;
+    --special-color-1: #ff00ee;
+    --special-button-decoration-color: #000000;
+    --intro-background: black;
+    --intro-text-color: white;
 }
 
 * {
     margin: 0px;
+    line-height: 100%;
+    font-size: 23px;
 }
 
 body {
@@ -17,7 +24,124 @@ body {
     font-family: var(--main-font);
     color: var(--text-color);
 }
+img {
+    user-select: none;
+}
 
+#navbar {
+    height: 60px;
+    width: 100vw;
+    background: var(--navbar-background);
+    color: var(--navbar-color);
+    display: flex;
+    align-items: center;
+}
 #logo {
     font-family: var(--display-font);
+    font-size: 40px;
+    margin-left: 20px;
+    font-weight: 600;
+}
+#navbar-right-align {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-grow: 1;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+#navbar-right-align > .special-button {
+    background-color: var(--special-color-1);
+    height: 45px;
+    display: flex;
+    font-family: var(--main-font);
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: 1000px;
+    -webkit-border-radius: 1000px;
+    -moz-border-radius: 1000px;
+    -ms-border-radius: 1000px;
+    -o-border-radius: 1000px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+}
+#navbar-right-align > .special-button > span {
+    margin-left: 15px;
+    margin-right: -10px;
+    font-family: var(--display-font);
+}
+#navbar-right-align > .special-button > img {
+    height: 100%;
+    margin-right: -3px
+}
+.normal-button {
+    margin-right: 40px;
+    user-select: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--display-font);
+}
+#search-button {
+    margin-right: 25px;
+}
+#intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--intro-background);
+}
+#intro > .title {
+    font-size: 120px;
+    margin-top: 100px;
+    color: var(--intro-text-color);
+    font-family: var(--display-font);
+}
+#intro > .subtitle {
+    font-size: 23px;
+    color: var(--intro-text-color);
+}
+
+#arguments > .argument {
+    display: flex;
+    margin-top: 50px;
+}
+#arguments > .argument > img {
+    width: 300px;
+}
+#arguments > .argument > .text {
+    margin-left: 10px;
+    width: 500px;
+}
+#arguments > .argument > .text > .title {
+    font-size: 40px;
+    font-weight: 600;
+    font-family: var(--display-font);
+}
+#arguments > .argument > .text > .paragraph {
+    font-size: 22px;
+    margin-top: 10px;
+}
+#arguments {
+    display: grid;
+    grid-template-columns: repeat(2, 700px);
+    column-gap: 100px;
+    grid-column-gap: 100px;
+}
+
+
+
+@media only screen and (max-width: 1450px) {
+    #arguments {
+        grid-template-columns: repeat(1, 700px);
+    }
+    #arguments > .argument:nth-child(even) {
+        flex-direction: row-reverse;
+        text-align: right;
+    }
+    #arguments > .argument:nth-child(even) > .text {
+        margin-left: 0px;
+        margin-right: 10px;
+    }
 }
