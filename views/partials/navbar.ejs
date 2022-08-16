@@ -1,0 +1,24 @@
+<div id="navbar">
+    <a href="/">
+        <h1 id="logo">Disboard</h1>
+    </a>
+    <div id="navbar-right-align">
+        <a class="normal-button" id="ads-button">Ads</a>
+        <a class="normal-button" id="search-button">Search</a>
+        <% if(!loggedIn) { %>
+        <a class="special-button" id="login-button" href="/auth">
+            <span>Login</span>
+            <img src="/icons/right.svg">
+        </a>
+        <% } else {%>
+            <a class="normal-button" id="dashboard-button" href="/dashboard">Dashboard</a>
+            <div id="profile">
+                <img
+                    src="<%- `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}` %>"
+                    class="image"
+                    ondragstart="return false"
+                >
+            </div>
+        <% } %>
+    </div>
+</div>

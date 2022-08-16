@@ -1,0 +1,1 @@
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QAds Search <% if(loggedIn) { %> <a class=\"special-button\" id=\"login-button\" href=\"/auth\"> <span>Login</span> <img src=\"/icons/right.svg\"> </a> <% } else {%> <% } %> </div> </div>\\E$"}

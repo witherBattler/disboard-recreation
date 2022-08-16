@@ -11,6 +11,7 @@
     --special-button-decoration-color: #000000;
     --intro-background: black;
     --intro-text-color: white;
+    --navbar-background-2: #222;
 }
 
 * {
@@ -33,7 +34,7 @@ a {
 
 #navbar {
     height: 60px;
-    width: 100vw;
+    width: 100%;
     background: var(--navbar-background);
     color: var(--navbar-color);
     display: flex;
@@ -44,6 +45,7 @@ a {
     font-size: 40px;
     margin-left: 20px;
     font-weight: 600;
+    color: var(--navbar-color);
 }
 #navbar-right-align {
     display: flex;
@@ -88,6 +90,21 @@ a {
     font-family: var(--display-font);
     color: var(--navbar-color);
 }
-#search-button {
-    margin-right: 25px;
+#profile {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#profile > img {
+    height: 45px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    background-color: black;
+    margin: 0px;
+    background-color: var(--navbar-background-2);
+    cursor: pointer;
 }

@@ -30,43 +30,51 @@ app.use(passport.session())
 app.use("/auth", authRoute)
 app.use(express.static('public'));
 
-app.get("/", (req, res) => {
-    let data = {}
+app.get("/", async (req, res) => {
+    let data = { loggedIn: false }
     if(req.user) {
         let userData = await getUserData(req.user)
         data.userData = userData
+        data.loggedIn = true
     }
     res.render("index", data);
 })
 app.get("/dashboard", loggedIn, async (req, res) => {
     let userData = await getUserData(req.user)
+    console.log(userData, "user data")
     res.render("dashboard", {
-        userData
+        userData,
+        loggedIn: true
     });
 })
 
 
 
-async function getUserData(user) {
+function getUserData(user) {
     // Check if accessToken is valid first
     let accessToken = user.accessToken
     let refreshToken = user.refreshToken
     // is it expired?
-    fetch("https://discordapp.com/api/users/@me", {
-        headers: {
-            authorization: `Bearer ${accessToken}`
-        }
-    }).then(async(res) => {
-        if (res.status === 401) {
-            await refreshAccessToken(user)
-            accessToken = user.accessToken
-            let data = await getUserData(user)
-            return data
-        } else {
-            let json = await res.json()
-            return json
-        }
+
+    return new Promise((resolve, reject) => {
+        fetch("https://discordapp.com/api/users/@me", {
+            headers: {
+                authorization: `Bearer ${accessToken}`
+            }
+        }).then(async(res) => {
+            if (res.status === 401) {
+                console.log("are you serious right neow brow")
+                await refreshAccessToken(user)
+                accessToken = user.accessToken
+                let data = await getUserData(user)
+                resolve(data)
+            } else {
+                let json = await res.json()
+                resolve(json)
+            }
+        })
     })
+    
 }
 
 async function refreshAccessToken(user) {
