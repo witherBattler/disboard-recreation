@@ -1,11 +1,14 @@
 const router = require("express").Router()
 const passport = require("passport")
 
-router.get("/", passport.authenticate("discord"))
+router.get("/", passport.authenticate("discord"), (req, res) => {
+    res.send(200)
+})
 router.get("/redirect", passport.authenticate("discord", {
     failureRedirect: "/forbidden",
 }), (req, res) => {
-    res.send("You are logged in")
+    res.redirect("/dashboard")
 })
+
 
 module.exports = router;
