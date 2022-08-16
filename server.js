@@ -7,8 +7,9 @@ const authRoute = require("./routes/auth")
 const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
-const { fetch } = require("cross-fetch")
-
+const fetch = require("node-fetch")
+const { loggedIn } = require("./util")
+const { updateUser } = require("./database")
 
 app.set("view engine", "ejs");
 app.listen(3000, () => console.log('http://localhost:3000'));
@@ -29,32 +30,65 @@ app.use(passport.session())
 app.use("/auth", authRoute)
 app.use(express.static('public'));
 
-function getRequiredData(req) {
-    if(req.isAuthenticated()) {
-        return {
-            user
-        }
-    }
-}
-
-
 app.get("/", (req, res) => {
-    res.render("index");
+    let data = {}
+    if(req.user) {
+        let userData = await getUserData(req.user)
+        data.userData = userData
+    }
+    res.render("index", data);
 })
-app.get("/dashboard", (req, res) => {
-    res.render("dashboard");
+app.get("/dashboard", loggedIn, async (req, res) => {
+    let userData = await getUserData(req.user)
+    res.render("dashboard", {
+        userData
+    });
 })
 
 
-// function to get guilds a user is in
-async function getGuilds(user) {
-    let guilds = await fetch(`https://discordapp.com/api/users/${user.id}/guilds`, {
+
+async function getUserData(user) {
+    // Check if accessToken is valid first
+    let accessToken = user.accessToken
+    let refreshToken = user.refreshToken
+    // is it expired?
+    fetch("https://discordapp.com/api/users/@me", {
         headers: {
-            Authorization: `Bearer ${user.accessToken}`
+            authorization: `Bearer ${accessToken}`
+        }
+    }).then(async(res) => {
+        if (res.status === 401) {
+            await refreshAccessToken(user)
+            accessToken = user.accessToken
+            let data = await getUserData(user)
+            return data
+        } else {
+            let json = await res.json()
+            return json
         }
     })
-    let guildsJSON = await guilds.json()
-    return guildsJSON
 }
 
-getGuilds("@me").then(console.log)
+async function refreshAccessToken(user) {
+    let refreshToken = user.refreshToken
+    fetch("https://discordapp.com/api/oauth2/token", {
+        method: "POST",
+        body: new URLSearchParams({
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET,
+            grant_type: "authorization_code",
+            code: refreshToken,
+            redirect_uri: process.env.CLIENT_REDIRECT,
+            scope: "identify guilds"
+        }),
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    }).then(res => res.json().then(async data => {
+        await updateUser(user.id, {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken
+        })
+        return data
+    }))
+}

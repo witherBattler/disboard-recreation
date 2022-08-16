@@ -8,14 +8,20 @@ async function getUser(id) {
     let user = await users.findOne({ id: id })
     return user
 }
-async function createUser(discordID) {
+async function createUser(discordID, accessToken, refreshToken) {
     let user = {
         id: discordID,
         servers: [],
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        accessToken,
+        refreshToken
     }
     await users.insertOne(user)
     return user
+}
+
+async function updateUser(id, data) {
+    await users.updateOne({ id: id }, { $set: data })
 }
 
 module.exports = {

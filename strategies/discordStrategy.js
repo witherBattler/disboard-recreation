@@ -1,6 +1,7 @@
 const DiscordStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
 const { getUser, createUser } = require('../database');
+const { fetch } = require('cross-fetch');
 
 // Serialize and deserialize user ID
 passport.serializeUser((user, done) => {
@@ -35,7 +36,7 @@ passport.use(
         let id = profile.id
         let user = await getUser(id)
         if (!user) {
-            user = await createUser(id)
+            user = await createUser(id, accessToken, refreshToken)
         }
         done(null, user)
     })
