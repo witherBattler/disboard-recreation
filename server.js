@@ -47,7 +47,10 @@ app.get("/dashboard", loggedIn, async (req, res) => {
         loggedIn: true
     });
 })
-
+app.get("/api/guilds", loggedIn, async(req, res) => {
+    let guilds = await getGuilds(req.user)
+    res.json(guilds)
+})
 
 
 function getUserData(user) {
@@ -113,3 +116,4 @@ function getGuilds(user) {
         console.log(err)
     })
 }
+

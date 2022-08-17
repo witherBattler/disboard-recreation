@@ -21,12 +21,12 @@ class BetterDropdown extends HTMLElement {
         dropdown.style.width = this.getAttribute("width") || "100%"
         dropdown.style.fontSize = this.getAttribute("font-size") || "25px"
         dropdown.addEventListener("click", () => {
-            if(dropdownOptions.style.height == dropdownOptionsHeight + "px") {
+            if(dropdownOptions.style.height == this.dropdownOptionsHeight + "px") {
                 dropdownOptions.style.height = "0px"
                 dropdownOptions.style.opacity = "0"
                 dropdownIcon.style.transform = "rotate(0deg)"
             } else {
-                dropdownOptions.style.height = dropdownOptionsHeight + "px"
+                dropdownOptions.style.height = this.dropdownOptionsHeight + "px"
                 dropdownOptions.style.opacity = "1"
                 dropdownIcon.style.transform = "rotate(180deg)"
             }
@@ -51,8 +51,9 @@ class BetterDropdown extends HTMLElement {
         let dropdownIcon = document.createElement("img")
         dropdownIcon.setAttribute("class", "dropdownIcon")
         dropdownIcon.src = "icons/dropdownTriangle.svg"
+        this.dropdownIcon = dropdownIcon
 
-        let dropdownOptionsHeight = 0
+        this.dropdownOptionsHeight = 0
         let dropdownOptions = document.createElement("div")
         dropdownOptions.style.width = this.getAttribute("width") || "100%"
         dropdownOptions.style.fontSize = this.getAttribute("font-size") || "25px"
@@ -78,7 +79,8 @@ class BetterDropdown extends HTMLElement {
             dropdown.style.borderBottomLeftRadius = "5px"
         }
         dropdownOptions.setAttribute("class", "dropdownOptions")
-        dropdownOptionsHeight = options.length * 34 + 8
+        this.dropdownOptionsHeight = options.length * 34 + 8
+        this.dropdownOptionsElement = dropdownOptions
 
         dropdownIconContainer.appendChild(dropdownIcon)
         dropdown.appendChild(dropdownLabel)
@@ -89,6 +91,29 @@ class BetterDropdown extends HTMLElement {
     }
     get options() {
         return this.getAttribute("options").split(",")
+    }
+    setOptions(optionsArray) {
+        console.log(optionsArray)
+        this.dropdownLabel.innerText = optionsArray[0]
+        this.setAttribute("options", optionsArray.join(","))
+        
+        let dropdownOptions = this.dropdownOptionsElement
+        dropdownOptions.innerHTML = ""
+        for (let i = 0; i < optionsArray.length; i++) {
+            console.log("ASD")
+            let option = document.createElement("div")
+            option.setAttribute("class", "dropdownOption")
+            option.innerText = optionsArray[i]
+            option.addEventListener("click", () => {
+                this.dropdownLabel.innerText = optionsArray[i]
+                dropdownOptions.style.height = "0"
+                dropdownOptions.style.opacity = "0"
+                this.dropdownIcon.style.transform = "rotate(0deg)"
+                this.events.change.forEach(callback => callback(optionsArray[i]))
+            })
+            dropdownOptions.appendChild(option)
+        }
+        this.dropdownOptionsHeight = optionsArray.length * 34 + 8
     }
     appendEvent(event, callback) {
         this.events[event].push(callback)
