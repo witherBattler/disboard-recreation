@@ -4,10 +4,14 @@ class BetterDropdown extends HTMLElement {
         this.events = {
             change: []
         }
+        this.disabled = false
+        this.chosenIndex = 0
+        this.chosen = null
     }
     connectedCallback() {
         this.dropdownLabel
         let options = this.options
+        this.chosen = options[0]
         let special = this.getAttribute("special")
 
         let shadow = this.attachShadow({ mode: "open" })
@@ -21,6 +25,7 @@ class BetterDropdown extends HTMLElement {
         dropdown.style.width = this.getAttribute("width") || "100%"
         dropdown.style.fontSize = this.getAttribute("font-size") || "25px"
         dropdown.addEventListener("click", () => {
+            if(this.disabled) return
             if(dropdownOptions.style.height == this.dropdownOptionsHeight + "px") {
                 dropdownOptions.style.height = "0px"
                 dropdownOptions.style.opacity = "0"
@@ -65,6 +70,8 @@ class BetterDropdown extends HTMLElement {
                 option.style.fontFamily = options[i]
             }
             option.addEventListener("click", () => {
+                this.chosenIndex = i
+                this.chosen = options[i]
                 dropdownLabel.innerText = options[i]
                 dropdownOptions.style.height = "0"
                 dropdownOptions.style.opacity = "0"
@@ -93,14 +100,15 @@ class BetterDropdown extends HTMLElement {
         return this.getAttribute("options").split(",")
     }
     setOptions(optionsArray) {
-        console.log(optionsArray)
+        this.chosenIndex = 0
+        this.chosen = optionsArray[0]
+
         this.dropdownLabel.innerText = optionsArray[0]
         this.setAttribute("options", optionsArray.join(","))
         
         let dropdownOptions = this.dropdownOptionsElement
         dropdownOptions.innerHTML = ""
         for (let i = 0; i < optionsArray.length; i++) {
-            console.log("ASD")
             let option = document.createElement("div")
             option.setAttribute("class", "dropdownOption")
             option.innerText = optionsArray[i]

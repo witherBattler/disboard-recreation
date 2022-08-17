@@ -3,6 +3,7 @@ console.log("scripts/dashboard.js")
 let darkOverlay = document.getElementById("dark-overlay")
 let serverSelectorPopup = document.getElementById("server-selector-popup")
 let chooseServerDropdown = document.getElementById("choose-server-dropdown")
+let refreshChooseServerDropdownButton = document.getElementById("refresh-choose-server-dropdown")
 let currentGuilds = null
 
 async function openServerSelectorPopup() {
@@ -27,3 +28,22 @@ function closeServerSelectorPopup() {
         serverSelectorPopup.style.display = "none"
     }, 300)
 }
+refreshChooseServerDropdownButton.addEventListener("click", async (event) => {
+    chooseServerDropdown.disabled = true
+    chooseServerDropdown.setOptions(["Loading..."])
+    ajax("/api/owned-guilds", "GET")
+        .then(response => {
+            currentGuilds = JSON.parse(response)
+            let guildNames = currentGuilds.map(guild => guild.name)
+            chooseServerDropdown.setOptions(guildNames)
+            chooseServerDropdown.disabled = false
+        })
+        .catch(error => {
+            if(error == 429) {
+                let guildNames = currentGuilds.map(guild => guild.name)
+                chooseServerDropdown.setOptions(guildNames)
+                chooseServerDropdown.disabled = false
+                alert("You are being rate limited.")
+            }
+        })
+})

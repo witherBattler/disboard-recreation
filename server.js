@@ -49,8 +49,12 @@ app.get("/dashboard", loggedIn, async (req, res) => {
 })
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)
-    guilds = guilds.filter(guild => guild.owner)
-    res.json(guilds)
+    if(guilds.message == "You are being rate limited.") {
+        res.sendStatus(429)
+    } else {
+        guilds = guilds.filter(guild => guild.owner)
+        res.json(guilds)
+    }
 })
 
 

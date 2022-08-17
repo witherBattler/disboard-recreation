@@ -102,3 +102,18 @@
     box-sizing: border-box;
     padding-left: 10px;
 }
+#choose-server-dropdown-container {
+    display: flex;
+    margin-top: 10px;
+}
+#refresh-choose-server-dropdown {
+    background-color: transparent;
+    outline: none;    
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+#refresh-choose-server-dropdown > img {
+    height: 80%;
+    margin-top: 5px;
+}
