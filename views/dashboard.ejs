@@ -2,10 +2,39 @@
 <html>
     <head>
         <link rel="stylesheet" href="/style/default.css">
-        <link rel="stylesheet" href="/style/index.css">
+        <link rel="stylesheet" href="/style/dashboard.css">
         <title>Disboard - Dashboard</title>
     </head>
     <body>
         <%- include("./partials/navbar") %>
+        <div id="dashboard-content-container">
+            <div id="dashboard-content">
+                <h2>Welcome to your dashboard, <span class="username"><%- userData.username %></span>!</h2>
+                <hr>
+                <p class="identifier">
+                    Servers
+                    <button id="add-server-button" onclick="openServerSelectorPopup()">
+                        <img src="/icons/add.svg">
+                    </button>
+                </p>
+                <div id="servers">
+                    
+                </div>
+            </div>
+        </div>
+        <div id="dark-overlay"></div>
+        <div id="server-selector-popup">
+            <div id="server-selector-popup-top">
+                <h2>Add server</h2>
+                <img src="/icons/close.svg" id="close-button" onclick="closeServerSelectorPopup()">
+            </div>
+            <hr>
+            <div id="server-selector-popup-bottom">
+                <better-dropdown width="250px" options="Loading..."></better-dropdown>
+            </div>
+        </div>
     </body>
+    <script src="util/betterDropdown/betterDropdown.js"></script>
+    <script src="scripts/dashboard.js"></script>
+    
 </html>

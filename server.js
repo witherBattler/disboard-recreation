@@ -41,7 +41,7 @@ app.get("/", async (req, res) => {
 })
 app.get("/dashboard", loggedIn, async (req, res) => {
     let userData = await getUserData(req.user)
-    console.log(userData, "user data")
+    let guilds = await getGuilds(req.user)
     res.render("dashboard", {
         userData,
         loggedIn: true
@@ -63,7 +63,6 @@ function getUserData(user) {
             }
         }).then(async(res) => {
             if (res.status === 401) {
-                console.log("are you serious right neow brow")
                 await refreshAccessToken(user)
                 accessToken = user.accessToken
                 let data = await getUserData(user)
@@ -99,4 +98,18 @@ async function refreshAccessToken(user) {
         })
         return data
     }))
+}
+
+function getGuilds(user) {
+    return new Promise((resolve, reject) => {
+        fetch("https://discordapp.com/api/users/@me/guilds", {
+            headers: {
+                authorization: `Bearer ${user.accessToken}`
+            }
+        }).then(res => res.json().then(json => {
+            resolve(json)
+        }))
+    }).catch(err => {
+        console.log(err)
+    })
 }

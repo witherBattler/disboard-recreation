@@ -12,6 +12,7 @@
     --intro-background: black;
     --intro-text-color: white;
     --navbar-background-2: #222;
+    --divider-color: white;
 }
 
 * {
@@ -24,6 +25,8 @@ body {
     background: var(--background);
     font-family: var(--main-font);
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
 }
 img {
     user-select: none;
