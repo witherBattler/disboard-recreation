@@ -13,7 +13,7 @@ async function openServerSelectorPopup() {
         serverSelectorPopup.style.opacity = "1"
     })
     if(currentGuilds == null) {
-        currentGuilds = await ajax("/api/guilds", "GET")
+        currentGuilds = await ajax("/api/owned-guilds", "GET")
         currentGuilds = JSON.parse(currentGuilds)
         let guildNames = currentGuilds.map(guild => guild.name)
         chooseServerDropdown.setOptions(guildNames)

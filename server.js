@@ -47,8 +47,9 @@ app.get("/dashboard", loggedIn, async (req, res) => {
         loggedIn: true
     });
 })
-app.get("/api/guilds", loggedIn, async(req, res) => {
+app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)
+    guilds = guilds.filter(guild => guild.owner)
     res.json(guilds)
 })
 
