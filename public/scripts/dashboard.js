@@ -4,6 +4,8 @@ let darkOverlay = document.getElementById("dark-overlay")
 let serverSelectorPopup = document.getElementById("server-selector-popup")
 let chooseServerDropdown = document.getElementById("choose-server-dropdown")
 let refreshChooseServerDropdownButton = document.getElementById("refresh-choose-server-dropdown")
+let serverSelectorPopupNext = document.getElementById("server-selector-popup-next")
+let tosAgreeCheckbox = document.getElementById("tos-agree-checkbox")
 let currentGuilds = null
 
 async function openServerSelectorPopup() {
@@ -31,12 +33,14 @@ function closeServerSelectorPopup() {
 refreshChooseServerDropdownButton.addEventListener("click", async (event) => {
     chooseServerDropdown.disabled = true
     chooseServerDropdown.setOptions(["Loading..."])
+    serverSelectorPopupNext.classList.remove("blocked")
     ajax("/api/owned-guilds", "GET")
         .then(response => {
             currentGuilds = JSON.parse(response)
             let guildNames = currentGuilds.map(guild => guild.name)
             chooseServerDropdown.setOptions(guildNames)
             chooseServerDropdown.disabled = false
+            updateNextButton()
         })
         .catch(error => {
             if(error == 429) {
@@ -47,3 +51,22 @@ refreshChooseServerDropdownButton.addEventListener("click", async (event) => {
             }
         })
 })
+
+tosAgreeCheckbox.appendEventListener("change", () => {
+    updateNextButton()
+})
+
+function canGoToNextPage() {
+
+    return (
+        tosAgreeCheckbox.checked == true &&
+        !chooseServerDropdown.disabled
+    )
+}
+function updateNextButton() {
+    if(canGoToNextPage()) {
+        serverSelectorPopupNext.classList.remove("blocked")
+    } else {
+        serverSelectorPopupNext.classList.add("blocked")
+    }
+}
