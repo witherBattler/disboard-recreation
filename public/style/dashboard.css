@@ -49,6 +49,7 @@
     -o-border-radius: 100px;
     padding: 0px;
     cursor: pointer;
+    border: none;
 }
 #add-server-button > img {
     height: 15px;
@@ -160,6 +161,7 @@
     -moz-transition: filter 0.2s;
     -ms-transition: filter 0.2s;
     -o-transition: filter 0.2s;
+    border: none;
 }
 .special-button.blocked {
     filter: brightness(60%);
