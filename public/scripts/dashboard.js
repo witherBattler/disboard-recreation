@@ -6,6 +6,12 @@ let chooseServerDropdown = document.getElementById("choose-server-dropdown")
 let refreshChooseServerDropdownButton = document.getElementById("refresh-choose-server-dropdown")
 let serverSelectorPopupNext = document.getElementById("server-selector-popup-next")
 let tosAgreeCheckbox = document.getElementById("tos-agree-checkbox")
+let dashboardDefault = document.getElementById("dashboard-default")
+let dashboardConfigureServer = document.getElementById("dashboard-configure-server")
+
+let serverIndicatorIcon = document.getElementById("server-indicator-icon")
+let serverIndicatorText = document.getElementById("server-indicator-name")
+
 let currentGuilds = null
 
 async function openServerSelectorPopup() {
@@ -56,8 +62,28 @@ tosAgreeCheckbox.appendEventListener("change", () => {
     updateNextButton()
 })
 
-function canGoToNextPage() {
 
+serverSelectorPopupNext.addEventListener("click", (event) => {
+    if(canGoToNextPage()) {
+        closeServerSelectorPopup()
+        dashboardConfigureServer.style.display = "block"
+        dashboardDefault.style.display = "none"
+        
+        let server = currentGuilds[chooseServerDropdown.selectedIndex]
+        let serverIconUrl
+        console.log(chooseServerDropdown.selectedIndex)
+        if(server.icon) {
+            serverIconUrl = `https://cdn.discordapp.com/icons/${server.id}/${server.icon}`
+        } else {
+            serverIconUrl = "/images/discord-icon.svg"
+        }
+        let serverName = server.name
+        serverIndicatorIcon.src = serverIconUrl
+        serverIndicatorText.textContent = serverName
+    }
+})
+
+function canGoToNextPage() {
     return (
         tosAgreeCheckbox.checked == true &&
         !chooseServerDropdown.disabled

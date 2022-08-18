@@ -1,13 +1,14 @@
-#dashboard-content-container {
+#dashboard-content-container, #dashboard-configure-server-content-container {
     flex-grow: 1;
     display: flex;
     justify-content: center;
 }
-#dashboard-content {
+#dashboard-content, #dashboard-configure-server-content {
     width: 1200px;
     margin-top: 100px;
+    padding-bottom: 100px;
 }
-#dashboard-content > h2 {
+#dashboard-content > h2, #dashboard-configure-server-content > h2 {
     font-family: var(--display-font);
     color: var(--text-color);
     font-weight: 600;
@@ -18,7 +19,7 @@
     color: var(--special-color-1);
     font-size: inherit;
 }
-#dashboard-content > hr {
+#dashboard-content > hr, #dashboard-configure-server-content > hr {
     margin-top: 0px;
     border: none;
     height: 2px;
@@ -162,6 +163,8 @@
     -ms-transition: filter 0.2s;
     -o-transition: filter 0.2s;
     border: none;
+    margin-top: -15px;
+    margin-right: 10px;
 }
 .special-button.blocked {
     filter: brightness(60%);
@@ -173,6 +176,144 @@
     font-family: var(--display-font);
 }
 .special-button > img {
+    height: 100%;
+    margin-left: -5px;
+}
+
+
+
+
+#server-indicator {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+#dashboard-configure-server {
+    display: none;
+}
+#server-indicator-icon {
+    height: 50px;
+    width: 50px;
+}
+#server-indicator-name {
+    font-family: var(--display-font);
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-left: 10px;
+}
+#nsfw, #unlisted {
+    display: flex;
+    align-items: center;
+}
+.subtitle {
+    margin-top: 10px;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: var(--display-font);
+    color: var(--text-color);
+}
+#add-tag {
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    width: 35px;
+    height: 35px;
+    background-color: var(--special-color-1);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+    margin-left: 10px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+#add-tag > img {
+    height: 15px;
+    width: 15px;
+}
+#tags {
+    height: 50px;
+}
+#description {
+    resize: none;
+    height: 200px;
+    width: 400px;
+    outline: none;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    margin-left: 20px;
+    font-family: var(--display-font);
+    margin-top: 5px;
+    background-color: var(--background);
+    color: var(--text-color);
+    box-sizing: border-box;
+    padding: 10px;
+    border: white solid 3px;
+    font-size: 20px;
+}
+#nsfw, #unlisted {
+    margin-top: 20px;
+    user-select: none;
+    cursor: pointer;
+}
+#nsfw > p, #unlisted > p {
+    font-family: var(--display-font);
+    font-size: 30px;
+    color: var(--text-color);
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+#dashboard-configure-server-content > .details {
+    margin-left: 20px;
+    font-family: var(--display-font);
+    font-size: 18px;
+    color: white;
+}
+#submit-button-container {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+    margin-top: 20px;
+}
+#submit-button {
+    background-color: var(--special-color-1);
+    height: 50px;
+    display: flex;
+    font-family: var(--display-font);
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: 1000px;
+    -webkit-border-radius: 1000px;
+    -moz-border-radius: 1000px;
+    -ms-border-radius: 1000px;
+    -o-border-radius: 1000px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    color: var(--navbar-color);
+    filter: brightness(1);
+    transition: filter 0.2s;
+    -webkit-transition: filter 0.2s;
+    -moz-transition: filter 0.2s;
+    -ms-transition: filter 0.2s;
+    -o-transition: filter 0.2s;
+    border: none;
+    margin-top: 10px;
+}
+#submit-button > span {
+    margin-left: 15px;
+    font-family: var(--display-font);
+}
+#submit-button > img {
     height: 100%;
     margin-left: -5px;
 }

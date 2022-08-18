@@ -42,6 +42,9 @@ a {
     color: var(--navbar-color);
     display: flex;
     align-items: center;
+    position: fixed;
+    top: 0px;
+    left: 0px;
 }
 #logo {
     font-family: var(--display-font);
@@ -110,4 +113,8 @@ a {
     margin: 0px;
     background-color: var(--navbar-background-2);
     cursor: pointer;
+}
+.row {
+    display: flex;
+    flex-direction: row;
 }
