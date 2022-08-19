@@ -20,8 +20,8 @@ let submitButton = document.getElementById("submit-button")
 let languageDropdown = document.getElementById("language-dropdown")
 let categoryDropdown = document.getElementById("category-dropdown")
 let descriptionTextArea = document.getElementById("description")
-let nsfwCheckbox = document.getElementById("nsfw")
-let unlistedCheckbox = document.getElementById("unlisted")
+let nsfwCheckbox = document.getElementById("nsfw-checkbox")
+let unlistedCheckbox = document.getElementById("unlisted-checkbox")
 
 let currentGuilds = null
 let tags = []
@@ -132,7 +132,9 @@ submitButton.addEventListener("click", async (event) => {
         nsfw: nsfwCheckbox.checked,
         unlisted: unlistedCheckbox.checked
     }
-    let postId = await ajax("/api/post-server", "POST", data)
+    console.log(nsfwCheckbox)
+    console.log(JSON.stringify(data))
+    let postId = await ajax("/api/post-server", "POST", JSON.stringify(data))
 })
 
 function canGoToNextPage() {

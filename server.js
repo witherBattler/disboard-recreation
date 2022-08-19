@@ -8,14 +8,14 @@ const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
-const { loggedIn } = require("./util")
-const { updateUser } = require("./database")
+const { loggedIn, categoryIsValid, generateId } = require("./util")
+const { updateUser, getServerData, postServer } = require("./database")
 
 app.set("view engine", "ejs");
 app.listen(3000, () => console.log('http://localhost:3000'));
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 app.use(session({
     secret: "ejs is the best",
@@ -56,7 +56,71 @@ app.get("/api/owned-guilds", loggedIn, async(req, res) => {
         res.json(guilds)
     }
 })
+app.post("/api/post-server", loggedIn, async(req, res) => {
+    console.log(req.body, "BODY")
+    if((
+        req.body.serverId != undefined &&
+        req.body.mainLanguage != undefined &&
+        req.body.category != undefined &&
+        req.body.tags != undefined &&
+        req.body.description != undefined &&
+        req.body.nsfw != undefined && 
+        req.body.unlisted != undefined
+    ) == false) {
+        res.sendStatus(400)
+        return
+    }
 
+    // Check if server exists
+    let guilds = await getGuilds(req.user)
+    if(guilds.message == "You are being rate limited.") {
+        console.log("Rate limit")
+        res.sendStatus(429)
+        return
+    }
+    let server = guilds.find(guild => guild.id == req.body.serverId)
+    if(server == undefined) {
+        console.log("server not found")
+        res.sendStatus(400)
+        return
+    }
+    // Check if user is owner of server
+    if(server.owner == false) {
+        console.log("user not owner")
+        res.sendStatus(400)
+        return
+    }
+    // Check if server is already in database
+    let serverData = await getServerData(req.body.serverId)
+    if(serverData != undefined) {
+        console.log("server already in database")
+        res.sendStatus(400)
+        return
+    }
+    // Check if category is valid
+    if(categoryIsValid(req.body.category) == false) {
+        console.log("Category not valid")
+        res.sendStatus(400)
+        return
+    }
+
+
+    // Finally, add server to database
+    let id = generateId(6)
+    let post = {
+        id,
+        serverId: req.body.serverId,
+        mainLanguage: req.body.mainLanguage,
+        category: req.body.category,
+        tags: req.body.tags,
+        description: req.body.description,
+        nsfw: req.body.nsfw,
+        unlisted: req.body.unlisted,
+        createdAt: Date.now()
+    }
+    await postServer(req.user, post)
+    res.send(id)
+})
 
 function getUserData(user) {
     // Check if accessToken is valid first
