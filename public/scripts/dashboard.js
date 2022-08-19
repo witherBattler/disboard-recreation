@@ -11,8 +11,20 @@ let dashboardConfigureServer = document.getElementById("dashboard-configure-serv
 
 let serverIndicatorIcon = document.getElementById("server-indicator-icon")
 let serverIndicatorText = document.getElementById("server-indicator-name")
+let addTag = document.getElementById("add-tag")
+let writeTagName = document.getElementById("write-tag-name")
+let writeTagNameInput = document.getElementById("write-tag-name-input")
+let writeTagNameConfirm = document.getElementById("write-tag-name-confirm")
+let tagsContainer = document.getElementById("tags")
+let submitButton = document.getElementById("submit-button")
+let languageDropdown = document.getElementById("language-dropdown")
+let categoryDropdown = document.getElementById("category-dropdown")
+let descriptionTextArea = document.getElementById("description")
+let nsfwCheckbox = document.getElementById("nsfw")
+let unlistedCheckbox = document.getElementById("unlisted")
 
 let currentGuilds = null
+let tags = []
 
 async function openServerSelectorPopup() {
     darkOverlay.style.display = "block"
@@ -71,7 +83,6 @@ serverSelectorPopupNext.addEventListener("click", (event) => {
         
         let server = currentGuilds[chooseServerDropdown.selectedIndex]
         let serverIconUrl
-        console.log(chooseServerDropdown.selectedIndex)
         if(server.icon) {
             serverIconUrl = `https://cdn.discordapp.com/icons/${server.id}/${server.icon}`
         } else {
@@ -81,6 +92,47 @@ serverSelectorPopupNext.addEventListener("click", (event) => {
         serverIndicatorIcon.src = serverIconUrl
         serverIndicatorText.textContent = serverName
     }
+})
+
+addTag.addEventListener("click", (event) => {
+    writeTagName.style.display = "flex"
+    writeTagName.style.top = addTag.offsetTop + addTag.offsetHeight + 10 + "px"
+    writeTagName.style.left = addTag.offsetLeft + "px"
+    writeTagNameInput.focus()
+})
+
+writeTagNameConfirm.addEventListener("click", (event) => {
+    let tagName = writeTagNameInput.value
+    if(tags.indexOf(tagName) != -1) {
+        alert("Tag already exists.")
+        return
+    }
+    writeTagName.value = ""
+    let tag = document.createElement("hashtag-renderer")
+    tag.setAttribute("name", tagName)
+    writeTagName.style.display = "none"
+    tagsContainer.appendChild(tag)
+    tag.appendEventListener("remove", (event) => {
+        tags.splice(tags.indexOf(tag), 1)
+    })
+
+    tags.push(tagName)
+    tag.appendEventListener("remove", (event) => {
+        tags.splice(tags.indexOf(tagName), 1)
+    })
+})
+
+submitButton.addEventListener("click", async (event) => {
+    let data = {
+        serverId: currentGuilds[chooseServerDropdown.selectedIndex].id,
+        mainLanguage: languageDropdown.selected,
+        category: categoryDropdown.selected,
+        tags: tags,
+        description: descriptionTextArea.value,
+        nsfw: nsfwCheckbox.checked,
+        unlisted: unlistedCheckbox.checked
+    }
+    let postId = await ajax("/api/post-server", "POST", data)
 })
 
 function canGoToNextPage() {

@@ -237,6 +237,8 @@
 }
 #tags {
     height: 50px;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 #description {
     resize: none;
@@ -270,7 +272,9 @@
     margin-left: 10px;
     font-weight: 600;
 }
-
+#dashboard-configure-server-content {
+    max-width: calc(100vw - 40px);
+}
 #dashboard-configure-server-content > .details {
     margin-left: 20px;
     font-family: var(--display-font);
@@ -316,4 +320,49 @@
 #submit-button > img {
     height: 100%;
     margin-left: -5px;
+}
+
+#write-tag-name {
+    position: absolute;
+    width: 300px;
+    height: 65px;
+    background-color: grey;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: var(--special-color-1);
+    box-sizing: border-box;
+    padding: 10px;
+    display: none;
+    color: var(--text-color);
+}
+#write-tag-name > .left {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+#write-tag-name > .left > p {
+    font-family: var(--display-font);
+    font-size: 18px;
+    font-weight: 600;
+    user-select: none;
+}
+#write-tag-name > .left > input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-family: var(--display-font);
+    font-size: 20px;
+}
+#write-tag-name > .right {
+    display: flex;
+    height: 100%;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+#write-tag-name > .right > img {
+    height: 50%;
 }

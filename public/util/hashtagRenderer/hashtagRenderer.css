@@ -1,0 +1,25 @@
+.container {
+    background-color: var(--special-color-1);
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--display-font);
+    color: var(--text-color);
+    font-size: 25px;
+    display: inline-flex;
+    padding-inline: 10px;
+    align-items: center;
+    border-top-left-radius: 0px;
+    margin-right: 10px;
+}
+.container > .remove {
+    margin: 0px;
+    font-weight: 900;
+    margin-left: 5px;
+    font-size: 25px;
+}
