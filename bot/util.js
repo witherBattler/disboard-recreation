@@ -1,11 +1,20 @@
-async function leaveAllGuilds(client) {
-    const guilds = client.guilds.cache.map(guild => guild.id)
-    for(let i = 0; i != guilds.length; i++) {
-        // leave
-        await client.guilds.cache.get(guilds[i]).leave()
+
+async function getMembers(guild) {
+/*     guild.members.fetch()
+    let members = guild.members.cache.filter(member => !member.user.bot)
+    console.log(members.map(member => console.log(member.presence)))
+    let onlineMembers = members.filter(member => member.presence.status != "offline")
+ */ 
+    await guild.fetch()
+
+    let toReturn = {
+        all: guild.approximateMemberCount,
+        online: guild.approximatePresenceCount
     }
+    console.log(toReturn)
+    return toReturn
 }
 
 module.exports = {
-    leaveAllGuilds
+    getMembers
 }

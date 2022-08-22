@@ -1,3 +1,4 @@
+const { booleanFalse } = require('@sapphire/shapeshift');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@disboard-redesign.5xh79ju.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -29,6 +30,7 @@ async function postServer(userId, fullData) {
         await publicServers.insertOne(fullData)
     }
     await users.updateOne({ id: userId }, { $push: { servers: fullData.id } })
+
 }
 
 async function updateUser(id, data) {
@@ -56,7 +58,9 @@ async function getUsers(userIds) {
 }
 
 async function getListingServers(search, category) {
-    let query = {}
+    let query = {
+        setUp: true,
+    }
     if(search && search.length > 0)
         query.description = { $regex: search, $options: "i" }
     if(category)
@@ -70,6 +74,12 @@ async function updateServerData(id, data) {
 }
 async function updateServerDataByGuildId(id, data) {
     await publicServers.updateOne({ serverId: id }, { $set: data } )
+    
+}
+async function resetAllData() {
+    await publicServers.deleteMany({})
+    await unlistedServers.deleteMany({})
+    await users.deleteMany({})
 }
 
 module.exports = {
@@ -85,5 +95,6 @@ module.exports = {
     users,
     updateServerData,
     getServerDataByGuildId,
-    updateServerDataByGuildId
+    updateServerDataByGuildId,
+    resetAllData
 }
