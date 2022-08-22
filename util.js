@@ -28,6 +28,7 @@ function generateId(length) {
     for(let i = 0; i != length; i++) {
         id += idChars[randomNumber(0, idChars.length - 1)]
     }
+    return id
 }
 module.exports = {
     loggedIn,

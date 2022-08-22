@@ -6,7 +6,7 @@
 }
 #intro > .title {
     font-size: 120px;
-    margin-top: 100px;
+    margin-top: 160px;
     color: var(--intro-text-color);
     font-family: var(--display-font);
 }
@@ -56,4 +56,84 @@
         margin-left: 0px;
         margin-right: 10px;
     }
+}
+
+#ribbon-top {
+    background-color: var(--ribbon-top-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 160px;
+    height: 160px;
+    font-family: var(--display-font);
+    font-size: 25px;
+    font-weight: 400;
+}
+#ribbon-top > a {
+    color: var(--ribbon-top-text-color);
+    font-weight: 600;
+    margin-left: 10px;
+    font-size: 28px;
+}
+
+
+#bottom {
+    width: 100%;
+    height: 1000px;
+    background-image: linear-gradient(rgb(40, 0, 25), black);
+    background-size: 100% 500px;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#search-bar {
+    display: flex;
+}
+#search-bar > div {
+    width: 600px;
+    background-color: var(--search-bar-background);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding-inline: 15px;
+}
+#search-bar > div > input {
+    color: var(--search-bar-text-color);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 23px;
+    font-family: var(--display-font);
+    width: 100%;
+}
+#search-bar > button {
+    display: flex;
+    padding: 0px;
+    aspect-ratio: 1;
+    height: 60px;
+    width: 70px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: var(--special-color-1);
+    margin: 0px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+#search-bar > button > img {
+    width: 30px;
+}
+#search-bar-title {
+    margin-top: 100px;
+    margin-bottom: 20px;
+    font-family: var(--display-font);
+    font-size: 50px;
+    font-weight: 600;
+    max-width: calc(100% - 20px);
+    text-align: center;
 }

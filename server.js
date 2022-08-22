@@ -9,7 +9,8 @@ const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
 const { loggedIn, categoryIsValid, generateId } = require("./util")
-const { updateUser, getServerData, postServer } = require("./database")
+const { updateUser, getServerData, postServer, getListingServers, getUsers } = require("./database")
+require("./bot/bot.js")
 
 app.set("view engine", "ejs");
 app.listen(3000, () => console.log('http://localhost:3000'));
@@ -56,6 +57,35 @@ app.get("/api/owned-guilds", loggedIn, async(req, res) => {
         res.json(guilds)
     }
 })
+app.get("/api/servers", async(req, res) => {
+    let servers = await getListingServers( req.query.search || "", req.query.category || undefined)
+    // get all users that are authors of the server
+    let usersIds = []
+    for(let i = 0; i != servers.length; i++) {
+        usersIds.push(servers[i].author)
+    }
+    let users = await getUsers(usersIds)
+    let guildsData = []
+    for(let i = 0; i != servers.length; i++) {
+        let rightAuthor = null
+        for(let j = 0; j != users.length; j++) {
+            if(users[j].id == servers[i].author) {
+                rightAuthor = users[j]
+                break
+            }
+        }
+
+        console.log(rightAuthor.accessToken, servers[i].serverId)
+        let guildData = await getGuildData(rightAuthor, servers[i].serverId)
+        guildsData.push({
+            guildData
+        })  
+    }
+    console.log(guildsData)
+    res.json(guildsData)
+
+})
+
 app.post("/api/post-server", loggedIn, async(req, res) => {
     console.log(req.body, "BODY")
     if((
@@ -116,7 +146,14 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         description: req.body.description,
         nsfw: req.body.nsfw,
         unlisted: req.body.unlisted,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        lastBump: Date.now(),
+        author: req.user.id,
+        botJoined: false,
+        icon: null,
+        banner: null,
+        guildName: server.name,
+        setUp: false,
     }
     await postServer(req.user, post)
     res.send(id)
@@ -126,8 +163,8 @@ function getUserData(user) {
     // Check if accessToken is valid first
     let accessToken = user.accessToken
     let refreshToken = user.refreshToken
-    // is it expired?
 
+    // is it expired?
     return new Promise((resolve, reject) => {
         fetch("https://discordapp.com/api/users/@me", {
             headers: {
@@ -145,7 +182,6 @@ function getUserData(user) {
             }
         })
     })
-    
 }
 
 async function refreshAccessToken(user) {
@@ -172,6 +208,8 @@ async function refreshAccessToken(user) {
     }))
 }
 
+
+
 function getGuilds(user) {
     return new Promise((resolve, reject) => {
         fetch("https://discordapp.com/api/users/@me/guilds", {
@@ -186,3 +224,17 @@ function getGuilds(user) {
     })
 }
 
+function getGuildData(author, id) {
+    return new Promise((resolve, reject) => {
+        // Why am I unauthorized?
+        fetch(`https://discordapp.com/api/guilds/${id}`, {
+            headers: {
+                authorization: `Bearer ${author.accessToken}`
+            }
+        }).then(res => res.json().then(json => {
+            resolve(json)
+        }))
+    }).catch(err => {
+        console.log(err)
+    })
+}

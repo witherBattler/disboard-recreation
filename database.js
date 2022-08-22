@@ -37,7 +37,39 @@ async function updateUser(id, data) {
 
 async function getServerData(id) {
     let server = await publicServers.findOne({ id: id })
+    if(!server) {
+        server = await unlistedServers.findOne({ id: id })
+    }
     return server
+}
+async function getServerDataByGuildId(id) {
+    let server = await publicServers.findOne({ serverId: id })
+    if(!server) {
+        server = await unlistedServers.findOne({ serverId: id })
+    }
+    return server
+}
+
+async function getUsers(userIds) {
+    let toReturn = await users.find({ id: { $in: userIds } }).toArray()
+    return toReturn
+}
+
+async function getListingServers(search, category) {
+    let query = {}
+    if(search && search.length > 0)
+        query.description = { $regex: search, $options: "i" }
+    if(category)
+        query.category = category
+    let servers = await publicServers.find(query).sort({ lastBump: -1 }).toArray()
+    return servers
+}
+
+async function updateServerData(id, data) {
+    await publicServers.updateOne({ id: id }, { $set: data } )
+}
+async function updateServerDataByGuildId(id, data) {
+    await publicServers.updateOne({ serverId: id }, { $set: data } )
 }
 
 module.exports = {
@@ -45,5 +77,13 @@ module.exports = {
     createUser,
     updateUser,
     getServerData,
-    postServer
+    postServer,
+    getListingServers,
+    publicServers,
+    unlistedServers,
+    getUsers,
+    users,
+    updateServerData,
+    getServerDataByGuildId,
+    updateServerDataByGuildId
 }
