@@ -83,9 +83,10 @@ client.on("interactionCreate", async(interaction) => {
     }
 
     const { commandName, options } = interaction
+    let data
     switch(commandName) {
         case "invite":
-            let data = await getServerDataByGuildId(interaction.guild.id)
+            data = await getServerDataByGuildId(interaction.guild.id)
             if(!data) {
                 const embed = new EmbedBuilder()
                     .setTitle("Error")
@@ -108,7 +109,7 @@ client.on("interactionCreate", async(interaction) => {
             // reply with embed
             const embed = new EmbedBuilder()
                 .setTitle("Invite link set")
-                .setDescription(`Set your invite link to ${link}! The server is now published on Disdex. Use /bump to bump the server to the top of the servers list.`)
+                .setDescription(`Set your invite link to ${link} ! The server is now published on Disdex. Use /bump to bump the server to the top of the servers list.`)
                 .setColor(process.env.THEME_COLOR)
                 .setTimestamp()
             interaction.reply({
@@ -123,7 +124,56 @@ client.on("interactionCreate", async(interaction) => {
             
             break
         case "bump":
-
+            data = await getServerDataByGuildId(interaction.guild.id)
+            if(!data) {
+                const embed = new EmbedBuilder()
+                    .setTitle("Error")
+                    .setDescription("This server is not registered on the Disdex website! Add this server to the website: https://disdex.gg/")
+                    .setColor("#ff0000")
+                    .setTimestamp()
+                interaction.reply({
+                    content: "",
+                    embeds: [embed]
+                })
+                return
+            }
+            if(!data.setUp) {
+                const embed = new EmbedBuilder()
+                    .setTitle("Error")
+                    .setDescription("First, finish setting up your server by adding an invite link for your server using /invite. Then, try again.")
+                    .setColor("#ff0000")
+                    .setTimestamp()
+                interaction.reply({
+                    content: "",
+                    embeds: [embed]
+                })
+                return
+            }
+            if(Date.now() - data.lastBump < 7200000) {
+                const embed = new EmbedBuilder()
+                    .setTitle("Error")
+                    .setDescription("Please wait 120 minutes before bumping again!")
+                    .setColor("#ff0000")
+                    .setTimestamp()
+                interaction.reply({
+                    content: "",
+                    embeds: [embed],
+                })
+                return
+            }
+            // finally, bump.
+            await updateServerDataByGuildId(interaction.guild.id, {
+                lastBump: Date.now()
+            })
+            const successEmbed = new EmbedBuilder()
+                .setTitle("Server bumped")
+                .setDescription("Successfully bumped your server to the top of the disdex list! Please wait 120 minutes before bumping again.")
+                .setColor(process.env.THEME_COLOR)
+                .setTimestamp()
+            interaction.reply({
+                content: "",
+                embeds: [embed]
+            })
             break
     }
 })

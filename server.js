@@ -124,7 +124,7 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         nsfw: req.body.nsfw,
         unlisted: req.body.unlisted,
         createdAt: Date.now(),
-        lastBump: Date.now(),
+        lastBump: 0,
         author: req.user.id,
         botJoined: false,
         icon: null,
