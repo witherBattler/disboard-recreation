@@ -172,7 +172,7 @@ client.on("interactionCreate", async(interaction) => {
                 .setTimestamp()
             interaction.reply({
                 content: "",
-                embeds: [embed]
+                embeds: [successEmbed]
             })
             break
     }
