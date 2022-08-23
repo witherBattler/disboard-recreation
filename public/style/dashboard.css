@@ -448,3 +448,6 @@
     user-select: none;
     cursor: pointer;
 }
+.no-description {
+    color: lightgrey;
+}

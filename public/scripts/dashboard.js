@@ -23,6 +23,8 @@ let descriptionTextArea = document.getElementById("description")
 let nsfwCheckbox = document.getElementById("nsfw-checkbox")
 let unlistedCheckbox = document.getElementById("unlisted-checkbox")
 
+let serversContainer = document.getElementById("servers")
+
 let currentGuilds = null
 let tags = []
 
@@ -169,3 +171,12 @@ function closeAddBotPopup() {
         addBotPopup.style.display = "none"
     }, 300)
 }
+
+ajax("/api/owned-servers").then(ownedServers => {
+    ownedServers = JSON.parse(ownedServers)
+    for(let i = 0; i != ownedServers.length; i++) {
+        let ownedServerObject = ownedServers[i]
+        let ownedServerElement = constructServerElement(ownedServerObject.id, ownedServerObject.icon, ownedServerObject.guildName, ownedServerObject.description, ownedServerObject.tags)
+        serversContainer.appendChild(ownedServerElement)
+    }
+})

@@ -141,7 +141,7 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         lastBump: 0,
         author: req.user.id,
         botJoined: false,
-        icon: null,
+        icon: server.icon,
         banner: null,
         guildName: server.name,
         setUp: false,
