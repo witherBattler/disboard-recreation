@@ -134,7 +134,7 @@ submitButton.addEventListener("click", async (event) => {
         unlisted: unlistedCheckbox.checked
     }
     let postId = await ajax("/api/post-server", "POST", JSON.stringify(data))
-    window.location = "/dashboard&addbot=" + serverId
+    window.location = "/dashboard?addbot=" + serverId
 })
 
 function canGoToNextPage() {
@@ -165,7 +165,7 @@ function closeAddBotPopup() {
     darkOverlay.style.opacity = 0
     addBotPopup.style.opacity = 0
     setTimeout(function() {
-        darkOverlay.style.display = "block"
-        addBotPopup.style.display = "block"
+        darkOverlay.style.display = "none"
+        addBotPopup.style.display = "none"
     }, 300)
 }

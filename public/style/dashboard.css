@@ -36,8 +36,9 @@
 #servers {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 20px;
+    margin-top: 10px;
 }
 #add-server-button {
     width: 35px;
@@ -175,7 +176,7 @@
     margin-right: 10px;
 }
 #add-bot-button {
-    margin-top: 5px;
+    margin-top: 0px;
 }
 .special-button.blocked {
     filter: brightness(60%);
@@ -376,4 +377,74 @@
 }
 #write-tag-name > .right > img {
     height: 50%;
+}
+
+
+/* server */
+.server {
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+}
+.server > .server-top {
+    height: 70px;
+    background-color: var(--special-color-1);
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    user-select: none;
+    cursor: pointer;
+}
+.server > .server-top > img {
+    height: 100%;
+    border: 4px white solid;
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+}
+.server > .server-top > h3 {
+    font-family: var(--display-font);
+    font-size: 30px;
+    margin-left: 10px;
+    font-weight: 600;
+}
+.server > .server-bottom {
+    background-color: var(--background-2);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+.server > .server-bottom > p {
+    font-family: var(--display-font);
+    line-height: 110%;
+}
+.server > .server-bottom > .tags {
+    display: flex;
+}
+.server > .server-bottom > .tags > .tag {
+    background-color: var(--special-color-1);
+    border-radius: 1000px;
+    -webkit-border-radius: 1000px;
+    -moz-border-radius: 1000px;
+    -ms-border-radius: 1000px;
+    -o-border-radius: 1000px;
+    border-top-left-radius: 0px;
+    font-family: var(--display-font);
+    font-weight: 600;
+    padding: 10px;
+    margin-right: 10px;
+    user-select: none;
+    cursor: pointer;
 }

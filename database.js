@@ -100,7 +100,6 @@ async function getUnregisteredGuilds(guilds) {
     let validGuilds = guilds.filter(function(guild) {
         return !invalidServersIds.includes(guild.id)
     })
-    console.log(validGuilds, "VALID GUILDS")
     return validGuilds
 }
 
