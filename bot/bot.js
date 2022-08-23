@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits, Routes, EmbedBuilder } = require("discord.js")
-const { getMembers } = require("./util")
+const { getMembers, generateBotUrl } = require("./util")
 const { getServerDataByGuildId, updateServerDataByGuildId } = require("../database")
 const { REST } = require("@discordjs/rest")
 const { SlashCommandBuilder } = require("@discordjs/builders")
@@ -182,5 +182,6 @@ client.login(process.env.BOT_TOKEN)
 
 module.exports = {
     leaveAllGuilds,
+    generateBotUrl,
     client
 }

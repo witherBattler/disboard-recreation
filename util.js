@@ -30,6 +30,7 @@ function generateId(length) {
     }
     return id
 }
+
 module.exports = {
     loggedIn,
     categoryIsValid,

@@ -9,8 +9,8 @@ const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
 const { loggedIn, categoryIsValid, generateId } = require("./util")
-const { updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData } = require("./database")
-const { leaveAllGuilds } = require("./bot/bot.js")
+const { updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds } = require("./database")
+const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
 app.set("view engine", "ejs");
 app.listen(3000, () => console.log('http://localhost:3000'));
@@ -41,12 +41,23 @@ app.get("/", async (req, res) => {
     res.render("index", data);
 })
 app.get("/dashboard", loggedIn, async (req, res) => {
-    let userData = await getUserData(req.user)
-    let guilds = await getGuilds(req.user)
-    res.render("dashboard", {
-        userData,
+    let toRender = {
         loggedIn: true
-    });
+    }
+    if(req.query.addbot) {
+        let serverData = await getServerDataByGuildId(req.query.addbot)
+        if(serverData) {
+            toRender.addBot = req.query.addbot
+        } else {
+            res.redirect("/dashboard")
+            return
+        }
+    }
+
+    let userData = await getUserData(req.user)
+    toRender.userData = userData
+    
+    res.render("dashboard", toRender);
 })
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)
@@ -54,13 +65,15 @@ app.get("/api/owned-guilds", loggedIn, async(req, res) => {
         res.sendStatus(429)
     } else {
         guilds = guilds.filter(guild => guild.owner)
+        // make sure guild is not registered in the database yet
+        guilds = await getUnregisteredGuilds(guilds)
+        console.log(guilds)
         res.json(guilds)
     }
 })
 app.get("/api/servers", async(req, res) => {
     let servers = await getListingServers( req.query.search || "", req.query.category || undefined)
     
-    console.log(servers)
     res.json(servers)
 })
 
@@ -219,6 +232,12 @@ function getGuildData(author, id) {
     })
 }
 
+app.locals = {
+    generateBotUrl
+}
+/* 
 // reset
 leaveAllGuilds()
 resetAllData()
+
+ */

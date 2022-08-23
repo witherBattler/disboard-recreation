@@ -82,6 +82,28 @@ async function resetAllData() {
     await users.deleteMany({})
 }
 
+async function getUnregisteredGuilds(guilds) {
+    let guildIds = guilds.map(guild => guild.id)
+    let invalidPublicServers = await publicServers.find({
+        serverId: {
+            $in: guildIds
+        }
+    }).toArray()
+    let invalidUnlistedServers = await unlistedServers.find({
+        serverId: {
+            $in: guildIds
+        }
+    }).toArray()
+    // why doesn't this work
+    let invalidServers = [...invalidPublicServers, ...invalidUnlistedServers]
+    let invalidServersIds = invalidServers.map(invalidServer => invalidServer.serverId)
+    let validGuilds = guilds.filter(function(guild) {
+        return !invalidServersIds.includes(guild.id)
+    })
+    console.log(validGuilds, "VALID GUILDS")
+    return validGuilds
+}
+
 module.exports = {
     getUser,
     createUser,
@@ -96,5 +118,6 @@ module.exports = {
     updateServerData,
     getServerDataByGuildId,
     updateServerDataByGuildId,
-    resetAllData
+    resetAllData,
+    getUnregisteredGuilds
 }

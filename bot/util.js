@@ -15,6 +15,11 @@ async function getMembers(guild) {
     return toReturn
 }
 
+function generateBotUrl(guildId) {
+    return `https://discord.com/api/oauth2/authorize?client_id=1008778841109573764&permissions=8&scope=bot${guildId ? `&guild_id=${guildId}&disable_guild_select=true` : ""}`
+}
+
 module.exports = {
-    getMembers
+    getMembers,
+    generateBotUrl
 }

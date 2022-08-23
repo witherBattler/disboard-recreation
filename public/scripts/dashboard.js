@@ -123,8 +123,9 @@ writeTagNameConfirm.addEventListener("click", (event) => {
 })
 
 submitButton.addEventListener("click", async (event) => {
+    let serverId = currentGuilds[chooseServerDropdown.selectedIndex].id
     let data = {
-        serverId: currentGuilds[chooseServerDropdown.selectedIndex].id,
+        serverId: serverId,
         mainLanguage: languageDropdown.selected,
         category: categoryDropdown.selected,
         tags: tags,
@@ -132,9 +133,8 @@ submitButton.addEventListener("click", async (event) => {
         nsfw: nsfwCheckbox.checked,
         unlisted: unlistedCheckbox.checked
     }
-    console.log(nsfwCheckbox)
-    console.log(JSON.stringify(data))
     let postId = await ajax("/api/post-server", "POST", JSON.stringify(data))
+    window.location = "/dashboard&addbot=" + serverId
 })
 
 function canGoToNextPage() {
@@ -149,4 +149,23 @@ function updateNextButton() {
     } else {
         serverSelectorPopupNext.classList.add("blocked")
     }
+}
+
+let addBotPopup = document.getElementById("add-bot-popup")
+if(addBotPopup != null) {
+    darkOverlay.style.display = "block"
+    addBotPopup.style.display = "block"
+    setTimeout(function() {
+        darkOverlay.style.opacity = 1
+        addBotPopup.style.opacity = 1
+    })
+
+}
+function closeAddBotPopup() {
+    darkOverlay.style.opacity = 0
+    addBotPopup.style.opacity = 0
+    setTimeout(function() {
+        darkOverlay.style.display = "block"
+        addBotPopup.style.display = "block"
+    }, 300)
 }
