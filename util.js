@@ -31,10 +31,15 @@ function generateId(length) {
     return id
 }
 
+function mergeObjects(object1, object2) {
+    return {...object1, ...object2}
+}
+
 module.exports = {
     loggedIn,
     categoryIsValid,
     valueIs,
     randomNumber,
-    generateId
+    generateId,
+    mergeObjects
 }

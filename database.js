@@ -94,13 +94,26 @@ async function getUnregisteredGuilds(guilds) {
             $in: guildIds
         }
     }).toArray()
-    // why doesn't this work
     let invalidServers = [...invalidPublicServers, ...invalidUnlistedServers]
     let invalidServersIds = invalidServers.map(invalidServer => invalidServer.serverId)
     let validGuilds = guilds.filter(function(guild) {
         return !invalidServersIds.includes(guild.id)
     })
     return validGuilds
+}
+
+async function getServersData(serverIds) {
+    let publicServersMatches = await publicServers.find({
+        id: {
+            $in: serverIds
+        }
+    }).toArray()
+    let unlistedServersMatches = await unlistedServers.find({
+        id: {
+            $in: serverIds
+        }
+    }).toArray()
+    return [...publicServersMatches, ...unlistedServersMatches]
 }
 
 module.exports = {
@@ -118,5 +131,6 @@ module.exports = {
     getServerDataByGuildId,
     updateServerDataByGuildId,
     resetAllData,
-    getUnregisteredGuilds
+    getUnregisteredGuilds,
+    getServersData
 }

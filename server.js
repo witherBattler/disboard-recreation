@@ -8,8 +8,8 @@ const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
-const { loggedIn, categoryIsValid, generateId } = require("./util")
-const { updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds } = require("./database")
+const { loggedIn, categoryIsValid, generateId, mergeObjects } = require("./util")
+const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData } = require("./database")
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
 app.set("view engine", "ejs");
@@ -67,11 +67,16 @@ app.get("/api/owned-guilds", loggedIn, async(req, res) => {
         guilds = guilds.filter(guild => guild.owner)
         // make sure guild is not registered in the database yet
         guilds = await getUnregisteredGuilds(guilds)
-        console.log(guilds)
         res.json(guilds)
     }
 })
-app.get("/api/owned-guilds")
+app.get("/api/owned-servers", loggedIn, async(req, res) => {
+    let user = await getUser(req.user.id)
+    let serverIds = user.servers
+    let serversData = await getServersData(serverIds)
+    console.log(serverIds, serversData)
+    res.json(serversData)
+})
 app.get("/api/servers", async(req, res) => {
     let servers = await getListingServers( req.query.search || "", req.query.category || undefined)
     
@@ -95,32 +100,27 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     // Check if server exists
     let guilds = await getGuilds(req.user)
     if(guilds.message == "You are being rate limited.") {
-        console.log("Rate limit")
         res.sendStatus(429)
         return
     }
     let server = guilds.find(guild => guild.id == req.body.serverId)
     if(server == undefined) {
-        console.log("server not found")
         res.sendStatus(400)
         return
     }
     // Check if user is owner of server
     if(server.owner == false) {
-        console.log("user not owner")
         res.sendStatus(400)
         return
     }
     // Check if server is already in database
     let serverData = await getServerData(req.body.serverId)
     if(serverData != undefined) {
-        console.log("server already in database")
         res.sendStatus(400)
         return
     }
     // Check if category is valid
     if(categoryIsValid(req.body.category) == false) {
-        console.log("Category not valid")
         res.sendStatus(400)
         return
     }
@@ -149,7 +149,7 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         members: null,
         onlineMembers: null
     }
-    await postServer(req.user, post)
+    await postServer(req.user.id, post)
     res.send(id)
 })
 
@@ -218,27 +218,6 @@ function getGuilds(user) {
     })
 }
 
-function getGuildData(author, id) {
-    return new Promise((resolve, reject) => {
-        // Why am I unauthorized?
-        fetch(`https://discordapp.com/api/guilds/${id}`, {
-            headers: {
-                authorization: `Bearer ${author.accessToken}`
-            }
-        }).then(res => res.json().then(json => {
-            resolve(json)
-        }))
-    }).catch(err => {
-        console.log(err)
-    })
-}
-
 app.locals = {
     generateBotUrl
 }
-/* 
-// reset
-leaveAllGuilds()
-resetAllData()
-
- */
