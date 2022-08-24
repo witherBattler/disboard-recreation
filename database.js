@@ -1,4 +1,3 @@
-const { booleanFalse } = require('@sapphire/shapeshift');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@disboard-redesign.5xh79ju.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -62,7 +61,14 @@ async function getListingServers(search, category) {
         setUp: true,
     }
     if(search && search.length > 0)
-        query.description = { $regex: search, $options: "i" }
+    query["$or"] = [
+        {
+            description: { $regex: search, $options: "i" }
+        },
+        {
+            guildName: { $regex: search, $options: "i" }
+        }
+    ]
     if(category)
         query.category = category
     let servers = await publicServers.find(query).sort({ lastBump: -1 }).toArray()

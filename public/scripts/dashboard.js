@@ -136,7 +136,7 @@ submitButton.addEventListener("click", async (event) => {
         unlisted: unlistedCheckbox.checked
     }
     let postId = await ajax("/api/post-server", "POST", JSON.stringify(data))
-    window.location = "/dashboard?addbot=" + serverId
+    window.location = "/dashboard?addbot=" + postId
 })
 
 function canGoToNextPage() {
@@ -172,11 +172,26 @@ function closeAddBotPopup() {
     }, 300)
 }
 
+function generateBotUrl(guildId) {
+    return `https://discord.com/api/oauth2/authorize?client_id=1008778841109573764&permissions=8&scope=bot${guildId ? `&guild_id=${guildId}&disable_guild_select=true` : ""}`
+}
+
 ajax("/api/owned-servers").then(ownedServers => {
     ownedServers = JSON.parse(ownedServers)
     for(let i = 0; i != ownedServers.length; i++) {
         let ownedServerObject = ownedServers[i]
-        let ownedServerElement = constructServerElement(ownedServerObject.serverId, ownedServerObject.icon, ownedServerObject.guildName, ownedServerObject.description, ownedServerObject.tags)
+        console.log(ownedServerObject.botJoined)
+        let ownedServerElement = 
+            constructServerElement(
+                ownedServerObject.serverId,
+                ownedServerObject.icon,
+                ownedServerObject.guildName,
+                ownedServerObject.description,
+                ownedServerObject.tags,
+                false,
+                ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId)
+            )
         serversContainer.appendChild(ownedServerElement)
     }
 })
+

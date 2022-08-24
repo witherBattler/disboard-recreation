@@ -15,7 +15,7 @@ function ajax(url, method, data) {
     })
 }
 
-function constructServerElement(id, icon, name, description, tags, join) {
+function constructServerElement(id, icon, name, description, tags, join, addBot) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
@@ -37,18 +37,27 @@ function constructServerElement(id, icon, name, description, tags, join) {
     serverTopElement.appendChild(iconElement)
     serverTopElement.appendChild(serverNameElement)
 
-    if(join) {
-        const joinButtonContainer = document.createElement("div")
+    const buttonsContainer = document.createElement("div")
 
+    if(join) {
         const joinButton = document.createElement("button")
         joinButton.textContent = "Join"
         joinButton.addEventListener("click", (event) => {
             window.open(join)
         })
-
-        joinButtonContainer.appendChild(joinButton)
-        serverTopElement.appendChild(joinButtonContainer)
+        buttonsContainer.appendChild(joinButton)
     }
+
+    if(addBot) {
+        const addBotButton = document.createElement("button")
+        addBotButton.textContent = "Add bot"
+        addBotButton.addEventListener("click", (event) => {
+            window.open(addBot)
+        })
+        buttonsContainer.appendChild(addBotButton)
+    }
+
+    serverTopElement.appendChild(buttonsContainer)
 
     // server bottom
     const serverBottomElement = document.createElement("div")

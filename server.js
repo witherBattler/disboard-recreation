@@ -45,9 +45,9 @@ app.get("/dashboard", loggedIn, async (req, res) => {
         loggedIn: true
     }
     if(req.query.addbot) {
-        let serverData = await getServerDataByGuildId(req.query.addbot)
+        let serverData = await getServerData(req.query.addbot)
         if(serverData) {
-            toRender.addBot = req.query.addbot
+            toRender.addBot = serverData.serverId
         } else {
             res.redirect("/dashboard")
             return
