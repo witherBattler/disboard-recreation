@@ -40,6 +40,11 @@ app.get("/", async (req, res) => {
     }
     res.render("index", data);
 })
+app.get("/server", async (req, res) => {
+    res.render("server", {
+        loggedIn: false
+    })
+})
 app.get("/dashboard", loggedIn, async (req, res) => {
     let toRender = {
         loggedIn: true
