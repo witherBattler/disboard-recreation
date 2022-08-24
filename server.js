@@ -13,7 +13,7 @@ const { getUser, updateUser, getServerData, postServer, getListingServers, getUs
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
 app.set("view engine", "ejs");
-app.listen(3000, () => console.log('http://localhost:3000'));
+app.listen(process.env.PORT || 3000, () => console.log('http://localhost:3000 test test test'));
 
 // Middleware
 app.use(express.json());
