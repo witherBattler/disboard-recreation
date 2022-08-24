@@ -79,7 +79,8 @@ app.get("/api/owned-servers", loggedIn, async(req, res) => {
 })
 app.get("/api/servers", async(req, res) => {
     let servers = await getListingServers( req.query.search || "", req.query.category || undefined)
-    
+    console.log(servers)
+
     res.json(servers)
 })
 

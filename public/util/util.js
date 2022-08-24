@@ -15,7 +15,7 @@ function ajax(url, method, data) {
     })
 }
 
-function constructServerElement(id, icon, name, description, tags) {
+function constructServerElement(id, icon, name, description, tags, join) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
@@ -37,6 +37,19 @@ function constructServerElement(id, icon, name, description, tags) {
     serverTopElement.appendChild(iconElement)
     serverTopElement.appendChild(serverNameElement)
 
+    if(join) {
+        const joinButtonContainer = document.createElement("div")
+
+        const joinButton = document.createElement("button")
+        joinButton.textContent = "Join"
+        joinButton.addEventListener("click", (event) => {
+            window.open(join)
+        })
+
+        joinButtonContainer.appendChild(joinButton)
+        serverTopElement.appendChild(joinButtonContainer)
+    }
+
     // server bottom
     const serverBottomElement = document.createElement("div")
     serverBottomElement.className = "server-bottom"
@@ -53,7 +66,7 @@ function constructServerElement(id, icon, name, description, tags) {
     for(let i = 0; i != tags.length; i++) {
         const tagElement = document.createElement("div")
         tagElement.className = "tag"
-        tagElement.textContent = tags[i]
+        tagElement.textContent = "#" + tags[i]
         tagsContainerElement.appendChild(tagElement)
     }
 
