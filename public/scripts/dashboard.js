@@ -176,7 +176,7 @@ ajax("/api/owned-servers").then(ownedServers => {
     ownedServers = JSON.parse(ownedServers)
     for(let i = 0; i != ownedServers.length; i++) {
         let ownedServerObject = ownedServers[i]
-        let ownedServerElement = constructServerElement(ownedServerObject.id, ownedServerObject.icon, ownedServerObject.guildName, ownedServerObject.description, ownedServerObject.tags)
+        let ownedServerElement = constructServerElement(ownedServerObject.serverId, ownedServerObject.icon, ownedServerObject.guildName, ownedServerObject.description, ownedServerObject.tags)
         serversContainer.appendChild(ownedServerElement)
     }
 })
