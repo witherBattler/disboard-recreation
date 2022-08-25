@@ -35,11 +35,43 @@ function mergeObjects(object1, object2) {
     return {...object1, ...object2}
 }
 
+
+let timeConversionData = [
+	["second", "seconds", 1000], 
+	["minute", "minutes", 60], 
+	["hour", "hours", 60], 
+	["day", "days", 24], 
+	["week", "weeks", 7],
+	["month", "months", 4.34524],
+	["year", "years", 12],
+	["decade", "decades", 10],
+	["century", "centuries", 10]
+]
+function convertTimeFromMS(time) {
+    console.log(time)
+	time = Math.max(time, 1000)
+	let timeConversionDataIndex = 0
+	while(time / timeConversionData[timeConversionDataIndex][2] >= 1) {
+		time = time / timeConversionData[timeConversionDataIndex][2]
+		timeConversionDataIndex++
+		if(timeConversionDataIndex >= timeConversionData.length) {
+			break
+		}
+	}
+	let t = timeConversionData[timeConversionDataIndex - 1][1]
+	let timeNumber = Math.floor(time)
+    if(timeNumber == 1) {
+        t = timeConversionData[timeConversionDataIndex - 1][0]
+    }
+	return timeNumber + " " + t
+}
+
 module.exports = {
     loggedIn,
     categoryIsValid,
     valueIs,
     randomNumber,
     generateId,
-    mergeObjects
+    mergeObjects,
+    convertTimeFromMS
 }

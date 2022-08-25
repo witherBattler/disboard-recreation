@@ -8,7 +8,7 @@ const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
-const { loggedIn, categoryIsValid, generateId, mergeObjects } = require("./util")
+const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS } = require("./util")
 const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData } = require("./database")
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
@@ -64,6 +64,22 @@ app.get("/dashboard", loggedIn, async (req, res) => {
     
     res.render("dashboard", toRender);
 })
+app.get("/server/:id", async (req, res) => {
+    let data = { loggedIn: false }
+    if(req.user) {
+        let userData = await getUserData(req.user)
+        data.userData = userData
+        userData.loggedIn = true
+    }
+    let id = req.params.id
+    let serverData = await getServerData(id)
+    if(serverData) {
+        data.serverData = serverData
+    } else {
+        res.redirect("/404")
+    }
+    res.render("server", data)
+})
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)
     if(guilds.message == "You are being rate limited.") {
@@ -97,7 +113,8 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         req.body.tags != undefined &&
         req.body.description != undefined &&
         req.body.nsfw != undefined && 
-        req.body.unlisted != undefined
+        req.body.unlisted != undefined &&
+        req.body.shortDescription
     ) == false) {
         res.sendStatus(400)
         return
@@ -140,6 +157,7 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         mainLanguage: req.body.mainLanguage,
         category: req.body.category,
         tags: req.body.tags,
+        shortDescription: req.body.shortDescription,
         description: req.body.description,
         nsfw: req.body.nsfw,
         unlisted: req.body.unlisted,
@@ -153,7 +171,9 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         setUp: false,
         invite: null,
         members: null,
-        onlineMembers: null
+        onlineMembers: null,
+        boosts: null,
+        emojis: [],
     }
     await postServer(req.user.id, post)
     res.send(id)
@@ -225,5 +245,6 @@ function getGuilds(user) {
 }
 
 app.locals = {
-    generateBotUrl
+    generateBotUrl,
+    convertTimeFromMS
 }

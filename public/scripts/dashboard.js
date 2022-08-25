@@ -19,6 +19,7 @@ let tagsContainer = document.getElementById("tags")
 let submitButton = document.getElementById("submit-button")
 let languageDropdown = document.getElementById("language-dropdown")
 let categoryDropdown = document.getElementById("category-dropdown")
+let shortDescriptionTextArea = document.getElementById("short-description")
 let descriptionTextArea = document.getElementById("description")
 let nsfwCheckbox = document.getElementById("nsfw-checkbox")
 let unlistedCheckbox = document.getElementById("unlisted-checkbox")
@@ -132,6 +133,7 @@ submitButton.addEventListener("click", async (event) => {
         category: categoryDropdown.selected,
         tags: tags,
         description: descriptionTextArea.value,
+        shortDescription: shortDescriptionTextArea.value,
         nsfw: nsfwCheckbox.checked,
         unlisted: unlistedCheckbox.checked
     }
@@ -186,10 +188,11 @@ ajax("/api/owned-servers").then(ownedServers => {
                 ownedServerObject.serverId,
                 ownedServerObject.icon,
                 ownedServerObject.guildName,
-                ownedServerObject.description,
+                ownedServerObject.shortDescription,
                 ownedServerObject.tags,
                 false,
-                ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId)
+                ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId),
+                ownedServerObject.id
             )
         serversContainer.appendChild(ownedServerElement)
     }

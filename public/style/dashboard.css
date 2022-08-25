@@ -378,4 +378,24 @@
 #write-tag-name > .right > img {
     height: 50%;
 }
+#short-description {
+    resize: none;
+    height: 100px;
+    width: 400px;
+    outline: none;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    margin-left: 20px;
+    font-family: var(--display-font);
+    margin-top: 5px;
+    background-color: var(--background);
+    color: var(--text-color);
+    box-sizing: border-box;
+    padding: 10px;
+    border: white solid 3px;
+    font-size: 20px;
 
+}

@@ -15,13 +15,17 @@ function ajax(url, method, data) {
     })
 }
 
-function constructServerElement(id, icon, name, description, tags, join, addBot) {
+function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
     // server top
     const serverTopElement = document.createElement("div")
     serverTopElement.className = "server-top"
+    if(disdexServerId)
+        serverTopElement.addEventListener("click", (event) => {
+            window.open("/server/" + disdexServerId)
+        })
 
     const iconElement = document.createElement("img")
     iconElement.draggable = "false"

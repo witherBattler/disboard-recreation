@@ -210,6 +210,7 @@ a {
 }
 .server > .server-bottom > .tags {
     display: flex;
+    overflow: hidden;
 }
 .server > .server-bottom > .tags > .tag {
     background-color: var(--special-color-1);
@@ -225,7 +226,11 @@ a {
     margin-right: 10px;
     user-select: none;
     cursor: pointer;
+    white-space: nowrap;
 }
 .no-description {
     color: lightgrey;
+}
+#server-name {
+    color: var(--text-color);
 }
