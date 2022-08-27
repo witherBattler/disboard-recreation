@@ -1,7 +1,7 @@
 body {
     display: flex;
-    justify-content: center;
-    flex-direction: row;
+    align-items: center;
+    flex-direction: column;
     background-color: var(--background-2);
 }
 
@@ -157,4 +157,181 @@ body {
     font-size: 18px;
     margin-top: 20px;
     font-style: italic;
+}
+
+
+
+#review-container {
+    width: 1200px;
+    background-color: black;
+    height: 280px;
+    margin-top: 20px;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    display: flex;
+}
+#review-left {
+    width: 260px;
+    height: 100%;
+    background-color: var(--special-color-1);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+.stars {
+    display: flex;
+    width: 180px;
+    justify-content: space-between;
+}
+.star {
+    width: 30px;
+    height: 30px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.star.filled {
+    background-image: url(../icons/star-filled.svg);
+}
+.star.empty {
+    background-image: url(../icons/star-empty.svg);
+}
+.star.half-empty {
+    background-image: url(../icons/star-half-empty.svg);
+}
+#reviews-summary-label {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 2px;
+    margin-bottom: 20px;
+}
+.stars-chart-container {
+    display: flex;
+    width: 200px;
+    margin-bottom: 6px;
+    justify-content: center;
+    cursor: pointer;
+}
+.stars-chart-container > span {
+    font-family: var(--display-font);
+    font-weight: 600;
+    text-align: right;
+    width: 15px;
+    margin-right: 5px;
+    font-size: 23px;
+    line-height: 23px;
+}
+.stars-chart-container > .chart {
+    background-color: rgba(253, 144, 255, 0.56);
+    flex-grow: 1;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+}
+#review-right-not-logged-in {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#review-right-not-logged-in > .not-logged-in {
+    font-family: var(--display-font);
+    display: flex;
+    align-items: center;
+}
+#review-right-not-logged-in > .not-logged-in > a {
+    font-weight: 600;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--special-color-1);
+    user-select: none;
+    margin-left: 10px;
+}
+#review-profile {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+#review-profile > img {
+    height: 100%;
+    background-color: var(--navbar-background-2);
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+#review-profile > p {
+    margin-left: 10px;
+    font-family: var(--display-font);
+    font-weight: 600;
+    font-size: 30px;
+}
+#review-right {
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+#review-textarea {
+    width: 100%;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    font-family: var(--main-font);
+    resize: none;
+    outline: none;
+    border: none;
+    padding: 10px;
+    padding-inline: 7px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    font-size: 20px;
+    flex-grow: 1;
+}
+#send-review-button-container {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    justify-content: right;
+}
+#send-review-button {
+    display: flex;
+    border: none;
+    background-color: var(--special-color-1);
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+#send-review-button > p {
+    font-family: var(--display-font);
+    color: white;
+    font-weight: 600;
+    margin-left: 10px;
+}
+#send-review-button > img {
+    height: 40px;
+    margin-right: -5px;
+}
+#stars-create-review > .star {
+    cursor: pointer;
 }

@@ -69,7 +69,7 @@ app.get("/server/:id", async (req, res) => {
     if(req.user) {
         let userData = await getUserData(req.user)
         data.userData = userData
-        userData.loggedIn = true
+        data.loggedIn = true
     }
     let id = req.params.id
     let serverData = await getServerData(id)
@@ -174,9 +174,13 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         onlineMembers: null,
         boosts: null,
         emojis: [],
+        reviews: []
     }
     await postServer(req.user.id, post)
     res.send(id)
+})
+app.post("/api/set-review", (req, res) => {
+
 })
 
 function getUserData(user) {

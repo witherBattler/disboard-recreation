@@ -53,5 +53,72 @@
                 </div>
             </div>
         </div>
+        <div id="review-container">
+            <div id="review-left">
+                <div class="stars" id="">
+                    <div class="star empty"></div>
+                    <div class="star empty"></div>
+                    <div class="star empty"></div>
+                    <div class="star empty"></div>
+                    <div class="star empty"></div>
+                </div>
+                <p id="reviews-summary-label">No reviews yet.</p>
+                <div class="stars-chart-container">
+                    <span>5</span>
+                    <div class="chart"></div>
+                </div>
+                <div class="stars-chart-container">
+                    <span>4</span>
+                    <div class="chart"></div>
+                </div>
+                <div class="stars-chart-container">
+                    <span>3</span>
+                    <div class="chart"></div>
+                </div>
+                <div class="stars-chart-container">
+                    <span>2</span>
+                    <div class="chart"></div>
+                </div>
+                <div class="stars-chart-container">
+                    <span>1</span>
+                    <div class="chart"></div>
+                </div>
+
+            </div>
+                <% if(loggedIn) { %>
+                    <div id="review-right">
+                        <div id="review-profile">
+                            <img
+                                src="<%- `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}` %>"
+                                class="image"
+                                ondragstart="return false"
+                            >
+                            <p><%- userData.username %></p>
+                        </div>
+                        <div class="stars" id="stars-create-review">
+                            <div class="star empty"></div>
+                            <div class="star empty"></div>
+                            <div class="star empty"></div>
+                            <div class="star empty"></div>
+                            <div class="star empty"></div>
+                        </div>
+                        <textarea id="review-textarea" placeholder="Your review for this server"></textarea>
+                        <div id="send-review-button-container">
+                            <button id="send-review-button">
+                                <p>Send</p>
+                                <img src="icons/right.svg">
+                            </button>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div id="review-right-not-logged-in">
+                        <p class="not-logged-in">
+                            You need to be logged in to leave reviews!
+                            <a>Join DISDEX</a>
+                        </p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
     </body>
 </html>

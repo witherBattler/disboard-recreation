@@ -4,6 +4,9 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const users = client.db("users").collection("users")
 const publicServers = client.db("servers").collection("public")
 const unlistedServers = client.db("servers").collection("unlisted")
+const reviews = client.db("reviews").collection("reviews")
+const { generateId } = require("./util")
+
 client.connect()
 
 async function getUser(id) {
@@ -16,7 +19,8 @@ async function createUser(discordID, accessToken, refreshToken) {
         servers: [],
         createdAt: Date.now(),
         accessToken,
-        refreshToken
+        refreshToken,
+        reviews: []
     }
     await users.insertOne(user)
     return user
@@ -121,6 +125,18 @@ async function getServersData(serverIds) {
     }).toArray()
     return [...publicServersMatches, ...unlistedServersMatches]
 }
+async function postReview(starsCount, text, serverId, userId) {
+    let id = generateId(6)
+    let reviewObject = {
+        id,
+        text,
+        server: serverId,
+        author: userId,
+        createdAt: Date.now(),
+        starsCount
+    }
+}
+
 
 module.exports = {
     getUser,
@@ -138,5 +154,6 @@ module.exports = {
     updateServerDataByGuildId,
     resetAllData,
     getUnregisteredGuilds,
-    getServersData
+    getServersData,
+    postReview
 }
