@@ -96,11 +96,11 @@
                             <p><%- userData.username %></p>
                         </div>
                         <div class="stars" id="stars-create-review">
-                            <div class="star empty"></div>
-                            <div class="star empty"></div>
-                            <div class="star empty"></div>
-                            <div class="star empty"></div>
-                            <div class="star empty"></div>
+                            <div class="star empty" data-star="1"></div>
+                            <div class="star empty" data-star="2"></div>
+                            <div class="star empty" data-star="3"></div>
+                            <div class="star empty" data-star="4"></div>
+                            <div class="star empty" data-star="5"></div>
                         </div>
                         <textarea id="review-textarea" placeholder="Your review for this server"></textarea>
                         <div id="send-review-button-container">
@@ -114,11 +114,19 @@
                     <div id="review-right-not-logged-in">
                         <p class="not-logged-in">
                             You need to be logged in to leave reviews!
-                            <a>Join DISDEX</a>
+                            <a href="/auth">Join DISDEX</a>
                         </p>
                     </div>
                 <% } %>
             </div>
         </div>
+        <div id="toast">
+            Lol!!! this is really funny i think
+        </div>
     </body>
+    <script>
+        let serverData = <%- JSON.stringify(serverData) %>
+        let loggedIn = <%- loggedIn %>
+    </script>
+    <script src="scripts/server.js"></script>
 </html>

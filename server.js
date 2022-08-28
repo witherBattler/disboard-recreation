@@ -179,7 +179,8 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     await postServer(req.user.id, post)
     res.send(id)
 })
-app.post("/api/set-review", (req, res) => {
+app.post("/api/post-review", (req, res) => {
+    
 
 })
 

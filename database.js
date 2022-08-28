@@ -135,6 +135,8 @@ async function postReview(starsCount, text, serverId, userId) {
         createdAt: Date.now(),
         starsCount
     }
+    await reviews.insertOne(reviewObject)
+    // where i left off
 }
 
 
