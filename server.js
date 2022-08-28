@@ -9,7 +9,7 @@ const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
 const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS } = require("./util")
-const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData } = require("./database")
+const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData } = require("./database")
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
 app.set("view engine", "ejs");
@@ -75,10 +75,10 @@ app.get("/server/:id", async (req, res) => {
     let serverData = await getServerData(id)
     if(serverData) {
         data.serverData = serverData
+        res.render("server", data)
     } else {
-        res.redirect("/404")
+        res.send(id)
     }
-    res.render("server", data)
 })
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)
@@ -179,9 +179,18 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     await postServer(req.user.id, post)
     res.send(id)
 })
-app.post("/api/post-review", (req, res) => {
-    
-
+app.post("/api/post-review", loggedIn, async (req, res) => {
+    let id = await postReview(req.body.rating, req.body.text, req.body.serverId, req.user.id)
+    res.send(id)
+})
+app.get("/api/reviews-data", async (req, res) => {
+    if(!req.query.ids) {
+        res.sendStatus(422)
+        return
+    }
+    let ids = req.query.ids.split(",")
+    let data = await getReviewsData(ids)
+    res.json(data)
 })
 
 function getUserData(user) {
@@ -254,4 +263,3 @@ app.locals = {
     convertTimeFromMS
 }
 
-resetAllData()

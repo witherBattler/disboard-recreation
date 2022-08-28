@@ -92,3 +92,17 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
 
     return serverElement
 }
+
+function getArrayAverage(array) {
+    let sum = array.reduce((sum, number) => sum + number)
+    return sum / array.length
+}
+
+function getStarAmount(number) {
+    return Math.round(number * 2) / 2
+}
+
+let ratingDefinitions = ["Bad", "Unimpressive", "Okay", "Good", "Perfect"]
+function getRatingDefinition(rating) {
+    return ratingDefinitions[Math.round(rating) - 1]
+}

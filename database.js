@@ -37,6 +37,7 @@ async function updateUser(id, data) {
 
 async function getServerData(id) {
     let server = await servers.findOne({id: id})
+    console.log(server)
     return server
 }
 async function getServerDataByGuildId(id) {
@@ -104,7 +105,7 @@ async function getServersData(serverIds) {
     }).toArray()
     return data
 }
-async function postReview(starsCount, text, serverId, userId) {
+async function postReview(rating, text, serverId, userId) {
     let id = generateId(6)
     let reviewObject = {
         id,
@@ -112,12 +113,28 @@ async function postReview(starsCount, text, serverId, userId) {
         server: serverId,
         author: userId,
         createdAt: Date.now(),
-        starsCount
+        rating
     }
     await reviews.insertOne(reviewObject)
-    // where i left off
+    await users.updateOne({id: userId}, {
+        $push: {
+            reviews: id
+        }
+    })
+    await servers.updateOne({id: serverId}, {
+        $push: {
+            reviews: id
+        }
+    })
 }
-
+async function getReviewsData(ids) {
+    let data = await reviews.find({
+        id: {
+            $in: ids
+        }
+    }).toArray()
+    return data
+}
 
 module.exports = {
     getUser,
@@ -134,5 +151,6 @@ module.exports = {
     resetAllData,
     getUnregisteredGuilds,
     getServersData,
-    postReview
+    postReview,
+    getReviewsData
 }
