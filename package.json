@@ -13,6 +13,7 @@
   "dependencies": {
     "@discordjs/builders": "^1.2.0",
     "@discordjs/rest": "^1.0.1",
+    "concurrently": "^7.3.0",
     "cors": "^2.8.5",
     "cross-fetch": "^3.1.5",
     "discord.js": "^14.2.0",

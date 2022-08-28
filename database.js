@@ -2,8 +2,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@disboard-redesign.5xh79ju.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const users = client.db("users").collection("users")
-const publicServers = client.db("servers").collection("public")
-const unlistedServers = client.db("servers").collection("unlisted")
+const servers = client.db("servers").collection("servers")
 const reviews = client.db("reviews").collection("reviews")
 const { generateId } = require("./util")
 
@@ -27,11 +26,7 @@ async function createUser(discordID, accessToken, refreshToken) {
 }
 
 async function postServer(userId, fullData) {
-    if(fullData.unlisted) {
-        await unlistedServers.insertOne(fullData)
-    } else {
-        await publicServers.insertOne(fullData)
-    }
+    servers.insertOne(fullData)
     await users.updateOne({ id: userId }, { $push: { servers: fullData.id } })
 
 }
@@ -41,17 +36,11 @@ async function updateUser(id, data) {
 }
 
 async function getServerData(id) {
-    let server = await publicServers.findOne({ id: id })
-    if(!server) {
-        server = await unlistedServers.findOne({ id: id })
-    }
+    let server = await servers.findOne({id: id})
     return server
 }
 async function getServerDataByGuildId(id) {
-    let server = await publicServers.findOne({ serverId: id })
-    if(!server) {
-        server = await unlistedServers.findOne({ serverId: id })
-    }
+    let server = await servers.findOne({serverId: id})
     return server
 }
 
@@ -63,6 +52,7 @@ async function getUsers(userIds) {
 async function getListingServers(search, category) {
     let query = {
         setUp: true,
+        unlisted: false
     }
     if(search && search.length > 0)
     query["$or"] = [
@@ -75,36 +65,30 @@ async function getListingServers(search, category) {
     ]
     if(category)
         query.category = category
-    let servers = await publicServers.find(query).sort({ lastBump: -1 }).toArray()
-    return servers
+    let matches = await servers.find(query).sort({ lastBump: -1 }).toArray()
+    return matches
 }
 
 async function updateServerData(id, data) {
-    await publicServers.updateOne({ id: id }, { $set: data } )
+    await servers.updateOne({ id: id }, { $set: data } )
 }
 async function updateServerDataByGuildId(id, data) {
-    await publicServers.updateOne({ serverId: id }, { $set: data } )
+    await servers.updateOne({ serverId: id }, { $set: data } )
     
 }
 async function resetAllData() {
-    await publicServers.deleteMany({})
-    await unlistedServers.deleteMany({})
+    await servers.deleteMany({})
     await users.deleteMany({})
+    await reviews.deleteMany({})
 }
 
 async function getUnregisteredGuilds(guilds) {
     let guildIds = guilds.map(guild => guild.id)
-    let invalidPublicServers = await publicServers.find({
+    let invalidServers = await servers.find({
         serverId: {
             $in: guildIds
         }
     }).toArray()
-    let invalidUnlistedServers = await unlistedServers.find({
-        serverId: {
-            $in: guildIds
-        }
-    }).toArray()
-    let invalidServers = [...invalidPublicServers, ...invalidUnlistedServers]
     let invalidServersIds = invalidServers.map(invalidServer => invalidServer.serverId)
     let validGuilds = guilds.filter(function(guild) {
         return !invalidServersIds.includes(guild.id)
@@ -113,17 +97,12 @@ async function getUnregisteredGuilds(guilds) {
 }
 
 async function getServersData(serverIds) {
-    let publicServersMatches = await publicServers.find({
+    let data = await servers.find({
         id: {
             $in: serverIds
         }
     }).toArray()
-    let unlistedServersMatches = await unlistedServers.find({
-        id: {
-            $in: serverIds
-        }
-    }).toArray()
-    return [...publicServersMatches, ...unlistedServersMatches]
+    return data
 }
 async function postReview(starsCount, text, serverId, userId) {
     let id = generateId(6)
@@ -147,8 +126,6 @@ module.exports = {
     getServerData,
     postServer,
     getListingServers,
-    publicServers,
-    unlistedServers,
     getUsers,
     users,
     updateServerData,

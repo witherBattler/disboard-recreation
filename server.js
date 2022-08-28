@@ -253,3 +253,5 @@ app.locals = {
     generateBotUrl,
     convertTimeFromMS
 }
+
+resetAllData()

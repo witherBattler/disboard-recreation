@@ -18,6 +18,7 @@ function leaveAllGuilds() {
 }
 
 client.on("ready", async () => {
+    leaveAllGuilds()
     const guilds = client.guilds.cache.map(guild => guild.id)
     for(let i = 0; i != guilds.length; i++) {
         console.log(process.env.BOT_TOKEN, guilds[i].id)
@@ -53,22 +54,6 @@ client.on("guildCreate", async guild => {
         // finish
     } else {
         let members = await getMembers(guild)
-        console.log({
-            botJoined: true,
-            icon: guild.icon,
-            banner: guild.banner,
-            guildName: guild.name,
-            members: members.all,
-            onlineMembers: members.online,
-            boosts: guild.premiumSubscriptionCount,
-            emojis: guild.emojis.cache.map(function(emoji) {
-                return {
-                    name: emoji.name,
-                    id: emoji.id
-                }
-            }),
-            guildCreatedAt: guild.createdTimestamp,
-        })
         await updateServerDataByGuildId(guild.id, {
             botJoined: true,
             icon: guild.icon,
