@@ -47,6 +47,7 @@ function showToast(message) {
 
 let starElementsAverage = Array.from(document.getElementById("stars-average-rating").children)
 let reviewsSummaryLabel = document.getElementById("reviews-summary-label")
+let ratingSummaryCharts = Array.from(document.getElementsByClassName("rating-summary-chart"))
 ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
     // average
     reviews = JSON.parse(reviews)
@@ -67,4 +68,15 @@ ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
         }
     }
     reviewsSummaryLabel.textContent = `${starAverage} out of 5: ${getRatingDefinition(starAverage)}`
+
+    // shares
+    let amounts = [] // array of amounts of reviews, where the rating is the index of the value
+    for(let i = ratingSummaryCharts.length; i != 0; i--) {
+        let amount = reviewsRatings.filter(rating => rating == i).length
+        amounts.push(amount)
+    }
+    let shares = amounts.map(amount => amount / reviewsRatings.length)
+    for(let i = 0; i != shares.length; i++) {
+        ratingSummaryCharts[i].style.backgroundImage = constructHardEdgedGradient("white", "transparent", shares[i])
+    }
 })

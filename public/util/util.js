@@ -106,3 +106,7 @@ let ratingDefinitions = ["Bad", "Unimpressive", "Okay", "Good", "Perfect"]
 function getRatingDefinition(rating) {
     return ratingDefinitions[Math.round(rating) - 1]
 }
+
+function constructHardEdgedGradient(color1, color2, cutAt) {
+    return `linear-gradient(to right, ${color1} 0%, ${color1} ${cutAt * 100 + "%"}, ${color2} ${cutAt * 100 + "%"}, ${color2} 100%)`
+}
