@@ -33,6 +33,7 @@ if(loggedIn) {
             text: reviewTextArea.value,
             serverId: serverData.id
         }))
+        window.reload()
     })
 }
 
