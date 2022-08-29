@@ -110,3 +110,28 @@ function getRatingDefinition(rating) {
 function constructHardEdgedGradient(color1, color2, cutAt) {
     return `linear-gradient(to right, ${color1} 0%, ${color1} ${cutAt * 100 + "%"}, ${color2} ${cutAt * 100 + "%"}, ${color2} 100%)`
 }
+
+function constructSearchString(searchTerms) {
+    let toReturn = "/api/servers"
+    if(searchTerms.search) {
+        toReturn += "?search=" + searchTerms.search
+        if(searchTerms.category) {
+            toReturn += "&category=" + searchTerms.category
+        }
+    } else if(searchTerms.category) {
+        toReturn += "?category=" + searchTerms.category
+    }
+    return toReturn
+}
+function constructSearchDescription(searchTerms) {
+    let toReturn = ""
+    if(searchTerms.search) {
+        toReturn += `Showing results for "${searchTerms.search}"`
+        if(searchTerms.category) {
+            toReturn += ` in category "${searchTerms.category}"`
+        }
+    } else if(searchTerms.category) {
+        toReturn += `Showing results for servers in category "${searchTerms.category}"`
+    }
+    return toReturn
+}
