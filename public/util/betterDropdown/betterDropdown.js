@@ -26,6 +26,7 @@ class BetterDropdown extends HTMLElement {
         dropdown.style.fontSize = this.getAttribute("font-size") || "25px"
         dropdown.addEventListener("click", () => {
             if(this.disabled) return
+            console.log(this.dropdownOptionsHeight + "px")
             if(dropdownOptions.style.height == this.dropdownOptionsHeight + "px") {
                 dropdownOptions.style.height = "0px"
                 dropdownOptions.style.opacity = "0"

@@ -1,4 +1,5 @@
 let toast = document.getElementById("toast")
+let reviewLeft = document.getElementById("review-left")
 
 if(loggedIn) {
     let sendReviewButton = document.getElementById("send-review-button")
@@ -80,4 +81,7 @@ ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
     for(let i = 0; i != shares.length; i++) {
         ratingSummaryCharts[i].style.backgroundImage = constructHardEdgedGradient("white", "transparent", shares[i])
     }
+
+    // reviews panel
 })
+
