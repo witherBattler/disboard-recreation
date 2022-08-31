@@ -37,6 +37,7 @@ if(loggedIn) {
     })
 }
 
+let reviewsUsersLoaded = false
 
 function showToast(message) {
     toast.style.top = "30px"
@@ -52,6 +53,7 @@ let ratingSummaryCharts = Array.from(document.getElementsByClassName("rating-sum
 let popupBackground = document.getElementById("popup-background")
 let reviewLeft = document.getElementById("review-left")
 let reviewsPopup = document.getElementById("reviews-popup")
+let reviewsCloseButton = document.getElementById("reviews-close-button")
 
 ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
     // average
@@ -86,11 +88,20 @@ ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
     }
 
     // reviews panel
-    reviewLeft.addEventListener("click", (event) => {
+    reviewLeft.addEventListener("click", async (event) => {
         showReviewsPopup()
+        reviewsUsersLoaded = true
+        let userIds = reviews.map(review => review.author)
+        // let users = await ajax("/api/users?users=" + userIds.join(","), "GET", )
     })
-    
-    
+    reviewsCloseButton.addEventListener("click", (event) => {
+        hideReviewsPopup()
+    })
+    popupBackground.addEventListener("click", (event) => {
+        if(!reviewsPopup.matches(":hover")) {
+            hideReviewsPopup()
+        }
+    })
 })
 
 function showReviewsPopup() {
@@ -104,5 +115,10 @@ function showReviewsPopup() {
 }
 
 function hideReviewsPopup() {
-
+    popupBackground.style.opacity = "0"
+    reviewsPopup.style.opacity = "0"
+    setTimeout(function() {
+        popupBackground.style.display = "none"
+        reviewsPopup.style.display = "none"
+    }, 300)
 }

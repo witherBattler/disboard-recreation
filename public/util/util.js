@@ -1,3 +1,32 @@
+let timeConversionData = [
+	["second", "seconds", 1000], 
+	["minute", "minutes", 60], 
+	["hour", "hours", 60], 
+	["day", "days", 24], 
+	["week", "weeks", 7],
+	["month", "months", 4.34524],
+	["year", "years", 12],
+	["decade", "decades", 10],
+	["century", "centuries", 10]
+]
+function convertTimeFromMS(time) {
+	time = Math.max(time, 1000)
+	let timeConversionDataIndex = 0
+	while(time / timeConversionData[timeConversionDataIndex][2] >= 1) {
+		time = time / timeConversionData[timeConversionDataIndex][2]
+		timeConversionDataIndex++
+		if(timeConversionDataIndex >= timeConversionData.length) {
+			break
+		}
+	}
+	let t = timeConversionData[timeConversionDataIndex - 1][1]
+	let timeNumber = Math.floor(time)
+    if(timeNumber == 1) {
+        t = timeConversionData[timeConversionDataIndex - 1][0]
+    }
+	return timeNumber + " " + t
+}
+
 function ajax(url, method, data) {
     // fetch
     return new Promise((resolve, reject) => {
@@ -135,3 +164,98 @@ function constructSearchDescription(searchTerms) {
     }
     return toReturn
 }
+
+function constructReviewElement(userId, icon, name, starsCount, createdAt, text, upvoted, upvotes, downvoted, downvotes) {
+    const reviewContainer = document.createElement("div")
+    reviewContainer.classList.add("review")
+
+    const reviewInnerContainer = document.createElement("div")
+    reviewInnerContainer.classList.add("review-inner-container")
+
+    const reviewProfile = document.createElement("div")
+    reviewProfile.classList.add("review-profile")
+
+    const reviewProfileIcon = document.createElement("img")
+    reviewProfileIcon.classList.add("review-profile-icon")
+    reviewProfileIcon.src = `https://cdn.discordapp.com/${userId}/${icon}`
+
+    const reviewProfileName = document.createElement("p")
+    reviewProfileName.classList.add("review-profile-name")
+    reviewProfileName.textContent = name
+
+    const reviewSecondLevel = document.createElement("div")
+    reviewSecondLevel.classList.add("review-second-level")
+
+    const stars = document.createElement("div")
+    stars.classList.add("stars")
+
+    let starsList = []
+    for(let i = 0; i != 5; i++) {
+        let starElement = document.createElement("div")
+        starElement.classList.add("star")
+        if(starsCount >= 1) {
+            starElement.classList.add("filled")
+            starsCount -= 1
+        } else if(starsCount == 0.5) {
+            starElement.classList.add("half-empty")
+            starsCount -= 0.5
+        } else {
+            starElement.classList.add("empty")
+        }
+        starsList.push(starElement)
+        stars.appendChild(starElement)
+    }
+
+    const reviewDate = document.createElement("div")
+    reviewDate.classList.add("review-date")
+    reviewDate.textContent = `${convertTimeFromMS(Date.now() - createdAt)} ago`
+
+    const reviewText = document.createElement("p")
+    reviewText.classList.add("review-text")
+    reviewText.textContent = text
+
+    const reviewVote = document.createElement("div")
+    reviewVote.classList.add("review-vote")
+
+    const reviewUpvote = document.createElement("div")
+    reviewUpvote.classList.add("review-upvote")
+
+    const reviewUpvoteCount = document.createElement("p")
+    reviewUpvoteCount.classList.add("review-upvote-count")
+    reviewUpvoteCount.textContent = upvotes
+
+    const reviewUpvoteIcon = document.createElement("img")
+    reviewUpvoteIcon.classList.add("review-upvote-icon")
+    reviewUpvoteIcon.src = "icons/upvote.svg"
+
+    const reviewDownvote = document.createElement("div")
+    reviewDownvote.classList.add("review-downvote-count")
+
+    const reviewDownvoteCount = document.createElement("p")
+    reviewDownvoteCount.classList.add("review-downvote-count")
+    reviewDownvoteCount.textContent = downvotes
+
+    const reviewDownvoteIcon = document.createElement("review-downvote-icon")
+    reviewDownvoteIcon.classList.add("review-downvote-icon")
+    reviewDownvoteIcon.src = "icons/downvote.svg"
+
+    // adding elements
+    reviewContainer.appendChild(reviewInnerContainer)
+    reviewInnerContainer.appendChild(reviewProfile)
+    reviewInnerContainer.appendChild(reviewSecondLevel)
+    reviewInnerContainer.appendChild(reviewText)
+    reviewInnerContainer.appendChild(reviewVote)
+    reviewProfile.appendChild(reviewProfileIcon)
+    reviewProfile.appendChild(reviewProfileName)
+    reviewSecondLevel.appendChild(stars)
+    reviewSecondLevel.appendChild(reviewDate)
+    reviewVote.appendChild(reviewUpvote)
+    reviewVote.appendChild(reviewDownvote)
+    reviewUpvote.appendChild(reviewUpvoteCount)
+    reviewUpvote.appendChild(reviewUpvoteIcon)
+    reviewDownvote.appendChild(reviewDownvoteCount)
+    reviewDownvote.appendChild(reviewDownvoteIcon)
+
+    return reviewContainer
+}
+
