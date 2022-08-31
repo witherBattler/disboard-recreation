@@ -373,6 +373,13 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(5px);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
+    -moz-transition: opacity 0.3s;
+    -ms-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
 }
 #reviews-popup {
     width: 800px;
@@ -385,8 +392,14 @@ body {
     -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
-    display: flex;
+    display: none;
     flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
+    -moz-transition: opacity 0.3s;
+    -ms-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
 }
 #reviews-header {
     background-color: var(--special-color-1);
@@ -485,4 +498,16 @@ body {
 .review-upvote-icon, .review-downvote-icon {
     height: 13px;
     margin-left: 2px;
+}
+#reviews-close-button-container {
+    display: flex;
+    justify-content: end;
+    flex-grow: 1;
+    padding-right: 17px;
+    box-sizing: border-box;
+}
+#reviews-close-button {
+    height: 30px;
+    cursor: pointer;
+    user-select: none;
 }

@@ -1,5 +1,4 @@
 let toast = document.getElementById("toast")
-let reviewLeft = document.getElementById("review-left")
 
 if(loggedIn) {
     let sendReviewButton = document.getElementById("send-review-button")
@@ -50,6 +49,10 @@ function showToast(message) {
 let starElementsAverage = Array.from(document.getElementById("stars-average-rating").children)
 let reviewsSummaryLabel = document.getElementById("reviews-summary-label")
 let ratingSummaryCharts = Array.from(document.getElementsByClassName("rating-summary-chart"))
+let popupBackground = document.getElementById("popup-background")
+let reviewLeft = document.getElementById("review-left")
+let reviewsPopup = document.getElementById("reviews-popup")
+
 ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
     // average
     reviews = JSON.parse(reviews)
@@ -83,5 +86,23 @@ ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
     }
 
     // reviews panel
+    reviewLeft.addEventListener("click", (event) => {
+        showReviewsPopup()
+    })
+    
+    
 })
 
+function showReviewsPopup() {
+    popupBackground.style.display = "flex"
+    reviewsPopup.style.display = "block"
+    setTimeout(function() {
+        popupBackground.style.opacity = "1"
+        reviewsPopup.style.opacity = "1"
+
+    })
+}
+
+function hideReviewsPopup() {
+
+}
