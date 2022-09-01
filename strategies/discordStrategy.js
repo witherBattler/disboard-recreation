@@ -35,8 +35,9 @@ passport.use(
     }, async (accessToken, refreshToken, profile, done) => {
         let id = profile.id
         let user = await getUser(id)
+        console.log(profile)
         if (!user) {
-            user = await createUser(id, accessToken, refreshToken)
+            user = await createUser(id, accessToken, refreshToken, profile.avatar, profile.username)
         }
         done(null, user)
     })

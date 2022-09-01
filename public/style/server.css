@@ -475,6 +475,7 @@ body {
 }
 .review-text {
     margin-top: 5px;
+    margin-bottom: 5px;
     font-weight: 500;
     line-height: 130%;
 }

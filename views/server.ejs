@@ -150,6 +150,9 @@
     <script>
         let serverData = <%- JSON.stringify(serverData) %>
         let loggedIn = <%- loggedIn %>
+        <% if(loggedIn) { %>
+            let userData = <%- JSON.stringify(userData) %>
+        <% } %>
     </script>
     <script src="scripts/server.js"></script>
 </html>

@@ -103,7 +103,11 @@ app.get("/api/servers", async(req, res) => {
 
     res.json(servers)
 })
-
+app.get("/api/users", loggedIn, async(req, res) => {
+    let ids = req.query.users.split(",")
+    let users = await getUsers(ids)
+    res.json(users)
+})
 app.post("/api/post-server", loggedIn, async(req, res) => {
     if((
         req.body.serverId != undefined &&
@@ -262,3 +266,4 @@ app.locals = {
     convertTimeFromMS
 }
 
+resetAllData()

@@ -177,7 +177,7 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
 
     const reviewProfileIcon = document.createElement("img")
     reviewProfileIcon.classList.add("review-profile-icon")
-    reviewProfileIcon.src = `https://cdn.discordapp.com/${userId}/${icon}`
+    reviewProfileIcon.src = `https://cdn.discordapp.com/avatars/${userId}/${icon}`
 
     const reviewProfileName = document.createElement("p")
     reviewProfileName.classList.add("review-profile-name")
@@ -229,13 +229,13 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
     reviewUpvoteIcon.src = "icons/upvote.svg"
 
     const reviewDownvote = document.createElement("div")
-    reviewDownvote.classList.add("review-downvote-count")
+    reviewDownvote.classList.add("review-downvote")
 
     const reviewDownvoteCount = document.createElement("p")
     reviewDownvoteCount.classList.add("review-downvote-count")
     reviewDownvoteCount.textContent = downvotes
 
-    const reviewDownvoteIcon = document.createElement("review-downvote-icon")
+    const reviewDownvoteIcon = document.createElement("img")
     reviewDownvoteIcon.classList.add("review-downvote-icon")
     reviewDownvoteIcon.src = "icons/downvote.svg"
 

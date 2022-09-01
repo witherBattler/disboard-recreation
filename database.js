@@ -12,14 +12,16 @@ async function getUser(id) {
     let user = await users.findOne({ id: id })
     return user
 }
-async function createUser(discordID, accessToken, refreshToken) {
+async function createUser(discordID, accessToken, refreshToken, avatar, username) {
     let user = {
         id: discordID,
         servers: [],
         createdAt: Date.now(),
         accessToken,
         refreshToken,
-        reviews: []
+        reviews: [],
+        avatar,
+        username
     }
     await users.insertOne(user)
     return user
@@ -113,7 +115,10 @@ async function postReview(rating, text, serverId, userId) {
         server: serverId,
         author: userId,
         createdAt: Date.now(),
-        rating
+        rating,
+        upvotes: [],
+        downvotes: [],
+        createdAt: Date.now()
     }
     await reviews.insertOne(reviewObject)
     await users.updateOne({id: userId}, {

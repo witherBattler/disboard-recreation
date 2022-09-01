@@ -33,11 +33,13 @@ if(loggedIn) {
             text: reviewTextArea.value,
             serverId: serverData.id
         }))
-        window.reload()
+        location.reload()
     })
 }
 
 let reviewsUsersLoaded = false
+let reviewUsers = {}
+let reviewsCopy = null
 
 function showToast(message) {
     toast.style.top = "30px"
@@ -54,54 +56,80 @@ let popupBackground = document.getElementById("popup-background")
 let reviewLeft = document.getElementById("review-left")
 let reviewsPopup = document.getElementById("reviews-popup")
 let reviewsCloseButton = document.getElementById("reviews-close-button")
+let reviewsContainer = document.getElementById("reviews-container")
 
-ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
-    // average
-    reviews = JSON.parse(reviews)
-    let reviewsRatings = reviews.map(review => review.rating) // array with ratings
-    let averageReview = getArrayAverage(reviewsRatings) // average of all reviews in reviewsRatings
-    let starAverage = getStarAmount(averageReview) // rounded to nearest 0.5
-    let starAverageCopy = starAverage
+if(serverData.reviews.length > 0) {
+    ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
+        // average
+        reviews = JSON.parse(reviews)
+        reviewsCopy = reviews
+        let reviewsRatings = reviews.map(review => review.rating) // array with ratings
+        let averageReview = getArrayAverage(reviewsRatings) // average of all reviews in reviewsRatings
+        let starAverage = getStarAmount(averageReview) // rounded to nearest 0.5
+        let starAverageCopy = starAverage
+        for(let i = 0; i != starElementsAverage.length; i++) {
+            let star = starElementsAverage[i]
+            if(starAverageCopy >= 1) { // this star is filled
+                starAverageCopy -= 1
+                star.classList.add("filled")
+            } else if(starAverageCopy == 0.5) { // this star is half filled / half empty
+                starAverageCopy -= 0.5
+                star.classList.add("half-empty")
+            } else { // this star is empty
+                star.classList.add("empty")
+            }
+        }
+        reviewsSummaryLabel.textContent = `${starAverage} out of 5: ${getRatingDefinition(starAverage)}`
+
+        // shares
+        let amounts = [] // array of amounts of reviews, where the rating is the index of the value
+        for(let i = ratingSummaryCharts.length; i != 0; i--) {
+            let amount = reviewsRatings.filter(rating => rating == i).length
+            amounts.push(amount)
+        }
+        let shares = amounts.map(amount => amount / reviewsRatings.length)
+        for(let i = 0; i != shares.length; i++) {
+            ratingSummaryCharts[i].style.backgroundImage = constructHardEdgedGradient("white", "transparent", shares[i])
+        }
+    })
+} else {
     for(let i = 0; i != starElementsAverage.length; i++) {
         let star = starElementsAverage[i]
-        if(starAverageCopy >= 1) { // this star is filled
-            starAverageCopy -= 1
-            star.classList.add("filled")
-        } else if(starAverageCopy == 0.5) { // this star is half filled / half empty
-            starAverageCopy -= 0.5
-            star.classList.add("half-empty")
-        } else { // this star is empty
-            star.classList.add("empty")
-        }
+        star.classList.add("empty")
     }
-    reviewsSummaryLabel.textContent = `${starAverage} out of 5: ${getRatingDefinition(starAverage)}`
-
-    // shares
-    let amounts = [] // array of amounts of reviews, where the rating is the index of the value
-    for(let i = ratingSummaryCharts.length; i != 0; i--) {
-        let amount = reviewsRatings.filter(rating => rating == i).length
-        amounts.push(amount)
-    }
-    let shares = amounts.map(amount => amount / reviewsRatings.length)
-    for(let i = 0; i != shares.length; i++) {
-        ratingSummaryCharts[i].style.backgroundImage = constructHardEdgedGradient("white", "transparent", shares[i])
-    }
-
-    // reviews panel
-    reviewLeft.addEventListener("click", async (event) => {
-        showReviewsPopup()
+}
+// reviews panel
+reviewLeft.addEventListener("click", async (event) => {
+    showReviewsPopup()
+    if(reviewsCopy) { // execute only if loaded, and only if there are reviews
         reviewsUsersLoaded = true
-        let userIds = reviews.map(review => review.author)
-        // let users = await ajax("/api/users?users=" + userIds.join(","), "GET", )
-    })
-    reviewsCloseButton.addEventListener("click", (event) => {
-        hideReviewsPopup()
-    })
-    popupBackground.addEventListener("click", (event) => {
-        if(!reviewsPopup.matches(":hover")) {
-            hideReviewsPopup()
+        let userIds = reviewsCopy.map(review => review.author)
+        let users = await ajax("/api/users?users=" + userIds.join(","), "GET")
+        users = JSON.parse(users)
+        for(let i = 0; i != users.length; i++) {
+            reviewUsers[users[i].id] = users[i]
         }
-    })
+        for(let i = 0; i != reviewsCopy.length; i++) {
+            let review = reviewsCopy[i]
+            let user = reviewUsers[review.author]
+            let upvoted = false
+            let downvoted = false
+            if(loggedIn) {
+                upvoted = review.upvotes.indexOf(user.id) != -1
+                downvoted = review.downvotes.indexOf(user.id) != -1
+            }
+            let reviewElement = constructReviewElement(user.id, user.avatar, user.username, review.rating, review.createdAt, review.text, upvoted, review.upvotes.length, downvoted, review.downvotes.length)
+            reviewsContainer.appendChild(reviewElement)
+        }
+    }
+})
+reviewsCloseButton.addEventListener("click", (event) => {
+    hideReviewsPopup()
+})
+popupBackground.addEventListener("click", (event) => {
+    if(!reviewsPopup.matches(":hover")) {
+        hideReviewsPopup()
+    }
 })
 
 function showReviewsPopup() {
