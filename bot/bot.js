@@ -18,10 +18,8 @@ function leaveAllGuilds() {
 }
 
 client.on("ready", async () => {
-    leaveAllGuilds()
     const guilds = client.guilds.cache.map(guild => guild.id)
     for(let i = 0; i != guilds.length; i++) {
-        console.log(process.env.BOT_TOKEN, guilds[i].id)
         await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_APPLICATION_ID, guilds[i]), {
             body: commands
         })

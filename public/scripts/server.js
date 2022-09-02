@@ -99,30 +99,39 @@ if(serverData.reviews.length > 0) {
     }
 }
 // reviews panel
+let reviewsRendered = false
+let starsChartContainers = document.getElementsByClassName("stars-chart-container")
 reviewLeft.addEventListener("click", async (event) => {
-    showReviewsPopup()
-    if(reviewsCopy) { // execute only if loaded, and only if there are reviews
-        reviewsUsersLoaded = true
-        let userIds = reviewsCopy.map(review => review.author)
-        let users = await ajax("/api/users?users=" + userIds.join(","), "GET")
-        users = JSON.parse(users)
-        for(let i = 0; i != users.length; i++) {
-            reviewUsers[users[i].id] = users[i]
-        }
-        for(let i = 0; i != reviewsCopy.length; i++) {
-            let review = reviewsCopy[i]
-            let user = reviewUsers[review.author]
-            let upvoted = false
-            let downvoted = false
-            if(loggedIn) {
-                upvoted = review.upvotes.indexOf(user.id) != -1
-                downvoted = review.downvotes.indexOf(user.id) != -1
-            }
-            let reviewElement = constructReviewElement(user.id, user.avatar, user.username, review.rating, review.createdAt, review.text, upvoted, review.upvotes.length, downvoted, review.downvotes.length)
-            reviewsContainer.appendChild(reviewElement)
+    for(let i = 0; i != starsChartContainers.length; i++) {
+        let starsChartContainer = starsChartContainers[i]
+        if(starsChartContainer.matches(":hover")) {
+            return
         }
     }
+    showReviewsPopup()
+    if(reviewsCopy && !reviewsRendered) { // execute only if loaded, and only if there are reviews // and only if didn't render yet
+        reviewsUsersLoaded = true
+        await fetchReviewsUsers()
+        renderReviews(reviewsCopy)
+        reviewsRendered = true
+    }
 })
+
+
+for(let i = 0; i != starsChartContainers.length; i++) {
+    let starsChartContainer = starsChartContainers[i]
+    starsChartContainer.addEventListener("click", async (event) => {
+        let rating = 5 - i
+        showReviewsPopup()
+        reviewsContainer.innerHTML = ""
+        if(!reviewsRendered) {
+            await fetchReviewsUsers()
+        }
+        renderReviews(reviewsCopy.filter(review => review.rating == rating))
+        reviewsRendered = true
+    })
+}
+
 reviewsCloseButton.addEventListener("click", (event) => {
     hideReviewsPopup()
 })
@@ -131,6 +140,21 @@ popupBackground.addEventListener("click", (event) => {
         hideReviewsPopup()
     }
 })
+
+function renderReviews(reviews) {
+    for(let i = 0; i != reviews.length; i++) {
+        let review = reviews[i]
+        let user = reviewUsers[review.author]
+        let upvoted = false
+        let downvoted = false
+        if(loggedIn) {
+            upvoted = review.upvotes.indexOf(user.id) != -1
+            downvoted = review.downvotes.indexOf(user.id) != -1
+        }
+        let reviewElement = constructReviewElement(user.id, user.avatar, user.username, review.rating, review.createdAt, review.text, upvoted, review.upvotes.length, downvoted, review.downvotes.length)
+        reviewsContainer.appendChild(reviewElement)
+    }
+}
 
 function showReviewsPopup() {
     popupBackground.style.display = "flex"
@@ -145,8 +169,16 @@ function showReviewsPopup() {
 function hideReviewsPopup() {
     popupBackground.style.opacity = "0"
     reviewsPopup.style.opacity = "0"
-    setTimeout(function() {
+    setTimeout(function() { 
         popupBackground.style.display = "none"
         reviewsPopup.style.display = "none"
     }, 300)
+}
+async function fetchReviewsUsers() {
+    let userIds = reviewsCopy.map(review => review.author)
+    let users = await ajax("/api/users?users=" + userIds.join(","), "GET")
+    users = JSON.parse(users)
+    for(let i = 0; i != users.length; i++) {
+        reviewUsers[users[i].id] = users[i]
+    }
 }
