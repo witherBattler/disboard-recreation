@@ -100,12 +100,13 @@ app.get("/api/owned-servers", loggedIn, async(req, res) => {
 })
 app.get("/api/servers", async(req, res) => {
     let servers = await getListingServers( req.query.search || "", req.query.category || undefined)
-
     res.json(servers)
 })
-app.get("/api/users", loggedIn, async(req, res) => {
+app.get("/api/users", async(req, res) => {
     let ids = req.query.users.split(",")
     let users = await getUsers(ids)
+    console.log("wtf")
+
     res.json(users)
 })
 app.post("/api/post-server", loggedIn, async(req, res) => {

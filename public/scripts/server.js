@@ -57,6 +57,7 @@ let reviewLeft = document.getElementById("review-left")
 let reviewsPopup = document.getElementById("reviews-popup")
 let reviewsCloseButton = document.getElementById("reviews-close-button")
 let reviewsContainer = document.getElementById("reviews-container")
+let starsDropdown = document.getElementById("stars-dropdown")
 
 if(serverData.reviews.length > 0) {
     ajax(`/api/reviews-data?ids=${serverData.reviews.join(",")}`).then(reviews => {
@@ -112,9 +113,9 @@ reviewLeft.addEventListener("click", async (event) => {
     if(reviewsCopy && !reviewsRendered) { // execute only if loaded, and only if there are reviews // and only if didn't render yet
         reviewsUsersLoaded = true
         await fetchReviewsUsers()
-        renderReviews(reviewsCopy)
-        reviewsRendered = true
     }
+    renderReviews(reviewsCopy)
+    reviewsRendered = true
 })
 
 
@@ -158,7 +159,7 @@ function renderReviews(reviews) {
 
 function showReviewsPopup() {
     popupBackground.style.display = "flex"
-    reviewsPopup.style.display = "block"
+    reviewsPopup.style.display = "flex"
     setTimeout(function() {
         popupBackground.style.opacity = "1"
         reviewsPopup.style.opacity = "1"
@@ -177,8 +178,13 @@ function hideReviewsPopup() {
 async function fetchReviewsUsers() {
     let userIds = reviewsCopy.map(review => review.author)
     let users = await ajax("/api/users?users=" + userIds.join(","), "GET")
+
     users = JSON.parse(users)
     for(let i = 0; i != users.length; i++) {
         reviewUsers[users[i].id] = users[i]
     }
 }
+
+starsDropdown.appendEvent("change", () => {
+    console.log(starsDropdown.index)
+})
