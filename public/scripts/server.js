@@ -40,6 +40,7 @@ if(loggedIn) {
 let reviewsUsersLoaded = false
 let reviewUsers = {}
 let reviewsCopy = null
+let currentReviewsMode = 0
 
 function showToast(message) {
     toast.style.top = "30px"
@@ -110,6 +111,8 @@ reviewLeft.addEventListener("click", async (event) => {
         }
     }
     showReviewsPopup()
+    starsDropdown.setSelected(0)
+    currentReviewsMode = 0
     if(reviewsCopy && !reviewsRendered) { // execute only if loaded, and only if there are reviews // and only if didn't render yet
         reviewsUsersLoaded = true
         await fetchReviewsUsers()
@@ -124,6 +127,8 @@ for(let i = 0; i != starsChartContainers.length; i++) {
     starsChartContainer.addEventListener("click", async (event) => {
         let rating = 5 - i
         showReviewsPopup()
+        starsDropdown.setSelected(i + 1)
+        currentReviewsMode = rating
         reviewsContainer.innerHTML = ""
         if(!reviewsRendered) {
             await fetchReviewsUsers()
@@ -163,7 +168,6 @@ function showReviewsPopup() {
     setTimeout(function() {
         popupBackground.style.opacity = "1"
         reviewsPopup.style.opacity = "1"
-
     })
 }
 
@@ -186,5 +190,14 @@ async function fetchReviewsUsers() {
 }
 
 starsDropdown.appendEvent("change", () => {
-    console.log(starsDropdown.index)
+    if(starsDropdown.selected != "All") {
+        let starsCount = 6 - starsDropdown.selectedIndex
+        reviewsContainer.innerHTML = ""
+        renderReviews(reviewsCopy.filter(review => review.rating == starsCount))
+        currentReviewsMode = starsCount
+    } else {
+        reviewsContainer.innerHTML = ""
+        renderReviews(reviewsCopy)
+        currentReviewsMode = 0
+    }
 })

@@ -429,12 +429,6 @@ body {
     display: flex;
     flex-direction: column;
 }
-#reviews-refresh {
-    aspect-ratio: 1 / 1;
-    height: 28px;
-    margin-left: 8px;
-    cursor: pointer;
-}
 .review-profile-icon {
     border-radius: 50%;
     -webkit-border-radius: 50%;
