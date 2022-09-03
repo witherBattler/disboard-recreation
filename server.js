@@ -246,7 +246,10 @@ async function refreshAccessToken(user) {
     }))
 }
 
-
+app.get("/bot-instructions", (req, res) => {
+    console.log("gotten bot instructions")
+    res.send("lmao")
+})
 
 function getGuilds(user) {
     return new Promise((resolve, reject) => {

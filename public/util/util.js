@@ -51,10 +51,17 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
     // server top
     const serverTopElement = document.createElement("div")
     serverTopElement.className = "server-top"
-    if(disdexServerId)
+    if(disdexServerId) {
         serverTopElement.addEventListener("click", (event) => {
+            if(join && joinButton.matches(":hover")) {
+                return
+            }
+            if(addBot && addBotButton.matches(":hover")) {
+                return
+            }
             window.open("/server/" + disdexServerId)
         })
+    }
 
     const iconElement = document.createElement("img")
     iconElement.draggable = "false"
@@ -72,8 +79,9 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
 
     const buttonsContainer = document.createElement("div")
 
+    let joinButton
     if(join) {
-        const joinButton = document.createElement("button")
+        joinButton = document.createElement("button")
         joinButton.textContent = "Join"
         joinButton.addEventListener("click", (event) => {
             window.open(join)
@@ -81,11 +89,13 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
         buttonsContainer.appendChild(joinButton)
     }
 
+    let addBotButton
     if(addBot) {
-        const addBotButton = document.createElement("button")
+        addBotButton = document.createElement("button")
         addBotButton.textContent = "Add bot"
         addBotButton.addEventListener("click", (event) => {
-            window.open(addBot)
+            console.log(addBot)
+            window.location = addBot
         })
         buttonsContainer.appendChild(addBotButton)
     }
