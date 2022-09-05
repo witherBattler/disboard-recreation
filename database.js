@@ -141,6 +141,93 @@ async function getReviewsData(ids) {
     return data
 }
 
+async function reviewAddUpvote(id, userId) {
+    // remove userId from downvotes, add userId to upvotes.
+    let review = await reviews.findOneAndUpdate({
+        id
+    }, {
+        $pull: {
+            downvotes: userId,
+        },
+        $addToSet: {
+            upvotes: userId
+        }
+    }, {
+        returnDocument: "after"
+    })
+    console.log(review.value)
+    return {
+        upvoted: true,
+        downvoted: false,
+        upvotes: review.value.upvotes,
+        downvotes: review.value.downvotes
+    }
+}
+async function reviewRemoveUpvote(id, userId) {
+    // remove userId from upvotes
+    let review = await reviews.findOneAndUpdate({
+        id
+    }, {
+        $pull: {
+            upvotes: userId
+        }
+    }, {
+        returnDocument: "after"
+    })
+    console.log(review.value)
+
+    return {
+        upvoted: false,
+        downvoted: false,
+        upvotes: review.value.upvotes,
+        downvotes: review.value.downvotes
+    }
+}
+async function reviewAddDownvote(id, userId) {
+    // remove userId from upvotes, add userId to downvotes
+    let review = await reviews.findOneAndUpdate({
+        id
+    }, {
+        $pull: {
+            upvotes: userId
+        },
+        $addToSet: {
+            downvotes: userId
+        }
+    }, {
+        returnDocument: "after"
+    })
+    console.log(review.value)
+
+    return {
+        upvoted: false,
+        downvoted: true,
+        upvotes: review.value.upvotes,
+        downvotes: review.value.downvotes
+    }
+}
+async function reviewRemoveDownvote(id, userId) {
+    // remove userId from downvotes
+    let review = await reviews.findOneAndUpdate({
+        id
+    }, {
+        $pull: {
+            downvotes: userId
+        }
+    }, {
+        returnDocument: "after"
+    })
+    console.log(review.value)
+
+    return {
+        upvoted: false,
+        downvoted: false,
+        upvotes: review.value.upvotes,
+        downvotes: review.value.downvotes
+    }
+}
+
+
 module.exports = {
     getUser,
     createUser,
@@ -157,5 +244,9 @@ module.exports = {
     getUnregisteredGuilds,
     getServersData,
     postReview,
-    getReviewsData
+    getReviewsData,
+    reviewAddUpvote,
+    reviewRemoveUpvote,
+    reviewRemoveDownvote,
+    reviewAddDownvote
 }

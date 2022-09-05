@@ -175,7 +175,7 @@ function constructSearchDescription(searchTerms) {
     return toReturn
 }
 
-function constructReviewElement(userId, icon, name, starsCount, createdAt, text, upvoted, upvotes, downvoted, downvotes) {
+function constructReviewElement(userId, icon, name, starsCount, createdAt, text, upvoted, upvotes, downvoted, downvotes, id) {
     const reviewContainer = document.createElement("div")
     reviewContainer.classList.add("review")
 
@@ -229,6 +229,18 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
 
     const reviewUpvote = document.createElement("div")
     reviewUpvote.classList.add("review-upvote")
+    reviewUpvote.addEventListener("click", async (event) => {
+        let response
+        if(upvoted) {
+            response = await ajax(`api/reviews/remove-upvote/${id}`, "POST")
+        } else {
+            response = await ajax(`api/reviews/add-upvote/${id}`, "POST")
+        }
+        response = JSON.parse(response)
+        processReviewVoteResponse(response, reviewUpvote, reviewUpvoteCount, reviewUpvoteIcon, reviewDownvote, reviewDownvoteCount, reviewDownvoteIcon)
+        upvoted = response.upvoted
+        downvoted = response.downvoted
+    })
 
     const reviewUpvoteCount = document.createElement("p")
     reviewUpvoteCount.classList.add("review-upvote-count")
@@ -240,6 +252,18 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
 
     const reviewDownvote = document.createElement("div")
     reviewDownvote.classList.add("review-downvote")
+    reviewDownvote.addEventListener("click", async (event) => {
+        let response
+        if(downvoted) {
+            response = await ajax(`/api/reviews/remove-downvote/${id}`, "POST")
+        } else {
+            response = await ajax(`api/reviews/add-downvote/${id}`, "POST")
+        }
+        response = JSON.parse(response)
+        processReviewVoteResponse(response, reviewUpvote, reviewUpvoteCount, reviewUpvoteIcon, reviewDownvote, reviewDownvoteCount, reviewDownvoteIcon)
+        upvoted = response.upvoted
+        downvoted = response.downvoted
+    })
 
     const reviewDownvoteCount = document.createElement("p")
     reviewDownvoteCount.classList.add("review-downvote-count")
@@ -248,6 +272,15 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
     const reviewDownvoteIcon = document.createElement("img")
     reviewDownvoteIcon.classList.add("review-downvote-icon")
     reviewDownvoteIcon.src = "icons/downvote.svg"
+
+    if(downvoted) {
+        reviewDownvote.classList.add("active")
+        reviewDownvoteIcon.src = "icons/downvote-selected.svg"
+    }
+    if(upvoted) {
+        reviewUpvote.classList.add("active")
+        reviewUpvoteIcon.src = "icons/upvote-selected.svg"
+    }
 
     // adding elements
     reviewContainer.appendChild(reviewInnerContainer)
@@ -269,3 +302,22 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
     return reviewContainer
 }
 
+function processReviewVoteResponse(response, elementUpvote, upvoteCount, iconUpvote, elementDownvote, downvoteCount, iconDownvote) {
+    console.log(arguments)
+    if(response.upvoted) {
+        elementUpvote.classList.add("active")
+        iconUpvote.src = "icons/upvote-selected.svg"
+    } else {
+        elementUpvote.classList.remove("active")
+        iconUpvote.src = "icons/upvote.svg"
+    }
+    if(response.downvoted) {
+        elementDownvote.classList.add("active")
+        iconDownvote.src = "icons/downvote-selected.svg"
+    } else {
+        elementDownvote.classList.remove("active")
+        iconDownvote.src = "icons/downvote.svg"
+    }
+    upvoteCount.textContent = response.upvotes.length
+    downvoteCount.textContent = response.downvotes.length
+}

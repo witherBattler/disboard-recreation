@@ -9,7 +9,7 @@ const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
 const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS } = require("./util")
-const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData } = require("./database")
+const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote } = require("./database")
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
 app.set("view engine", "ejs");
@@ -245,9 +245,27 @@ async function refreshAccessToken(user) {
         return data
     }))
 }
-
+app.post("/api/reviews/add-upvote/:id", loggedIn, async (req, res) => {
+    const response = await reviewAddUpvote(req.params.id, req.user.id)
+    console.log(response)
+    res.send(response)
+})
+app.post("/api/reviews/remove-upvote/:id", loggedIn, async (req, res) => {
+    const response = await reviewRemoveUpvote(req.params.id, req.user.id)
+    console.log(response)
+    res.send(response)
+})
+app.post("/api/reviews/add-downvote/:id", loggedIn, async (req, res) => {
+    const response = await reviewAddDownvote(req.params.id, req.user.id)
+    console.log(response)
+    res.send(response)
+})
+app.post("/api/reviews/remove-downvote/:id", loggedIn, async (req, res) => {
+    const response = await reviewRemoveDownvote(req.params.id, req.user.id)
+    console.log(response)
+    res.send(response)
+})
 app.get("/bot-instructions", (req, res) => {
-    console.log("gotten bot instructions")
     res.send("lmao")
 })
 

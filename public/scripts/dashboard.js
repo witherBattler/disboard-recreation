@@ -176,7 +176,7 @@ function closeAddBotPopup() {
 
 
 function generateBotUrl(guildId) {
-    return `https://discord.com/api/oauth2/authorize?client_id=1008778841109573764&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fbot-instructions&response_type=code&scope=identify%20bot&guild_id=${guildId}&disable_guild_select=true`
+    return `https://discord.com/api/oauth2/authorize?client_id=1008778841109573764&permissions=8&redirect_uri=https://disdex.herokuapp.com/bot-instructions&response_type=code&scope=identify%20bot&guild_id=${guildId}&disable_guild_select=true`
 }
 
 ajax("/api/owned-servers").then(ownedServers => {

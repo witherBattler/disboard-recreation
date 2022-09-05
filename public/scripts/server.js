@@ -103,6 +103,7 @@ if(serverData.reviews.length > 0) {
 // reviews panel
 let reviewsRendered = false
 let starsChartContainers = document.getElementsByClassName("stars-chart-container")
+let rerenderForAll = true
 reviewLeft.addEventListener("click", async (event) => {
     for(let i = 0; i != starsChartContainers.length; i++) {
         let starsChartContainer = starsChartContainers[i]
@@ -113,14 +114,16 @@ reviewLeft.addEventListener("click", async (event) => {
     showReviewsPopup()
     starsDropdown.setSelected(0)
     currentReviewsMode = 0
-    if(reviewsCopy && !reviewsRendered) { // execute only if loaded, and only if there are reviews // and only if didn't render yet
+    if(reviewsCopy && !reviewsRendered) { // execute only if loaded, and only if there are reviews // and only if didn't render yet // and only if we need to
         reviewsUsersLoaded = true
         await fetchReviewsUsers()
     }
-    renderReviews(reviewsCopy)
-    reviewsRendered = true
+    if(rerenderForAll) {
+        renderReviews(reviewsCopy)
+        reviewsRendered = true
+        rerenderForAll = false
+    }
 })
-
 
 for(let i = 0; i != starsChartContainers.length; i++) {
     let starsChartContainer = starsChartContainers[i]
@@ -135,6 +138,7 @@ for(let i = 0; i != starsChartContainers.length; i++) {
         }
         renderReviews(reviewsCopy.filter(review => review.rating == rating))
         reviewsRendered = true
+        rerenderForAll = true
     })
 }
 
@@ -154,10 +158,10 @@ function renderReviews(reviews) {
         let upvoted = false
         let downvoted = false
         if(loggedIn) {
-            upvoted = review.upvotes.indexOf(user.id) != -1
-            downvoted = review.downvotes.indexOf(user.id) != -1
+            upvoted = review.upvotes.indexOf(userData.id) != -1
+            downvoted = review.downvotes.indexOf(userData.id) != -1
         }
-        let reviewElement = constructReviewElement(user.id, user.avatar, user.username, review.rating, review.createdAt, review.text, upvoted, review.upvotes.length, downvoted, review.downvotes.length)
+        let reviewElement = constructReviewElement(user.id, user.avatar, user.username, review.rating, review.createdAt, review.text, upvoted, review.upvotes.length, downvoted, review.downvotes.length, review.id)
         reviewsContainer.appendChild(reviewElement)
     }
 }
@@ -195,9 +199,11 @@ starsDropdown.appendEvent("change", () => {
         reviewsContainer.innerHTML = ""
         renderReviews(reviewsCopy.filter(review => review.rating == starsCount))
         currentReviewsMode = starsCount
+        rerenderForAll = true
     } else {
         reviewsContainer.innerHTML = ""
         renderReviews(reviewsCopy)
         currentReviewsMode = 0
+        rerenderForAll = false
     }
 })

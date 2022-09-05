@@ -505,6 +505,12 @@ body {
 .review-downvote {
     margin-left: 20px;
 }
+.review-downvote.active {
+    color: red;
+}
+.review-upvote.active {
+    color: rgb(0, 200, 0);
+}
 .review-upvote-count, .review-downvote-count {
     font-size: 30px;
 }
