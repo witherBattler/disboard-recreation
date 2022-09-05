@@ -229,18 +229,6 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
 
     const reviewUpvote = document.createElement("div")
     reviewUpvote.classList.add("review-upvote")
-    reviewUpvote.addEventListener("click", async (event) => {
-        let response
-        if(upvoted) {
-            response = await ajax(`api/reviews/remove-upvote/${id}`, "POST")
-        } else {
-            response = await ajax(`api/reviews/add-upvote/${id}`, "POST")
-        }
-        response = JSON.parse(response)
-        processReviewVoteResponse(response, reviewUpvote, reviewUpvoteCount, reviewUpvoteIcon, reviewDownvote, reviewDownvoteCount, reviewDownvoteIcon)
-        upvoted = response.upvoted
-        downvoted = response.downvoted
-    })
 
     const reviewUpvoteCount = document.createElement("p")
     reviewUpvoteCount.classList.add("review-upvote-count")
@@ -252,18 +240,6 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
 
     const reviewDownvote = document.createElement("div")
     reviewDownvote.classList.add("review-downvote")
-    reviewDownvote.addEventListener("click", async (event) => {
-        let response
-        if(downvoted) {
-            response = await ajax(`/api/reviews/remove-downvote/${id}`, "POST")
-        } else {
-            response = await ajax(`api/reviews/add-downvote/${id}`, "POST")
-        }
-        response = JSON.parse(response)
-        processReviewVoteResponse(response, reviewUpvote, reviewUpvoteCount, reviewUpvoteIcon, reviewDownvote, reviewDownvoteCount, reviewDownvoteIcon)
-        upvoted = response.upvoted
-        downvoted = response.downvoted
-    })
 
     const reviewDownvoteCount = document.createElement("p")
     reviewDownvoteCount.classList.add("review-downvote-count")
@@ -280,6 +256,38 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
     if(upvoted) {
         reviewUpvote.classList.add("active")
         reviewUpvoteIcon.src = "icons/upvote-selected.svg"
+    }
+    if(loggedIn) {
+        reviewUpvote.addEventListener("click", async (event) => {
+            let response
+            if(upvoted) {
+                response = await ajax(`api/reviews/remove-upvote/${id}`, "POST")
+            } else {
+                response = await ajax(`api/reviews/add-upvote/${id}`, "POST")
+            }
+            response = JSON.parse(response)
+            processReviewVoteResponse(response, reviewUpvote, reviewUpvoteCount, reviewUpvoteIcon, reviewDownvote, reviewDownvoteCount, reviewDownvoteIcon)
+            upvoted = response.upvoted
+            downvoted = response.downvoted
+        })
+        reviewDownvote.addEventListener("click", async (event) => {
+            let response
+            if(downvoted) {
+                response = await ajax(`/api/reviews/remove-downvote/${id}`, "POST")
+            } else {
+                response = await ajax(`api/reviews/add-downvote/${id}`, "POST")
+            }
+            response = JSON.parse(response)
+            processReviewVoteResponse(response, reviewUpvote, reviewUpvoteCount, reviewUpvoteIcon, reviewDownvote, reviewDownvoteCount, reviewDownvoteIcon)
+            upvoted = response.upvoted
+            downvoted = response.downvoted
+        })
+    } else {
+        let func = function() {
+            showNotLoggedInPopup("You need to be logged in to vote on reviews on disdex. Why aren't you?!")
+        }
+        reviewUpvote.addEventListener("click", func)
+        reviewDownvote.addEventListener("click", func)
     }
 
     // adding elements
@@ -303,7 +311,6 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
 }
 
 function processReviewVoteResponse(response, elementUpvote, upvoteCount, iconUpvote, elementDownvote, downvoteCount, iconDownvote) {
-    console.log(arguments)
     if(response.upvoted) {
         elementUpvote.classList.add("active")
         iconUpvote.src = "icons/upvote-selected.svg"
