@@ -8,7 +8,7 @@ const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
-const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS } = require("./util")
+const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm } = require("./util")
 const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote } = require("./database")
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
@@ -184,6 +184,9 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     res.send(id)
 })
 app.post("/api/post-review", loggedIn, async (req, res) => {
+    if(!reviewForm.check(req.body)) {
+        res.sendStatus(400)
+    }
     let id = await postReview(req.body.rating, req.body.text, req.body.serverId, req.user.id)
     res.send(id)
 })

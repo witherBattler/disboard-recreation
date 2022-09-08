@@ -66,6 +66,78 @@ function convertTimeFromMS(time) {
 	return timeNumber + " " + t
 }
 
+
+let fieldCheckers = {
+    number(data, details) {
+        if(typeof(data) != "number") {
+            return false
+        }
+        let min = details.min || -Infinity
+        let max = details.max || Infinity
+        let canBeDecimal = details.canBeDecimal || true
+        if(!canBeDecimal && Math.round(data) != data) {
+            return false
+        }
+        if(data > max || data < min) {
+            return false
+        }
+        return true
+    },
+    string(data, details) {
+        if(typeof(data) != "string") {
+            return false
+        }
+        let min = details.length || details.minLength || 0
+        let max = details.length || details.maxLength || Infinity
+        if(data.length < min || data.length > max) {
+            return false
+        }
+        return true
+    }
+}
+
+class Form {
+    constructor() {
+        this.fields = {}
+        this.fieldCheckers = fieldCheckers
+    }
+    addField(name, type, details) {
+        this.fields[name] = {
+            type,
+            details,
+        }
+        return this
+    }
+    check(form) {
+        let formFieldsArray = Object.keys(form)
+        let fieldsArray = Object.keys(this.fields)
+        fieldsArray.forEach(field => {
+            if(formFieldsArray.indexOf(field) == -1) {
+                return false
+            }
+        })
+
+        // first 
+        for(let i = 0; i != fieldsArray.length; i++) {
+            let fieldName = fieldsArray[i]
+            let formField = form[fieldName]
+            let field = this.fields[fieldName]
+            let fieldChecker = this.fieldCheckers[field.type]
+            let result = fieldChecker(formField, field.details)
+            if(!result) {
+                return false
+            }
+        }
+
+        return true
+    }
+}
+
+let reviewForm = new Form()
+    .addField("rating", "number", { min: 1, max: 5, canBeDecimal: false })
+    .addField("text", "string", { maxLength: 250 })
+    .addField("serverId", "string", { length: 6 })
+
 module.exports = {
     loggedIn,
     categoryIsValid,
@@ -73,5 +145,7 @@ module.exports = {
     randomNumber,
     generateId,
     mergeObjects,
-    convertTimeFromMS
+    convertTimeFromMS,
+    Form,
+    reviewForm
 }

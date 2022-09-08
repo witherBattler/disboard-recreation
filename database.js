@@ -217,7 +217,6 @@ async function reviewRemoveDownvote(id, userId) {
     }, {
         returnDocument: "after"
     })
-    console.log(review.value)
 
     return {
         upvoted: false,
