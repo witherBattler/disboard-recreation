@@ -56,6 +56,14 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     padding-inline: 5px;
+    transition: background-color 0.1s;
+    -webkit-transition: background-color 0.1s;
+    -moz-transition: background-color 0.1s;
+    -ms-transition: background-color 0.1s;
+    -o-transition: background-color 0.1s;
+}
+.dropdownOption:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 .dropdownLabel {
     font-size: 20px;

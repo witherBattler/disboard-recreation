@@ -235,3 +235,16 @@ a {
 #server-name {
     color: var(--text-color);
 }
+.two-sided {
+    display: flex;
+}
+.two-sided > *:first-child {
+    width: 50%;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+.two-sided > *:last-child {
+    width: 50%;
+    padding-left: 10px;
+    box-sizing: border-box;
+}

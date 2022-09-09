@@ -186,7 +186,7 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
 app.post("/api/post-review", loggedIn, async (req, res) => {
     if(!reviewForm.check(req.body))
         res.sendStatus(400)
-        
+
     let id = await postReview(req.body.rating, req.body.text, req.body.serverId, req.user.id)
     res.send(id)
 })
@@ -198,6 +198,12 @@ app.get("/api/reviews-data", async (req, res) => {
     let ids = req.query.ids.split(",")
     let data = await getReviewsData(ids)
     res.json(data)
+})
+app.get("/edit-server/:id", loggedIn, async (req, res) => {
+    res.render("edit-server", {
+        loggedIn: true,
+        userData: req.user
+    })
 })
 
 function getUserData(user) {

@@ -66,6 +66,7 @@ class BetterDropdown extends HTMLElement {
         for (let i = 0; i < options.length; i++) {
             let option = document.createElement("div")
             option.setAttribute("class", "dropdownOption")
+
             option.innerText = options[i]
             if(special == "font") {
                 option.style.fontFamily = options[i]
@@ -76,6 +77,7 @@ class BetterDropdown extends HTMLElement {
                 dropdownLabel.innerText = options[i]
                 dropdownOptions.style.height = "0"
                 dropdownOptions.style.opacity = "0"
+                dropdownOptions.style.width = "360px"
                 dropdownIcon.style.transform = "rotate(0deg)"
                 this.events.change.forEach(callback => callback(options[i]))
             })
