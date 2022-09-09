@@ -44,7 +44,8 @@ function ajax(url, method, data) {
     })
 }
 
-function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId) {
+function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId, settings) {
+    console.log(settings)
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
@@ -120,6 +121,21 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
         tagElement.className = "tag"
         tagElement.textContent = "#" + tags[i]
         tagsContainerElement.appendChild(tagElement)
+    }
+    
+    if(settings) {
+        let settingsContainer = document.createElement("div")
+        settingsContainer.classList.add("settings-container")
+        let settingsButton = document.createElement("img")
+        settingsButton.classList.add("settings-button")
+        settingsButton.src = "/icons/server-settings.svg"
+
+        settingsButton.addEventListener("click", (event) => {
+            window.open(settings)
+        })
+
+        settingsContainer.appendChild(settingsButton)
+        tagsContainerElement.appendChild(settingsContainer)
     }
 
     serverBottomElement.appendChild(descriptionElement)

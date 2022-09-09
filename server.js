@@ -184,9 +184,9 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     res.send(id)
 })
 app.post("/api/post-review", loggedIn, async (req, res) => {
-    if(!reviewForm.check(req.body)) {
+    if(!reviewForm.check(req.body))
         res.sendStatus(400)
-    }
+        
     let id = await postReview(req.body.rating, req.body.text, req.body.serverId, req.user.id)
     res.send(id)
 })

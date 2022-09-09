@@ -183,7 +183,8 @@ ajax("/api/owned-servers").then(ownedServers => {
     ownedServers = JSON.parse(ownedServers)
     for(let i = 0; i != ownedServers.length; i++) {
         let ownedServerObject = ownedServers[i]
-        console.log(ownedServerObject.botJoined)
+        console.log(`/edit-server/${ownedServerObject.id}`)
+
         let ownedServerElement = 
             constructServerElement(
                 ownedServerObject.serverId,
@@ -193,7 +194,8 @@ ajax("/api/owned-servers").then(ownedServers => {
                 ownedServerObject.tags,
                 false,
                 ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId),
-                ownedServerObject.id
+                ownedServerObject.id,
+                `/edit-server/${ownedServerObject.id}`
             )
         serversContainer.appendChild(ownedServerElement)
     }

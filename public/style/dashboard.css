@@ -397,5 +397,28 @@
     padding: 10px;
     border: white solid 3px;
     font-size: 20px;
-
+}
+.settings-container {
+    flex-grow: 1;
+    justify-content: end;
+    align-items: end;
+    display: flex;
+}
+.settings-button {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+}
+.settings-button:hover {
+    opacity: 1;
+}
+.server-bottom > .tags {
+    height: 43px;
 }
