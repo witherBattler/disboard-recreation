@@ -225,6 +225,15 @@ async function reviewRemoveDownvote(id, userId) {
         downvotes: review.value.downvotes
     }
 }
+async function addServerJoin(id) {
+    servers.updateOne({
+        id
+    }, {
+        $push: {
+            joins: Date.now()
+        }
+    })
+}
 
 
 module.exports = {
@@ -247,5 +256,6 @@ module.exports = {
     reviewAddUpvote,
     reviewRemoveUpvote,
     reviewRemoveDownvote,
-    reviewAddDownvote
+    reviewAddDownvote,
+    addServerJoin
 }

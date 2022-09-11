@@ -76,7 +76,7 @@ function displayServers(servers) {
             server.guildName,
             server.shortDescription,
             server.tags,
-            server.invite,
+            `/join-server/${server.id}`,
             false,
             server.id
         )

@@ -83,6 +83,7 @@ client.on("guildCreate", async guild => {
         }
     }
 })
+
 client.on("interactionCreate", async(interaction) => {
     if(!interaction.isCommand()) {
         return
