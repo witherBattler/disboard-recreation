@@ -280,6 +280,8 @@ app.get("/bot-instructions", loggedIn, (req, res) => {
         userData: req.user
     })
 })
+app.get("/stats/")
+
 
 function getGuilds(user) {
     return new Promise((resolve, reject) => {

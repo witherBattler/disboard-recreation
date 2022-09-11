@@ -419,6 +419,7 @@
     -moz-transition: opacity 0.2s;
     -ms-transition: opacity 0.2s;
     -o-transition: opacity 0.2s;
+    margin-left: 20px;
 }
 .settings-button:hover {
     opacity: 1;

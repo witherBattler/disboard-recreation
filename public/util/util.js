@@ -44,8 +44,7 @@ function ajax(url, method, data) {
     })
 }
 
-function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId, settings) {
-    console.log(settings)
+function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId, settings, stats) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
@@ -90,6 +89,7 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
         buttonsContainer.appendChild(joinButton)
     }
 
+
     let addBotButton
     if(addBot) {
         addBotButton = document.createElement("button")
@@ -122,10 +122,24 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
         tagElement.textContent = "#" + tags[i]
         tagsContainerElement.appendChild(tagElement)
     }
-    
+
+    let settingsContainer = document.createElement("div")
+    settingsContainer.classList.add("settings-container")
+    tagsContainerElement.appendChild(settingsContainer)
+
+    if(stats) {
+        statsButton = document.createElement("img")
+        statsButton.classList.add("settings-button")
+        statsButton.src = "icons/stats.svg"
+
+        statsButton.addEventListener("click", (event) => {
+            window.open(stats)
+        })
+
+        settingsContainer.appendChild(statsButton)
+    } 
+
     if(settings) {
-        let settingsContainer = document.createElement("div")
-        settingsContainer.classList.add("settings-container")
         let settingsButton = document.createElement("img")
         settingsButton.classList.add("settings-button")
         settingsButton.src = "/icons/server-settings.svg"
@@ -135,8 +149,9 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
         })
 
         settingsContainer.appendChild(settingsButton)
-        tagsContainerElement.appendChild(settingsContainer)
     }
+
+    
 
     serverBottomElement.appendChild(descriptionElement)
     serverBottomElement.appendChild(tagsContainerElement)

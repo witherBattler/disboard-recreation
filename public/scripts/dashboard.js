@@ -163,7 +163,8 @@ ajax("/api/owned-servers").then(ownedServers => {
                 false,
                 ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId),
                 ownedServerObject.id,
-                `/edit-server/${ownedServerObject.id}`
+                `/edit-server/${ownedServerObject.id}`,
+                `/stats/${ownedServerObject.id}`
             )
         serversContainer.appendChild(ownedServerElement)
     }
