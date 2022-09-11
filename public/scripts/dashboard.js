@@ -11,10 +11,6 @@ let dashboardConfigureServer = document.getElementById("dashboard-configure-serv
 
 let serverIndicatorIcon = document.getElementById("server-indicator-icon")
 let serverIndicatorText = document.getElementById("server-indicator-name")
-let addTag = document.getElementById("add-tag")
-let writeTagName = document.getElementById("write-tag-name")
-let writeTagNameInput = document.getElementById("write-tag-name-input")
-let writeTagNameConfirm = document.getElementById("write-tag-name-confirm")
 let tagsContainer = document.getElementById("tags")
 let submitButton = document.getElementById("submit-button")
 let languageDropdown = document.getElementById("language-dropdown")
@@ -27,7 +23,6 @@ let unlistedCheckbox = document.getElementById("unlisted-checkbox")
 let serversContainer = document.getElementById("servers")
 
 let currentGuilds = null
-let tags = []
 
 async function openServerSelectorPopup() {
     darkOverlay.style.display = "block"
@@ -97,33 +92,6 @@ serverSelectorPopupNext.addEventListener("click", (event) => {
     }
 })
 
-addTag.addEventListener("click", (event) => {
-    writeTagName.style.display = "flex"
-    writeTagName.style.top = addTag.offsetTop + addTag.offsetHeight + 10 + "px"
-    writeTagName.style.left = addTag.offsetLeft + "px"
-    writeTagNameInput.focus()
-})
-
-writeTagNameConfirm.addEventListener("click", (event) => {
-    let tagName = writeTagNameInput.value
-    if(tags.indexOf(tagName) != -1) {
-        alert("Tag already exists.")
-        return
-    }
-    writeTagName.value = ""
-    let tag = document.createElement("hashtag-renderer")
-    tag.setAttribute("name", tagName)
-    writeTagName.style.display = "none"
-    tagsContainer.appendChild(tag)
-    tag.appendEventListener("remove", (event) => {
-        tags.splice(tags.indexOf(tag), 1)
-    })
-
-    tags.push(tagName)
-    tag.appendEventListener("remove", (event) => {
-        tags.splice(tags.indexOf(tagName), 1)
-    })
-})
 
 submitButton.addEventListener("click", async (event) => {
     let serverId = currentGuilds[chooseServerDropdown.selectedIndex].id
