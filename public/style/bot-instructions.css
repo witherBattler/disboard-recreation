@@ -1,0 +1,25 @@
+#content-container {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 180px;
+    box-sizing: border-box;
+}
+h2 {
+    color: var(--special-color-1);
+    font-family: var(--display-font);
+    font-weight: 800;
+    font-size: 70px;
+}
+h3 {
+    font-family: var(--display-font);
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+body {
+    align-items: center;
+}
+p {
+    margin-bottom: 30px;
+}

@@ -274,8 +274,11 @@ app.post("/api/reviews/remove-downvote/:id", loggedIn, async (req, res) => {
     console.log(response)
     res.send(response)
 })
-app.get("/bot-instructions", (req, res) => {
-    res.send("lmao")
+app.get("/bot-instructions", loggedIn, (req, res) => {
+    res.render("bot-instructions", {
+        loggedIn: true,
+        userData: req.user
+    })
 })
 
 function getGuilds(user) {
