@@ -11,6 +11,7 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
+        
     ]
 })
 const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN)
@@ -27,18 +28,20 @@ client.on("ready", async () => {
         })
     }
 })
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     let id = message.guild.id
     if(serversMessagesInLastHour[id] == undefined) {
-        serversMessagesInLastHour[id] = 0
+        serversMessagesInLastHour[id] = 1
     } else {
         serversMessagesInLastHour[id]++
     }
 })
 
 setInterval(async function() {
+    console.log("interval")
     // daily messages
     let serverIds = Object.keys(serversMessagesInLastHour)
+    console.log(serversMessagesInLastHour)
     for(let i = 0; i != serverIds.length; i++) {
         let id = serverIds[i]
         let newMessages = serversMessagesInLastHour[id]
@@ -60,7 +63,7 @@ setInterval(async function() {
         replaceServerDataByGuildId(id, updateTo)
     }
     serversMessagesInLastHour = {}
-}, 20000)
+}, 5000)
 
 const inviteCommand = new SlashCommandBuilder()
     .setName("invite")
