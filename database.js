@@ -77,8 +77,12 @@ async function updateServerData(id, data) {
 }
 async function updateServerDataByGuildId(id, data) {
     await servers.updateOne({ serverId: id }, { $set: data } )
-    
 }
+
+async function replaceServerDataByGuildId(id, data) {
+    await servers.replaceOne({ serverId: id }, data)
+}
+
 async function resetAllData() {
     await servers.deleteMany({})
     await users.deleteMany({})
@@ -155,7 +159,6 @@ async function reviewAddUpvote(id, userId) {
     }, {
         returnDocument: "after"
     })
-    console.log(review.value)
     return {
         upvoted: true,
         downvoted: false,
@@ -257,5 +260,6 @@ module.exports = {
     reviewRemoveUpvote,
     reviewRemoveDownvote,
     reviewAddDownvote,
-    addServerJoin
+    addServerJoin,
+    replaceServerDataByGuildId
 }

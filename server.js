@@ -179,7 +179,8 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         boosts: null,
         emojis: [],
         reviews: [],
-        joins: []
+        joins: [],
+        membersDays: []
     }
     await postServer(req.user.id, post)
     res.send(id)

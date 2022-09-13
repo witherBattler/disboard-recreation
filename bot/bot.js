@@ -1,8 +1,10 @@
 const { Client, GatewayIntentBits, Routes, EmbedBuilder } = require("discord.js")
 const { getMembers, generateBotUrl } = require("./util")
-const { getServerDataByGuildId, updateServerDataByGuildId } = require("../database")
+const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGuildId } = require("../database")
 const { REST } = require("@discordjs/rest")
 const { SlashCommandBuilder } = require("@discordjs/builders")
+
+let serversMessagesInLastHour = {}
 
 const client = new Client({
     intents: [
@@ -26,10 +28,39 @@ client.on("ready", async () => {
     }
 })
 client.on("message", async message => {
-    if(message.content === "ping") {
-        message.channel.send("pong")
+    let id = message.guild.id
+    if(serversMessagesInLastHour[id] == undefined) {
+        serversMessagesInLastHour[id] = 0
+    } else {
+        serversMessagesInLastHour[id]++
     }
 })
+
+setInterval(async function() {
+    // daily messages
+    let serverIds = Object.keys(serversMessagesInLastHour)
+    for(let i = 0; i != serverIds.length; i++) {
+        let id = serverIds[i]
+        let newMessages = serversMessagesInLastHour[id]
+        let serverData = await getServerDataByGuildId(id)
+        if(!serverData) {
+            return
+        }
+        let updateTo = serverData
+        let lastMemberDay = updateTo.messagesDays[updateTo.messagesDays.length - 1]
+        if(new Date(lastMemberDay.date).getUTCDay() == new Date().getUTCDay()) {
+            lastMemberDay.messages += newMessages
+        } else {
+            updateTo.messagesDays.push({
+                date: Date.now(),
+                messages: newMessages
+            })
+        }
+        console.log(updateTo)
+        replaceServerDataByGuildId(id, updateTo)
+    }
+    serversMessagesInLastHour = {}
+}, 20000)
 
 const inviteCommand = new SlashCommandBuilder()
     .setName("invite")
@@ -52,6 +83,7 @@ client.on("guildCreate", async guild => {
         // finish
     } else {
         let members = await getMembers(guild)
+        let date = new Date()
         await updateServerDataByGuildId(guild.id, {
             botJoined: true,
             icon: guild.icon,
@@ -66,7 +98,19 @@ client.on("guildCreate", async guild => {
                     id: emoji.id
                 }
             }),
-            guildCreatedAt: guild.createdTimestamp
+            guildCreatedAt: guild.createdTimestamp,
+            membersDays: [
+                {
+                    date,
+                    members: members.all
+                }
+            ],
+            messagesDays: [
+                {
+                    date,
+                    messages: 0
+                }
+            ]
         })
         await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_APPLICATION_ID, guild.id), {
             body: commands
@@ -123,6 +167,7 @@ client.on("interactionCreate", async(interaction) => {
                 content: "",
                 embeds: [embed]
             })
+            
             // update database
             await updateServerDataByGuildId(interaction.guild.id, {
                 invite: link,
