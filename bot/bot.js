@@ -5,6 +5,7 @@ const { REST } = require("@discordjs/rest")
 const { SlashCommandBuilder } = require("@discordjs/builders")
 
 let serversMessagesInLastHour = {}
+let serversMembersChangesInLastHour = {}
 
 const client = new Client({
     intents: [
@@ -36,12 +37,26 @@ client.on("messageCreate", async message => {
         serversMessagesInLastHour[id]++
     }
 })
+client.on("guildMemberAdd", async member => {
+    let id = member.guild.id
+    if(serversMembersChangesInLastHour[id] == undefined) {
+        serversMembersChangesInLastHour[id] = 1
+    } else {
+        serversMembersChangesInLastHour[id]++
+    }
+})
+client.on("guildMemberRemove", async member => {
+    let id = member.guild.id
+    if(serversMemberChangesInLastHour[id] == undefined) {
+        serversMembersChangesInLastHour[id] = -1
+    } else {
+        serversMembersChangesInLastHour[id]--
+    }
+})
 
 setInterval(async function() {
-    console.log("interval")
     // daily messages
     let serverIds = Object.keys(serversMessagesInLastHour)
-    console.log(serversMessagesInLastHour)
     for(let i = 0; i != serverIds.length; i++) {
         let id = serverIds[i]
         let newMessages = serversMessagesInLastHour[id]
@@ -59,11 +74,34 @@ setInterval(async function() {
                 messages: newMessages
             })
         }
-        console.log(updateTo)
         replaceServerDataByGuildId(id, updateTo)
     }
     serversMessagesInLastHour = {}
-}, 5000)
+
+    // server member changes
+    serverIds = Object.keys(serversMembersChangesInLastHour)
+    for(let i = 0; i != serverIds.length; i++) {
+        let id = serverIds[i]
+        let newMessages = serversMembersChangesInLastHour[id]
+        let serverData = await getServerDataByGuildId(id)
+        if(!serverData) {
+            return
+        }
+        let updateTo = serverData
+        let lastMemberDay = updateTo.membersDays[updateTo.membersDays.length - 1]
+        if(new Date(lastMemberDay.date).getUTCDay() == new Date().getUTCDay()) {
+            lastMemberDay.members += newMessages
+        } else {
+            updateTo.membersDays.push({
+                date: Date.now(),
+                members: newMessages
+            })
+        }
+        replaceServerDataByGuildId(id, updateTo)
+    }
+    serversMembersChangesInLastHour = {}
+
+}, 1600000)
 
 const inviteCommand = new SlashCommandBuilder()
     .setName("invite")
