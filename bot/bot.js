@@ -98,7 +98,8 @@ setInterval(async function() {
                     date: Date.now()
                 }
                 toPush[serverUpdateType] = serverUpdateValue
-                serverToUpdateObject[daysName].push(toPush)
+                serverToUpdateObject[daysName].unshift(toPush)
+                serverToUpdateObject[daysName].length = Math.min(serverToUpdateObject[daysName].length, 7)
             }
         }
         updateServerDataByGuildId(serverId, serverToUpdateObject)
