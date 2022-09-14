@@ -87,6 +87,7 @@ setInterval(async function() {
         for(let serverUpdateType in serverUpdateObject) { // messages, leaves
             let serverUpdateValue = serverUpdateObject[serverUpdateType] // 212, 1
             let daysName = serverUpdateType + "Days" // messagesDays, leavesDays
+            console.log(daysName)
             let lastDay = serverData[daysName][serverData[daysName].length - 1]
             let lastDayIsToday = new Date(lastDay.date).isSameDay(new Date())
             serverToUpdateObject[daysName] = serverData[daysName] 

@@ -2,12 +2,23 @@
 <html>
     <head>
         <link rel="stylesheet" href="/style/default.css">
-        <link rel="stylesheet" href="/style/dashboard.css">
+        <link rel="stylesheet" href="/style/stats.css">
         <title>Stats | Disdex</title>
+        <base href="/">
     </head>
     <body>
         <%- include("./partials/navbar") %>
+        <div id="main-content">
+            <div id="bottom-charts-container">
+                <div id="messages-chart-container">
+                    <div>
+                        <canvas id="messages-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <canvas class="statistic" id="messages-chart"></canvas> -->
     </body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <scripts src="scripts/stats.js"></scripts>
+    <script src="scripts/stats.js"></script>
 </html>
