@@ -1,11 +1,13 @@
 const { Client, GatewayIntentBits, Routes, EmbedBuilder } = require("discord.js")
 const { getMembers, generateBotUrl } = require("./util")
-const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGuildId } = require("../database")
+const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGuildId, updateServerData } = require("../database")
 const { REST } = require("@discordjs/rest")
 const { SlashCommandBuilder } = require("@discordjs/builders")
 
 let serversMessagesInLastHour = {}
-let serversMembersChangesInLastHour = {}
+let serversMembersInLastHour = {}
+let serversMembersJoinsInLastHour = {}
+let serversMembersLeavesInLastHour = {}
 
 const client = new Client({
     intents: [
@@ -39,69 +41,77 @@ client.on("messageCreate", async message => {
 })
 client.on("guildMemberAdd", async member => {
     let id = member.guild.id
-    if(serversMembersChangesInLastHour[id] == undefined) {
-        serversMembersChangesInLastHour[id] = 1
+    if(serversMembersJoinsInLastHour[id] == undefined) {
+        serversMembersJoinsInLastHour[id] = 1
     } else {
-        serversMembersChangesInLastHour[id]++
+        serversMembersJoinsInLastHour[id]++
     }
+    serversMembersInLastHour[id] = member.guild.members.all
 })
 client.on("guildMemberRemove", async member => {
     let id = member.guild.id
-    if(serversMemberChangesInLastHour[id] == undefined) {
-        serversMembersChangesInLastHour[id] = -1
+    if(serversMembersLeavesInLastHour[id] == undefined) {
+        serversMembersLeavesInLastHour[id] = 1
     } else {
-        serversMembersChangesInLastHour[id]--
+        serversMembersLeavesInLastHour[id]++
     }
+    serversMembersInLastHour[id] = member.guild.members.all
 })
 
 setInterval(async function() {
-    // daily messages
-    let serverIds = Object.keys(serversMessagesInLastHour)
-    for(let i = 0; i != serverIds.length; i++) {
-        let id = serverIds[i]
-        let newMessages = serversMessagesInLastHour[id]
-        let serverData = await getServerDataByGuildId(id)
+    let serversUpdates = {}
+    for(let property in serversMessagesInLastHour) {
+        serversUpdates[property] = serversUpdates[property] || {}
+        serversUpdates[property].messages = serversMessagesInLastHour[property]
+    }
+    for(let property in serversMembersInLastHour) {
+        serversUpdates[property] = serversUpdates[property] || {}
+        serversUpdates[property].members = serversMembersInLastHour[property]
+    }
+    for(let property in serversMembersJoinsInLastHour) {
+        serversUpdates[property] = serversUpdates[property] || {}
+        serversUpdates[property].joins = serversMembersJoinsInLastHour[property]
+    }
+    for(let property in serversMembersLeavesInLastHour) {
+        serversUpdates[property] = serversUpdates[property] || {}
+        serversUpdates[property].leaves = serversMembersLeavesInLastHour[property]
+    }
+    for(let serverId in serversUpdates) { // 814864721240260619
+        let serverData = await getServerDataByGuildId(serverId)
         if(!serverData) {
             return
         }
-        let updateTo = serverData
-        let lastMemberDay = updateTo.messagesDays[updateTo.messagesDays.length - 1]
-        if(new Date(lastMemberDay.date).getUTCDay() == new Date().getUTCDay()) {
-            lastMemberDay.messages += newMessages
-        } else {
-            updateTo.messagesDays.push({
-                date: Date.now(),
-                messages: newMessages
-            })
-        }
-        replaceServerDataByGuildId(id, updateTo)
-    }
-    serversMessagesInLastHour = {}
 
-    // server member changes
-    serverIds = Object.keys(serversMembersChangesInLastHour)
-    for(let i = 0; i != serverIds.length; i++) {
-        let id = serverIds[i]
-        let newMessages = serversMembersChangesInLastHour[id]
-        let serverData = await getServerDataByGuildId(id)
-        if(!serverData) {
-            return
+        let serverUpdateObject = serversUpdates[serverId] // { messages: 212, leaves: 1 }
+        let serverToUpdateObject = {}
+        for(let serverUpdateType in serverUpdateObject) { // messages, leaves
+            let serverUpdateValue = serverUpdateObject[serverUpdateType] // 212, 1
+            let daysName = serverUpdateType + "Days" // messagesDays, leavesDays
+            let lastDay = serverData[daysName][serverData[daysName].length - 1]
+            let lastDayIsToday = new Date(lastDay.date).isSameDay(new Date())
+            serverToUpdateObject[daysName] = serverData[daysName] 
+            if(lastDayIsToday) {
+                let previousValue = serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType]
+                serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = previousValue + serverUpdateValue
+            } else {
+                let toPush = {
+                    date: Date.now()
+                }
+                toPush[serverUpdateType] = serverUpdateValue
+                serverToUpdateObject[daysName].push(toPush)
+            }
         }
-        let updateTo = serverData
-        let lastMemberDay = updateTo.membersDays[updateTo.membersDays.length - 1]
-        if(new Date(lastMemberDay.date).getUTCDay() == new Date().getUTCDay()) {
-            lastMemberDay.members += newMessages
-        } else {
-            updateTo.membersDays.push({
-                date: Date.now(),
-                members: newMessages
-            })
-        }
-        replaceServerDataByGuildId(id, updateTo)
+        updateServerDataByGuildId(serverId, serverToUpdateObject)
     }
-    serversMembersChangesInLastHour = {}
+    serversMessagesInLastHour = []
+    serversMembersInLastHour = []
+    serversMembersJoinsInLastHour = []
+    serversMembersLeavesInLastHour = []
+}, 5000)
 
-}, 1600000)
+Date.prototype.isSameDay = function(date) {
+    return this.getUTCDate() == date.getUTCDate() && this.getUTCMonth() == date.getUTCMonth() && this.getUTCFullYear() == date.getUTCFullYear()
+}
 
 const inviteCommand = new SlashCommandBuilder()
     .setName("invite")

@@ -238,6 +238,14 @@ async function addServerJoin(id) {
     })
 }
 
+async function getServerDataWithAuthor(id, author) {
+    let server = await servers.findOne({
+        id,
+        author
+    })
+    return server
+} 
+
 
 module.exports = {
     getUser,
@@ -261,5 +269,6 @@ module.exports = {
     reviewRemoveDownvote,
     reviewAddDownvote,
     addServerJoin,
-    replaceServerDataByGuildId
+    replaceServerDataByGuildId,
+    getServerDataWithAuthor
 }
