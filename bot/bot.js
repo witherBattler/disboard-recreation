@@ -89,18 +89,27 @@ setInterval(async function() {
             let daysName = serverUpdateType + "Days" // messagesDays, leavesDays
             console.log(daysName)
             let lastDay = serverData[daysName][serverData[daysName].length - 1]
-            let lastDayIsToday = new Date(lastDay.date).isSameDay(new Date())
-            serverToUpdateObject[daysName] = serverData[daysName] 
-            if(lastDayIsToday) {
-                let previousValue = serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType]
-                serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = previousValue + serverUpdateValue
-            } else {
+            function newDayInList() {
                 let toPush = {
                     date: Date.now()
                 }
                 toPush[serverUpdateType] = serverUpdateValue
                 serverToUpdateObject[daysName].unshift(toPush)
                 serverToUpdateObject[daysName].length = Math.min(serverToUpdateObject[daysName].length, 7)
+            }
+            if(lastDay == undefined) {
+                serverToUpdateObject[daysName] = serverData[daysName] 
+                newDayInList()
+                updateServerDataByGuildId(serverId, serverToUpdateObject)
+                return 
+            }
+            let lastDayIsToday = new Date(lastDay.date).isSameDay(new Date())
+            serverToUpdateObject[daysName] = serverData[daysName] 
+            if(lastDayIsToday) {
+                let previousValue = serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType]
+                serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = previousValue + serverUpdateValue
+            } else {
+                newDayInList()
             }
         }
         updateServerDataByGuildId(serverId, serverToUpdateObject)
