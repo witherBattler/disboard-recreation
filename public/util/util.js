@@ -44,6 +44,8 @@ function ajax(url, method, data) {
     })
 }
 
+const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+
 function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId, settings, stats) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"

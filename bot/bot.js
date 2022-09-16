@@ -46,7 +46,8 @@ client.on("guildMemberAdd", async member => {
     } else {
         serversMembersJoinsInLastHour[id]++
     }
-    serversMembersInLastHour[id] = member.guild.members.all
+    await member.guild.members.fetch()
+    serversMembersInLastHour[id] = member.guild.members.cache.size
 })
 client.on("guildMemberRemove", async member => {
     let id = member.guild.id
@@ -55,7 +56,8 @@ client.on("guildMemberRemove", async member => {
     } else {
         serversMembersLeavesInLastHour[id]++
     }
-    serversMembersInLastHour[id] = member.guild.members.all
+    await member.guild.members.fetch()
+    serversMembersInLastHour[id] = member.guild.members.cache.size
 })
 
 setInterval(async function() {
@@ -87,7 +89,6 @@ setInterval(async function() {
         for(let serverUpdateType in serverUpdateObject) { // messages, leaves
             let serverUpdateValue = serverUpdateObject[serverUpdateType] // 212, 1
             let daysName = serverUpdateType + "Days" // messagesDays, leavesDays
-            console.log(daysName)
             let lastDay = serverData[daysName][serverData[daysName].length - 1]
             function newDayInList() {
                 let toPush = {
@@ -107,7 +108,11 @@ setInterval(async function() {
             serverToUpdateObject[daysName] = serverData[daysName] 
             if(lastDayIsToday) {
                 let previousValue = serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType]
-                serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = previousValue + serverUpdateValue
+                if(serverUpdateType == "members") {
+                    serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = serverUpdateValue
+                } else {
+                    serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = previousValue + serverUpdateValue
+                }
             } else {
                 newDayInList()
             }

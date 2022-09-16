@@ -10,9 +10,19 @@
         <%- include("./partials/navbar") %>
         <div id="main-content">
             <div id="bottom-charts-container">
-                <div id="messages-chart-container">
+                <div id="messages-chart-container" class="chart-container">
                     <div>
                         <canvas id="messages-chart"></canvas>
+                    </div>
+                </div>
+                <div id="joins-leaves-chart-container" class="chart-container">
+                    <div>
+                        <canvas id="joins-leaves-chart"></canvas>
+                    </div>
+                </div>
+                <div id="members-chart-container" class="chart-container">
+                    <div>
+                        <canvas id="members-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -23,5 +33,6 @@
     <script>
         serverData = <%- JSON.stringify(serverData) %>
     </script>
+    <script src="util/util.js"></script>
     <script src="scripts/stats.js"></script>
 </html>
