@@ -5,13 +5,12 @@ async function getMembers(guild) {
     console.log(members.map(member => console.log(member.presence)))
     let onlineMembers = members.filter(member => member.presence.status != "offline")
  */ 
-    await guild.fetch()
+    await guild.members.fetch()
 
     let toReturn = {
         all: guild.approximateMemberCount,
         online: guild.approximatePresenceCount
     }
-    console.log(toReturn)
     return toReturn
 }
 

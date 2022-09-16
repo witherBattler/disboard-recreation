@@ -73,7 +73,10 @@ async function getListingServers(search, category) {
 }
 
 async function updateServerData(id, data) {
-    await servers.updateOne({ id: id }, { $set: data } )
+    await servers.updateOne({ id }, { $set: data } )
+}
+async function realUpdateServerData(id, data) {
+    await servers.updateOne({ id }, data)
 }
 async function updateServerDataByGuildId(id, data) {
     await servers.updateOne({ serverId: id }, { $set: data } )
@@ -270,5 +273,6 @@ module.exports = {
     reviewAddDownvote,
     addServerJoin,
     replaceServerDataByGuildId,
-    getServerDataWithAuthor
+    getServerDataWithAuthor,
+    realUpdateServerData
 }

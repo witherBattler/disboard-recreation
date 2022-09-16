@@ -130,7 +130,6 @@ setInterval(async function() {
                 newDayInList()
             }
         }
-        console.log(serverId, serverToUpdateObject)
         updateServerDataByGuildId(serverId, serverToUpdateObject)
     }
     globalServerUpdates = {}
@@ -160,8 +159,8 @@ client.on("guildCreate", async guild => {
     if(!data) {
         // finish
     } else {
-        let members = await getMembers(guild)
         let date = new Date()
+        await member.guild.members.fetch()
         await updateServerDataByGuildId(guild.id, {
             botJoined: true,
             icon: guild.icon,
@@ -180,7 +179,7 @@ client.on("guildCreate", async guild => {
             membersDays: [
                 {
                     date,
-                    members: members.all
+                    members: member.guild.members.cache.size
                 }
             ],
             messagesDays: [
@@ -313,5 +312,7 @@ client.login(process.env.BOT_TOKEN)
 module.exports = {
     leaveAllGuilds,
     generateBotUrl,
-    client
+    client,
+    changeGlobalServerUpdate,
+    setGlobalServerUpdate,
 }

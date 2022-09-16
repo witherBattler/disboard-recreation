@@ -9,10 +9,16 @@ const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
 const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm, compareObjects } = require("./util")
-const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote, addServerJoin, getServerDataWithAuthor } = require("./database")
-const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
+const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote, addServerJoin, getServerDataWithAuthor, updateServerData, realUpdateServerData } = require("./database")
+const { leaveAllGuilds, generateBotUrl, changeGlobalServerUpdate } = require("./bot/bot.js")
+
+let ipsSearches = {}
+setInterval(function() {
+    ipsSearches = {}
+}, 3600000) // hour
 
 app.set("view engine", "ejs");
+app.set('trust proxy', true)
 app.listen(process.env.PORT || 3000, () => console.log('http://localhost:3000 test test test'));
 
 // Middleware
@@ -108,12 +114,44 @@ app.get("/api/owned-servers", loggedIn, async(req, res) => {
 app.get("/api/servers", async(req, res) => {
     let servers = await getListingServers( req.query.search || "", req.query.category || undefined)
     res.json(servers)
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    ipsSearches[ip] = ipsSearches[ip] || []
+    if(req.query.search || req.query.category) {
+        let foundSearch = ipsSearches[ip].find(object => object.search == req.query.search && object.category == req.query.category)
+        if(!foundSearch) {
+            // user has not searched for this yet, so add a search to every server.
+            for(let i = 0; i != servers.length; i++) {
+                let server = servers[i]
+                changeGlobalServerUpdate(server.serverId, "pageSearchViews", 1)
+                realUpdateServerData(server.id, {
+                    $inc: {
+                        pageSearchViews: 1
+                    }
+                })
+            }
+            ipsSearches[ip].push({ search: req.query.search, category: req.query.category })
+        } // else: user already searched for this, nothing has to be doine
+    }
 })
 app.get("/api/users", async(req, res) => {
     let ids = req.query.users.split(",")
     let users = await getUsers(ids)
 
     res.json(users)
+})
+app.get("/api/join-server/:id", async (req, res) => {
+    let server = await getServerData(req.params.id)
+    if(server && server.setUp) {
+        res.redirect(server.invite)
+        changeGlobalServerUpdate(server.guildId, "joinClicks", 1)
+        realUpdateServerData(server.id, {
+            $inc: {
+                joinClicks: 1
+            }
+        })
+    } else {
+        res.redirect("/")
+    }
 })
 app.post("/api/post-server", loggedIn, async(req, res) => {
     if((
@@ -186,10 +224,14 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         emojis: [],
         reviews: [],
         joins: [],
+        joinClicks: 0,
+        pageSearchViews: 0,
         messagesDays: [],
         membersDays: [],
         joinsDays: [],
-        leavesDays: []
+        leavesDays: [],
+        joinClicksDays: [],
+        pageSearchViewsDays: []
     }
     await postServer(req.user.id, post)
     res.send(id)
@@ -287,17 +329,7 @@ app.get("/bot-instructions", loggedIn, (req, res) => {
         userData: req.user
     })
 })
-app.get("/join-server/:id", async (req, res) => {
-    let id = req.params.id
-    const server = await getServerData(id)
-    if(server == null || server.setUp == false) {
-        res.redirect("/")
-        return
-    } else {
-        res.redirect(server.invite)
-    }
-    addServerJoin(id)
-})
+
 
 
 function getGuilds(user) {
