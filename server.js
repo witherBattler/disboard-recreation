@@ -8,7 +8,7 @@ const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
-const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm } = require("./util")
+const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm, compareObjects } = require("./util")
 const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote, addServerJoin, getServerDataWithAuthor } = require("./database")
 const { leaveAllGuilds, generateBotUrl } = require("./bot/bot.js")
 
@@ -103,7 +103,6 @@ app.get("/api/owned-servers", loggedIn, async(req, res) => {
     let user = await getUser(req.user.id)
     let serverIds = user.servers
     let serversData = await getServersData(serverIds)
-    console.log(serverIds, serversData)
     res.json(serversData)
 })
 app.get("/api/servers", async(req, res) => {
@@ -113,7 +112,6 @@ app.get("/api/servers", async(req, res) => {
 app.get("/api/users", async(req, res) => {
     let ids = req.query.users.split(",")
     let users = await getUsers(ids)
-    console.log("wtf")
 
     res.json(users)
 })
@@ -269,22 +267,18 @@ async function refreshAccessToken(user) {
 }
 app.post("/api/reviews/add-upvote/:id", loggedIn, async (req, res) => {
     const response = await reviewAddUpvote(req.params.id, req.user.id)
-    console.log(response)
     res.send(response)
 })
 app.post("/api/reviews/remove-upvote/:id", loggedIn, async (req, res) => {
     const response = await reviewRemoveUpvote(req.params.id, req.user.id)
-    console.log(response)
     res.send(response)
 })
 app.post("/api/reviews/add-downvote/:id", loggedIn, async (req, res) => {
     const response = await reviewAddDownvote(req.params.id, req.user.id)
-    console.log(response)
     res.send(response)
 })
 app.post("/api/reviews/remove-downvote/:id", loggedIn, async (req, res) => {
     const response = await reviewRemoveDownvote(req.params.id, req.user.id)
-    console.log(response)
     res.send(response)
 })
 app.get("/bot-instructions", loggedIn, (req, res) => {
@@ -324,4 +318,3 @@ app.locals = {
     generateBotUrl,
     convertTimeFromMS
 }
-

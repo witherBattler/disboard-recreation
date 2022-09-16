@@ -4,10 +4,10 @@ const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGu
 const { REST } = require("@discordjs/rest")
 const { SlashCommandBuilder } = require("@discordjs/builders")
 
-let serversMessagesInLastHour = {}
-let serversMembersInLastHour = {}
-let serversMembersJoinsInLastHour = {}
-let serversMembersLeavesInLastHour = {}
+// let serversMessagesInLastHour = {}
+// let serversMembersInLastHour = {}
+// let serversMembersJoinsInLastHour = {}
+// let serversMembersLeavesInLastHour = {}
 
 const client = new Client({
     intents: [
@@ -33,51 +33,63 @@ client.on("ready", async () => {
 })
 client.on("messageCreate", async message => {
     let id = message.guild.id
-    if(serversMessagesInLastHour[id] == undefined) {
-        serversMessagesInLastHour[id] = 1
-    } else {
-        serversMessagesInLastHour[id]++
-    }
+    changeGlobalServerUpdate(id, "messages", 1)
 })
 client.on("guildMemberAdd", async member => {
     let id = member.guild.id
-    if(serversMembersJoinsInLastHour[id] == undefined) {
-        serversMembersJoinsInLastHour[id] = 1
-    } else {
-        serversMembersJoinsInLastHour[id]++
-    }
+    changeGlobalServerUpdate(id, "joins", 1)
     await member.guild.members.fetch()
-    serversMembersInLastHour[id] = member.guild.members.cache.size
+    setGlobalServerUpdate(id, "members", member.guild.members.cache.size)
 })
 client.on("guildMemberRemove", async member => {
     let id = member.guild.id
-    if(serversMembersLeavesInLastHour[id] == undefined) {
-        serversMembersLeavesInLastHour[id] = 1
-    } else {
-        serversMembersLeavesInLastHour[id]++
-    }
+    changeGlobalServerUpdate(id, "leaves", 1)
     await member.guild.members.fetch()
-    serversMembersInLastHour[id] = member.guild.members.cache.size
+    setGlobalServerUpdate(id, "members", member.guild.members.cache.size)
 })
 
+let globalServerUpdates = {
+
+}
+function changeGlobalServerUpdate(id, name, value) {
+    globalServerUpdates[id] = globalServerUpdates[id] || {}
+    if(globalServerUpdates[id][name] == undefined) {
+        globalServerUpdates[id][name] = value
+    } else {
+        globalServerUpdates[id][name] += value
+    }
+}
+function setGlobalServerUpdate(id, name, value) {
+    globalServerUpdates[id] = globalServerUpdates[id] || {}
+    globalServerUpdates[id][name] = value
+}
+
 setInterval(async function() {
-    let serversUpdates = {}
-    for(let property in serversMessagesInLastHour) {
-        serversUpdates[property] = serversUpdates[property] || {}
-        serversUpdates[property].messages = serversMessagesInLastHour[property]
-    }
-    for(let property in serversMembersInLastHour) {
-        serversUpdates[property] = serversUpdates[property] || {}
-        serversUpdates[property].members = serversMembersInLastHour[property]
-    }
-    for(let property in serversMembersJoinsInLastHour) {
-        serversUpdates[property] = serversUpdates[property] || {}
-        serversUpdates[property].joins = serversMembersJoinsInLastHour[property]
-    }
-    for(let property in serversMembersLeavesInLastHour) {
-        serversUpdates[property] = serversUpdates[property] || {}
-        serversUpdates[property].leaves = serversMembersLeavesInLastHour[property]
-    }
+    let serversUpdates = globalServerUpdates // {7fJ9Skk0ms3: }
+    console.log(serversUpdates)
+    // for(let property in globalServerUpdates) {
+    //     serversUpdates[property] = serversUpdates[property] || {}
+    //     let serverValue = globalServerUpdates[property]
+    //     for(let property2 in serverValue) {
+    //         serversUpdates[property][property2] = serverValue
+    //     }
+    // }
+    // for(let property in serversMessagesInLastHour) {
+    //     serversUpdates[property] = serversUpdates[property] || {}
+    //     serversUpdates[property].messages = serversMessagesInLastHour[property]
+    // }
+    // for(let property in serversMembersInLastHour) {
+    //     serversUpdates[property] = serversUpdates[property] || {}
+    //     serversUpdates[property].members = serversMembersInLastHour[property]
+    // }
+    // for(let property in serversMembersJoinsInLastHour) {
+    //     serversUpdates[property] = serversUpdates[property] || {}
+    //     serversUpdates[property].joins = serversMembersJoinsInLastHour[property]
+    // }
+    // for(let property in serversMembersLeavesInLastHour) {
+    //     serversUpdates[property] = serversUpdates[property] || {}
+    //     serversUpdates[property].leaves = serversMembersLeavesInLastHour[property]
+    // }
     for(let serverId in serversUpdates) { // 814864721240260619
         let serverData = await getServerDataByGuildId(serverId)
         if(!serverData) {
@@ -112,17 +124,16 @@ setInterval(async function() {
                     serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = serverUpdateValue
                 } else {
                     serverToUpdateObject[daysName][serverData[daysName].length - 1][serverUpdateType] = previousValue + serverUpdateValue
+                    console.log(serverToUpdateObject[daysName][serverData[daysName].length - 1])
                 }
             } else {
                 newDayInList()
             }
         }
+        console.log(serverId, serverToUpdateObject)
         updateServerDataByGuildId(serverId, serverToUpdateObject)
     }
-    serversMessagesInLastHour = []
-    serversMembersInLastHour = []
-    serversMembersJoinsInLastHour = []
-    serversMembersLeavesInLastHour = []
+    globalServerUpdates = {}
 }, 5000)
 
 Date.prototype.isSameDay = function(date) {

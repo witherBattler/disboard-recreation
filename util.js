@@ -138,6 +138,10 @@ let reviewForm = new Form()
     .addField("text", "string", { maxLength: 250 })
     .addField("serverId", "string", { length: 6 })
 
+
+function compareObjects(object1, object2) {
+    return JSON.stringify(object1) == JSON.stringify(object2)
+}
 module.exports = {
     loggedIn,
     categoryIsValid,
@@ -147,5 +151,7 @@ module.exports = {
     mergeObjects,
     convertTimeFromMS,
     Form,
-    reviewForm
+    reviewForm,
+    compareObjects
 }
+
