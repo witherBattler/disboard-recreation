@@ -1,6 +1,10 @@
 let messagesChartContext = document.getElementById("messages-chart").getContext("2d")
 let membersChartContext = document.getElementById("members-chart").getContext("2d")
 let joinsLeavesChartContext = document.getElementById("joins-leaves-chart").getContext("2d")
+let joinsHeaderElement = document.getElementById("joins-header-element")
+let leavesHeaderElement = document.getElementById("leaves-header-element")
+let dailyMessagesHeaderElement = document.getElementById("daily-messages-header-element")
+let membersHeaderElement = document.getElementById("members-header-element")
 
 const SPECIAL_COLOR_1 = "#FF00EE"
 const TOTAL_DAYS = 7
@@ -14,6 +18,9 @@ const pluginsDefault = {
     }
 }
 const optionsDefault = {
+    animation: {
+        duration: 600
+    },
     plugins: {
         legend: {
             display: false
@@ -41,12 +48,14 @@ const optionsDefault = {
             }
         },
         y: {
+            beginAtZero: true,
             ticks: {
                 font: {
                     size: 13,
                     family: "poppins",
                 },
-                color: "white"
+                color: "white",
+                precision: 0
             }
         }
     },
@@ -69,24 +78,60 @@ function getDaysArray(data, propertyName) {
     }
     return daysArray
 }
+function allowHidingForHeaderElement(headerElement, chart, datasetIndex) {
+    let hidden = false
+    headerElement.addEventListener("click", (event) => {
+        hidden = !hidden
+        chart.data.datasets[datasetIndex].hidden = hidden
+        headerElement.classList.toggle("hidden")
+        chart.update()
+    })
+}
 
-initializeChart(messagesChartContext, serverData.messagesDays, "messages", {
+let dailyMessagesChart = initializeChart(messagesChartContext, serverData.messagesDays, "messages", {
     borderColor: SPECIAL_COLOR_1,
     pointBackgroundColor: "#99008f",
     backgroundColor: "#170015",
 })
-initializeChart(membersChartContext, serverData.membersDays, "members", {
+let membersChart = initializeChart(membersChartContext, serverData.membersDays, "members", {
     borderColor: SPECIAL_COLOR_1,
     pointBackgroundColor: "#99008f",
     backgroundColor: "#170015",
 })
-new Chart(joinsLeavesChartContext, {
+let joinsDays = getDaysArray(serverData.joinsDays, "joins")
+let leavesDays = getDaysArray(serverData.leavesDays, "leaves")
+const leavesJoinsChart = new Chart(joinsLeavesChartContext, {
     type: "line",
     data: {
-        labels: []
+        labels: joinsDays.map(day => months[day.day.getUTCMonth()] + " " + day.day.getUTCDate()),
+        datasets: [{
+            data: joinsDays.map(day => day.value),
+            lineHeight: 1.2,
+            tension: 0.3,
+            fill: true,
+            borderWidth: 3,
+            borderColor: "#3dff44",
+            pointBackgroundColor: "#00a306",
+            backgroundColor: "#011400",
+        }, {
+            data: leavesDays.map(day => day.value),
+            lineHeight: 1.2,
+            tension: 0.3,
+            fill: true,
+            borderWidth: 3,
+            borderColor: "#ff0000",
+            pointBackgroundColor: "#940000",
+            backgroundColor: "#240000",
+        }]
+    },
+    options: {
+        ...optionsDefault
     }
 })
-
+allowHidingForHeaderElement(joinsHeaderElement, leavesJoinsChart, 0)
+allowHidingForHeaderElement(leavesHeaderElement, leavesJoinsChart, 1)
+allowHidingForHeaderElement(dailyMessagesHeaderElement, dailyMessagesChart, 0)
+allowHidingForHeaderElement(membersHeaderElement, membersChart, 0)
 
 function isSameDay(date1, date2) {
     return date1.getUTCDate() == date2.getUTCDate() && date1.getUTCMonth() == date2.getUTCMonth() && date1.getUTCFullYear() == date2.getUTCFullYear()
@@ -97,7 +142,7 @@ function isSameDay(date1, date2) {
 
 function initializeChart(context, data, propertyName, ...datasets) {
     let daysArray = getDaysArray(data, propertyName)
-    new Chart(context, {
+    let chart = new Chart(context, {
         type: "line",
         data: {
             labels: daysArray.map(day => months[day.day.getUTCMonth()] + " " + day.day.getUTCDate()),
@@ -115,6 +160,7 @@ function initializeChart(context, data, propertyName, ...datasets) {
         options: {
             ...optionsDefault,
         },
-    })    
+    })
+    return chart
 }
 
