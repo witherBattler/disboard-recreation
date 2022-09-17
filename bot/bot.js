@@ -66,30 +66,6 @@ function setGlobalServerUpdate(id, name, value) {
 
 setInterval(async function() {
     let serversUpdates = globalServerUpdates // {7fJ9Skk0ms3: }
-    console.log(serversUpdates)
-    // for(let property in globalServerUpdates) {
-    //     serversUpdates[property] = serversUpdates[property] || {}
-    //     let serverValue = globalServerUpdates[property]
-    //     for(let property2 in serverValue) {
-    //         serversUpdates[property][property2] = serverValue
-    //     }
-    // }
-    // for(let property in serversMessagesInLastHour) {
-    //     serversUpdates[property] = serversUpdates[property] || {}
-    //     serversUpdates[property].messages = serversMessagesInLastHour[property]
-    // }
-    // for(let property in serversMembersInLastHour) {
-    //     serversUpdates[property] = serversUpdates[property] || {}
-    //     serversUpdates[property].members = serversMembersInLastHour[property]
-    // }
-    // for(let property in serversMembersJoinsInLastHour) {
-    //     serversUpdates[property] = serversUpdates[property] || {}
-    //     serversUpdates[property].joins = serversMembersJoinsInLastHour[property]
-    // }
-    // for(let property in serversMembersLeavesInLastHour) {
-    //     serversUpdates[property] = serversUpdates[property] || {}
-    //     serversUpdates[property].leaves = serversMembersLeavesInLastHour[property]
-    // }
     for(let serverId in serversUpdates) { // 814864721240260619
         let serverData = await getServerDataByGuildId(serverId)
         if(!serverData) {

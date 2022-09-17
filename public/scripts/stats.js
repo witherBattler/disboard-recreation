@@ -5,6 +5,11 @@ let joinsHeaderElement = document.getElementById("joins-header-element")
 let leavesHeaderElement = document.getElementById("leaves-header-element")
 let dailyMessagesHeaderElement = document.getElementById("daily-messages-header-element")
 let membersHeaderElement = document.getElementById("members-header-element")
+let pageSearchViewsChartContext = document.getElementById("page-search-views-chart").getContext("2d")
+let pageSearchViewsHeader = document.getElementById("page-search-views-header-element")
+let joinButtonClicksChartContext = document.getElementById("join-button-clicks-chart").getContext("2d")
+let joinButtonClicksHeader = document.getElementById("join-button-clicks-header-element")
+
 
 const SPECIAL_COLOR_1 = "#FF00EE"
 const TOTAL_DAYS = 7
@@ -87,17 +92,17 @@ function allowHidingForHeaderElement(headerElement, chart, datasetIndex) {
         chart.update()
     })
 }
+const defaultChartColors = {
+    borderColor: SPECIAL_COLOR_1,
+    pointBackgroundColor: "#99008f",
+    backgroundColor: "#170015",
+}
 
-let dailyMessagesChart = initializeChart(messagesChartContext, serverData.messagesDays, "messages", {
-    borderColor: SPECIAL_COLOR_1,
-    pointBackgroundColor: "#99008f",
-    backgroundColor: "#170015",
-})
-let membersChart = initializeChart(membersChartContext, serverData.membersDays, "members", {
-    borderColor: SPECIAL_COLOR_1,
-    pointBackgroundColor: "#99008f",
-    backgroundColor: "#170015",
-})
+let dailyMessagesChart = initializeChart(messagesChartContext, serverData.messagesDays, "messages", defaultChartColors)
+let membersChart = initializeChart(membersChartContext, serverData.membersDays, "members", defaultChartColors)
+let pageSearchViewsChart = initializeChart(pageSearchViewsChartContext, serverData.pageSearchViewsDays, "pageSearchViews", defaultChartColors)
+let joinButtonClicksChart = initializeChart(joinButtonClicksChartContext, serverData.joinClicksDays, "joinClicks", defaultChartColors)
+
 let joinsDays = getDaysArray(serverData.joinsDays, "joins")
 let leavesDays = getDaysArray(serverData.leavesDays, "leaves")
 const leavesJoinsChart = new Chart(joinsLeavesChartContext, {
@@ -128,10 +133,13 @@ const leavesJoinsChart = new Chart(joinsLeavesChartContext, {
         ...optionsDefault
     }
 })
+
 allowHidingForHeaderElement(joinsHeaderElement, leavesJoinsChart, 0)
 allowHidingForHeaderElement(leavesHeaderElement, leavesJoinsChart, 1)
 allowHidingForHeaderElement(dailyMessagesHeaderElement, dailyMessagesChart, 0)
 allowHidingForHeaderElement(membersHeaderElement, membersChart, 0)
+allowHidingForHeaderElement(pageSearchViewsHeader, pageSearchViewsChart, 0)
+allowHidingForHeaderElement(joinButtonClicksHeader, joinButtonClicksChart, 0)
 
 function isSameDay(date1, date2) {
     return date1.getUTCDate() == date2.getUTCDate() && date1.getUTCMonth() == date2.getUTCMonth() && date1.getUTCFullYear() == date2.getUTCFullYear()

@@ -9,6 +9,38 @@
     <body>
         <%- include("./partials/navbar") %>
         <div id="main-content">
+            <div id="top-charts-container">
+                <div id="page-search-views-chart-container" class="chart-container">
+                    <div class="header">
+                        <div class="header-element default" id="page-search-views-header-element">
+                            <div class="box">
+
+                            </div>
+                            <div class="label">
+                                Page search views
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-chart-container">
+                        <canvas id="page-search-views-chart"></canvas>
+                    </div>
+                </div>
+                <div id="join-button-clicks-chart-container" class="chart-container">
+                    <div class="header">
+                        <div class="header-element default" id="join-button-clicks-header-element">
+                            <div class="box">
+
+                            </div>
+                            <div class="label">
+                                Join button clicks
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-chart-container">
+                        <canvas id="join-button-clicks-chart"></canvas>
+                    </div>
+                </div>
+            </div>
             <div id="bottom-charts-container">
                 <div id="messages-chart-container" class="chart-container">
                     <div class="header">

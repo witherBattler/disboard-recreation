@@ -2,13 +2,37 @@
     margin-top: 100px;
 }
 #main-content {
-    width: 1800px;
+    width: 1500px;
     max-width: calc(100vw - 80px);
     padding-top: 150px;
     box-sizing: border-box;
 }
 body {
     align-items: center;
+}
+#top-charts-container {
+    width: 100%;
+    height: 440px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+#top-charts-container > div {
+    width: calc(50% - 15px);
+    padding: 10px;
+    padding-top: 12px;
+    box-sizing: border-box;
+    border: 3px solid var(--special-color-1);
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+#top-charts-container > div > .inner-chart-container {
+    flex-grow: 1;
 }
 #bottom-charts-container {
     width: 100%;
@@ -17,7 +41,7 @@ body {
     justify-content: space-between;
 }
 #bottom-charts-container > div {
-    width: 32%;
+    width: calc(33.3333% - 15px);
     padding: 10px;
     padding-top: 12px;
     box-sizing: border-box;
@@ -33,65 +57,65 @@ body {
 #bottom-charts-container > div > .inner-chart-container {
     flex-grow: 1;
 }
-#bottom-charts-container > div > .header {
+.header {
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#bottom-charts-container > div > .header > .header-element {
+.header > .header-element {
     display: flex;
     margin-right: 15px;
     cursor: pointer;
     user-select: none;
 }
-#bottom-charts-container > div > .header > .header-element:last-child {
+.header > .header-element:last-child {
     margin-right: 0px;
 }
-#bottom-charts-container > div > .header > .header-element > .box {
+.header > .header-element > .box {
     height: 20px;
     width: 40px;
     box-sizing: border-box;
     margin-right: 6px;
 }
-#bottom-charts-container > div .header > .header-element > .label {
+.header > .header-element > .label {
     transition: color 0.2s;
     -webkit-transition: color 0.2s;
     -moz-transition: color 0.2s;
     -ms-transition: color 0.2s;
     -o-transition: color 0.2s;
 }
-#bottom-charts-container > div .header > .header-element.hidden > .label {
+.header > .header-element.hidden > .label {
     text-decoration: line-through;
     color: grey;
 }
-#bottom-charts-container > div .header > .header-element.default > .box {
+.header > .header-element.default > .box {
     border: 3px solid var(--special-color-1);
     background-color: var(--special-color-2);
 }
-#bottom-charts-container > div .header > .header-element.default > .label {
+.header > .header-element.default > .label {
     font-family: var(--display-font);
     font-weight: 600;
     font-size: 17px;
     height: 100%;
     line-height: 110%;
 }
-#bottom-charts-container > div .header > .header-element.joins > .box {
+.header > .header-element.joins > .box {
     border: 3px solid #3dff44;
     background-color: #056100;
 }
-#bottom-charts-container > div .header > .header-element.joins > .label {
+.header > .header-element.joins > .label {
     font-family: var(--display-font);
     font-weight: 600;
     font-size: 17px;
     height: 100%;
     line-height: 110%;
 }
-#bottom-charts-container > div .header > .header-element.leaves > .box {
+.header > .header-element.leaves > .box {
     border: 3px solid #ff0000;
     background-color: #4d0000;
 }
-#bottom-charts-container > div .header > .header-element.leaves > .label {
+.header > .header-element.leaves > .label {
     font-family: var(--display-font);
     font-weight: 600;
     font-size: 17px;
