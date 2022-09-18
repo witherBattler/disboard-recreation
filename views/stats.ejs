@@ -9,6 +9,7 @@
     <body>
         <%- include("./partials/navbar") %>
         <div id="main-content">
+            <h2>Showing statistics for <span class="special"><%- serverData.guildName %></span></h2>
             <div id="top-charts-container">
                 <div id="page-search-views-chart-container" class="chart-container">
                     <div class="header">
@@ -39,6 +40,16 @@
                     <div class="inner-chart-container">
                         <canvas id="join-button-clicks-chart"></canvas>
                     </div>
+                </div>
+            </div>
+            <div class="totals">
+                <div class="left">
+                    <span class="special" id="page-search-views-total"><%- serverData.pageSearchViews %></span>
+                    searches for your server
+                </div>
+                <div class="right">
+                    <span class="special" id="join-button-clicks-total"><%- serverData.joinClicks %></span>
+                    joins from Disdex
                 </div>
             </div>
             <div id="bottom-charts-container">

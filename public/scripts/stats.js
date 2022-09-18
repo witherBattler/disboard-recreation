@@ -10,7 +10,6 @@ let pageSearchViewsHeader = document.getElementById("page-search-views-header-el
 let joinButtonClicksChartContext = document.getElementById("join-button-clicks-chart").getContext("2d")
 let joinButtonClicksHeader = document.getElementById("join-button-clicks-header-element")
 
-
 const SPECIAL_COLOR_1 = "#FF00EE"
 const TOTAL_DAYS = 7
 const pluginsDefault = {
