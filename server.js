@@ -351,4 +351,3 @@ app.locals = {
     convertTimeFromMS
 }
 
-resetAllData()
