@@ -1,0 +1,14 @@
+<div id="toast">
+    Lol!!! this is really funny i think
+</div>
+<script>
+    let toast = document.getElementById("toast")
+
+    function showToast(message) {
+        toast.style.top = "30px"
+        toast.textContent = message
+        setTimeout(function() {
+            toast.style.top = "-70px"
+        }, 3000)
+    }
+</script>

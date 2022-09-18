@@ -17,7 +17,7 @@ writeTagNameConfirm.addEventListener("click", (event) => {
 function confirmTagNameWrite() {
     let tagName = writeTagNameInput.value
     if(tags.indexOf(tagName) != -1) {
-        alert("Tag already exists.")
+        showToast("Tag already exists.")
         return
     }
     writeTagNameInput.value = ""
@@ -41,7 +41,7 @@ writeTagNameInput.addEventListener("keydown", (event) => {
 })
 
 document.body.addEventListener("mousedown", (event) => {
-    if(addTag.matches(":hover")) {
+    if(writeTagNameConfirm.matches(":hover")) {
         return
     }
     writeTagNameInput.value = ""

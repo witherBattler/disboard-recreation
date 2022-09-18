@@ -14,7 +14,7 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
-        
+        GatewayIntentBits.GuildPresences
     ]
 })
 const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN)
@@ -24,6 +24,7 @@ function leaveAllGuilds() {
 }
 
 client.on("ready", async () => {
+    leaveAllGuilds()
     const guilds = client.guilds.cache.map(guild => guild.id)
     for(let i = 0; i != guilds.length; i++) {
         await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_APPLICATION_ID, guilds[i]), {
@@ -136,14 +137,14 @@ client.on("guildCreate", async guild => {
         // finish
     } else {
         let date = new Date()
-        await member.guild.members.fetch()
+        await guild.members.fetch()
         await updateServerDataByGuildId(guild.id, {
             botJoined: true,
             icon: guild.icon,
             banner: guild.banner,
             guildName: guild.name,
-            members: members.all,
-            onlineMembers: members.online,
+            members: guild.members.cache.size,
+            onlineMembers: guild.members.cache.filter(member => member.presence).size,
             boosts: guild.premiumSubscriptionCount,
             emojis: guild.emojis.cache.map(function(emoji) {
                 return {
@@ -155,7 +156,7 @@ client.on("guildCreate", async guild => {
             membersDays: [
                 {
                     date,
-                    members: member.guild.members.cache.size
+                    members: guild.members.cache.size
                 }
             ],
             messagesDays: [

@@ -1,4 +1,4 @@
-let toast = document.getElementById("toast")
+
 
 if(loggedIn) {
     let sendReviewButton = document.getElementById("send-review-button")
@@ -42,13 +42,6 @@ let reviewUsers = {}
 let reviewsCopy = null
 let currentReviewsMode = 0
 
-function showToast(message) {
-    toast.style.top = "30px"
-    toast.textContent = message
-    setTimeout(function() {
-        toast.style.top = "-70px"
-    }, 3000)
-}
 
 let starElementsAverage = Array.from(document.getElementById("stars-average-rating").children)
 let reviewsSummaryLabel = document.getElementById("reviews-summary-label")
