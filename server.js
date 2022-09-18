@@ -8,9 +8,11 @@ const session = require("express-session")
 const passport = require("passport")
 const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
-const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm, compareObjects } = require("./util")
+const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm, compareObjects, accountIsRateLimited, rateLimitAccount, serverPostingRateLimitMiddleware } = require("./util")
 const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote, addServerJoin, getServerDataWithAuthor, updateServerData, realUpdateServerData } = require("./database")
 const { leaveAllGuilds, generateBotUrl, changeGlobalServerUpdate } = require("./bot/bot.js")
+
+console.log(serverPostingRateLimitMiddleware)
 
 let ipsSearches = {}
 setInterval(function() {
@@ -236,7 +238,7 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     await postServer(req.user.id, post)
     res.send(id)
 })
-app.post("/api/post-review", loggedIn, async (req, res) => {
+app.post("/api/post-review", loggedIn, serverPostingRateLimitMiddleware, async (req, res) => {
     if(!reviewForm.check(req.body))
         res.sendStatus(400)
 

@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "push-progress": "concurrently \"git push origin master\" \"git push heroku master\""
+    "push-progress": "concurrently \"git push origin master\" \"git push heroku master\"",
+    "stop-heroku": "heroku ps:scale web=0",
+    "restart-heroku": "heroku ps:scale web=1"
   },
   "author": "",
   "license": "ISC",

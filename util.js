@@ -142,6 +142,36 @@ let reviewForm = new Form()
 function compareObjects(object1, object2) {
     return JSON.stringify(object1) == JSON.stringify(object2)
 }
+
+const rateLimitedAccounts = {
+
+}
+function accountIsRateLimited(action, id) {
+    if(rateLimitedAccounts[id] && rateLimitedAccounts[id].indexOf(action) != -1) {// is rate limited at something and at that action, it is rate limited
+        return true
+    }
+    return false
+}
+function rateLimitAccount(action, id, ms) {
+    rateLimitedAccounts[id] = rateLimitedAccounts[id] || []
+    rateLimitedAccounts[id].push(action)
+    setTimeout(function() {
+        rateLimitedAccounts[id].filter(element => element != action)
+    }, ms)
+}
+function createRateLimitAccountMiddleware(action, ms = 10000) {
+    return function(req, res, next) {
+        if(!accountIsRateLimited(action, req.user.id)) {
+            rateLimitAccount(action, req.user.id, ms)
+            next()
+        } else {
+            res.sendStatus(429)
+        }
+    }
+}
+let serverPostingRateLimitMiddleware = createRateLimitAccountMiddleware("post-server")
+console.log(serverPostingRateLimitMiddleware)
+
 module.exports = {
     loggedIn,
     categoryIsValid,
@@ -152,6 +182,10 @@ module.exports = {
     convertTimeFromMS,
     Form,
     reviewForm,
-    compareObjects
+    compareObjects,
+    accountIsRateLimited,
+    rateLimitAccount,
+    createRateLimitAccountMiddleware,
+    serverPostingRateLimitMiddleware
 }
 
