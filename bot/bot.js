@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Routes, EmbedBuilder } = require("discord.js")
+const { Client, GatewayIntentBits, Routes, EmbedBuilder, Partials } = require("discord.js")
 const { getMembers, generateBotUrl } = require("./util")
 const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGuildId, updateServerData } = require("../database")
 const { REST } = require("@discordjs/rest")
@@ -14,8 +14,11 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildPresences
-    ]
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent,
+    ],
+    partials: [ Partials.Channel ]
 })
 const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN)
 

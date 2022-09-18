@@ -41,7 +41,7 @@ writeTagNameInput.addEventListener("keydown", (event) => {
 })
 
 document.body.addEventListener("mousedown", (event) => {
-    if(writeTagNameConfirm.matches(":hover")) {
+    if(writeTagName.matches(":hover")) {
         return
     }
     writeTagNameInput.value = ""

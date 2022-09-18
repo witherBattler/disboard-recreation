@@ -338,35 +338,6 @@ body {
     cursor: pointer;
 }
 
-#toast {
-    font-family: var(--display-font);
-    position: absolute;
-    top: -70px;
-    left: 50vw;
-    transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    height: 70px;
-    background-color: var(--special-color-1);
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 27px;
-    transition: top 0.2s;
-    -webkit-transition: top 0.2s;
-    -moz-transition: top 0.2s;
-    -ms-transition: top 0.2s;
-    -o-transition: top 0.2s;
-    padding-inline: 20px;
-}
 
 #popup-background {
     position: fixed;
