@@ -42,7 +42,7 @@
     -o-transition: height 0.5s, opacity 0.5s;
     max-height: 200px;
     overflow-y: auto;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.9);
 }
 .dropdownOptions::-webkit-scrollbar {
     width: 0px;
