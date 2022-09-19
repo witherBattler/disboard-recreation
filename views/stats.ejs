@@ -107,6 +107,26 @@
                     </div>
                 </div>
             </div>
+            <div id="bump-invite-container">
+                <div class="bump">
+                    <h3>
+                        Bump settings
+                        <img src="icons/warning.svg" id="bump-warning" class="warning <% if(serverData.bumps.length > 0) { %>hidden<% } %>">
+                    </h3>
+                    <% if(serverData.bumps.length == 0) { %>
+                        <p id="bump-paragraph">Warning: No bump has been executed since the creation of this server. Your server is unlikely to be found in the server list. To bump, press the below button:</p>
+                    <% } else { %>
+                        <p id="bump-paragraph">Total bumps: <span class="special"><%- serverData.bumps.length + 1 %></span><br>Last bump: <span class="special"><%- convertTimeFromMS(Date.now() - serverData.lastBump) %> ago</span></p>
+                    <% } %>
+                    <button id="execute-bump" <% if(Date.now() - serverData.lastBump < 7200000) { %> class="blocked" <% } %>>
+                        <span>Bump</span>
+                        <img src="icons/bump.svg">
+                    </button>
+                </div>
+                <div class="invite">
+                    <h3>Invite settings</h3>
+                </div>
+            </div>
         </div>
         <!-- <canvas class="statistic" id="messages-chart"></canvas> -->
     </body>
@@ -116,4 +136,5 @@
     </script>
     <script src="util/util.js"></script>
     <script src="scripts/stats.js"></script>
+    <%- include("partials/toast") %>
 </html>

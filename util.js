@@ -170,7 +170,6 @@ function createRateLimitAccountMiddleware(action, ms = 10000) {
     }
 }
 let serverPostingRateLimitMiddleware = createRateLimitAccountMiddleware("post-server")
-console.log(serverPostingRateLimitMiddleware)
 
 module.exports = {
     loggedIn,

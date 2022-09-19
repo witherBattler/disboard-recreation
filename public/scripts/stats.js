@@ -9,6 +9,9 @@ let pageSearchViewsChartContext = document.getElementById("page-search-views-cha
 let pageSearchViewsHeader = document.getElementById("page-search-views-header-element")
 let joinButtonClicksChartContext = document.getElementById("join-button-clicks-chart").getContext("2d")
 let joinButtonClicksHeader = document.getElementById("join-button-clicks-header-element")
+let bumpButton = document.getElementById("execute-bump")
+let bumpWarning = document.getElementById("bump-warning")
+let bumpParagraph = document.getElementById("bump-paragraph")
 
 const SPECIAL_COLOR_1 = "#FF00EE"
 const TOTAL_DAYS = 7
@@ -171,3 +174,19 @@ function initializeChart(context, data, propertyName, ...datasets) {
     return chart
 }
 
+let alreadyBumped = false
+
+bumpButton.addEventListener("click", async (event) => {
+    if(alreadyBumped || Date.now() - serverData.lastBump < 7200000) {
+        showToast("You have already bumped your server in the past 2 hours.")
+        return
+    }
+    let response = await ajax(`/api/bump-server/${serverData.id}`, "POST")
+    if(response == "true") {
+        bumpWarning.classList.add("hidden")
+        bumpParagraph.innerHTML = `Total bumps: <span class="special">${serverData.bumps.length + 1}</span><br>Last bump: <span class="special">Just now</span>`
+        bumpButton.classList.add("blocked")
+        showToast("Server bumped!")
+        alreadyBumped = true
+    }
+})

@@ -233,7 +233,8 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         joinsDays: [],
         leavesDays: [],
         joinClicksDays: [],
-        pageSearchViewsDays: []
+        pageSearchViewsDays: [],
+        bumps: []
     }
     await postServer(req.user.id, post)
     res.send(id)
@@ -331,7 +332,31 @@ app.get("/bot-instructions", loggedIn, (req, res) => {
         userData: req.user
     })
 })
-
+app.post("/api/bump-server/:id", loggedIn, async (req, res) => {
+    let id = req.params.id
+    let server = await getServerData(id)
+    if(!server) {
+        res.sendStatus(400)
+        return
+    }
+    if(req.user.id != server.author) {
+        res.sendStatus(400)
+        return
+    }
+    if(Date.now() - server.lastBump < 7200000) {
+        res.sendStatus(409)
+        return
+    }
+    await realUpdateServerData(id, {
+        $set: {
+            lastBump: Date.now()
+        },
+        $push: {
+            bumps: Date.now()
+        }
+    })
+    res.send(true)
+})
 
 
 function getGuilds(user) {

@@ -78,6 +78,9 @@ async function updateServerData(id, data) {
 async function realUpdateServerData(id, data) {
     await servers.updateOne({ id }, data)
 }
+async function realUpdateServerDataByGuildId(id, data) {
+    await servers.updateOne({ serverId: id }, data)
+}
 async function updateServerDataByGuildId(id, data) {
     await servers.updateOne({ serverId: id }, { $set: data } )
 }
@@ -274,5 +277,6 @@ module.exports = {
     addServerJoin,
     replaceServerDataByGuildId,
     getServerDataWithAuthor,
-    realUpdateServerData
+    realUpdateServerData,
+    realUpdateServerDataByGuildId
 }

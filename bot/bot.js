@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits, Routes, EmbedBuilder, Partials } = require("discord.js")
 const { getMembers, generateBotUrl } = require("./util")
-const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGuildId, updateServerData } = require("../database")
+const { getServerDataByGuildId, updateServerDataByGuildId, replaceServerDataByGuildId, updateServerData, realUpdateServerDataByGuildId } = require("../database")
 const { REST } = require("@discordjs/rest")
 const { SlashCommandBuilder } = require("@discordjs/builders")
 
@@ -270,8 +270,13 @@ client.on("interactionCreate", async(interaction) => {
                 return
             }
             // finally, bump.
-            await updateServerDataByGuildId(interaction.guild.id, {
-                lastBump: Date.now()
+            await realUpdateServerDataByGuildId(interaction.guild.id, {
+                $set: {
+                    lastBump: Date.now()
+                },
+                $push: {
+                    bumps: Date.now()
+                }
             })
             const successEmbed = new EmbedBuilder()
                 .setTitle("Server bumped")
