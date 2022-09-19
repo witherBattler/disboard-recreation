@@ -25,7 +25,29 @@ const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN)
 function leaveAllGuilds() {
     client.guilds.cache.map(guild => guild.leave())
 }
-
+async function getChannelsFromGuild(id) {
+    await client.guilds.fetch()
+    const guild = client.guilds.cache.get(id)
+    let possibleChannels = guild.channels.cache.filter(channel => channel.type != 4 && channel.type != 2)
+    let toReturn = possibleChannels.map(channel => {
+        return {
+            id: channel.id,
+            type: channel.type,
+            name: channel.name
+        }
+    })
+    return toReturn
+}
+async function createInviteForChannel(serverId, channelId) {
+    await client.guilds.fetch()
+    const guild = client.guilds.cache.get(serverId)
+    let channel = guild.channels.cache.get(channelId)
+    let invite = await channel.createInvite({
+        maxAge: 0,
+        maxUses: 0,
+    })
+    return invite.url
+}
 client.on("ready", async () => {
     const guilds = client.guilds.cache.map(guild => guild.id)
     for(let i = 0; i != guilds.length; i++) {
@@ -291,6 +313,8 @@ client.on("interactionCreate", async(interaction) => {
     }
 })
 
+
+
 client.login(process.env.BOT_TOKEN)
 
 module.exports = {
@@ -299,4 +323,6 @@ module.exports = {
     client,
     changeGlobalServerUpdate,
     setGlobalServerUpdate,
+    getChannelsFromGuild,
+    createInviteForChannel
 }

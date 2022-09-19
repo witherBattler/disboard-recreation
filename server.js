@@ -10,7 +10,7 @@ const discordStrategy = require("./strategies/discordStrategy")
 const fetch = require("node-fetch")
 const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, reviewForm, compareObjects, accountIsRateLimited, rateLimitAccount, serverPostingRateLimitMiddleware } = require("./util")
 const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote, addServerJoin, getServerDataWithAuthor, updateServerData, realUpdateServerData } = require("./database")
-const { leaveAllGuilds, generateBotUrl, changeGlobalServerUpdate } = require("./bot/bot.js")
+const { leaveAllGuilds, generateBotUrl, changeGlobalServerUpdate, getChannelsFromGuild, createInviteForChannel } = require("./bot/bot.js")
 
 console.log(serverPostingRateLimitMiddleware)
 
@@ -90,10 +90,16 @@ app.get("/server/:id", async (req, res) => {
 })
 app.get("/stats/:id", loggedIn, async (req, res) => {
     let server = await getServerDataWithAuthor(req.params.id, req.user.id)
+    if(!server) {
+        res.redirect("/")
+        return
+    }
+    let channels = await getChannelsFromGuild(server.serverId)
     res.render("stats", {
         loggedIn: true,
         userData: req.user,
-        serverData: server
+        serverData: server,
+        channelsData: channels
     })
 })
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
@@ -343,6 +349,10 @@ app.post("/api/bump-server/:id", loggedIn, async (req, res) => {
         res.sendStatus(400)
         return
     }
+    if(!server.invite) {
+        res.sendStatus(409)
+        return
+    }
     if(Date.now() - server.lastBump < 7200000) {
         res.sendStatus(409)
         return
@@ -377,4 +387,3 @@ app.locals = {
     generateBotUrl,
     convertTimeFromMS
 }
-

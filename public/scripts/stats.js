@@ -72,16 +72,17 @@ const optionsDefault = {
     },
 }
 
-function getDaysArray(data, propertyName) {
+function getDaysArray(data, propertyName, takeValueFromPreviousDay = false) {
     let daysArray = [] // where today is the first element
     let today = new Date()
-    for(let i = 0; i != TOTAL_DAYS; i++) {
+    for(let i = TOTAL_DAYS - 1; i != -1; i--) {
         let thatDay = new Date(+today)
         thatDay.setDate(today.getDate() - i)
         let dayJustInCase = {date: null}
-        dayJustInCase[propertyName] = 0
+        console.log(takeValueFromPreviousDay)
+        dayJustInCase[propertyName] = (takeValueFromPreviousDay ? (daysArray[daysArray.length - 1]?.value || 0) : 0)
         let day = data.find(e => { return isSameDay(thatDay, new Date(e.date)) }) || dayJustInCase
-        daysArray.unshift({value: day[propertyName], day: thatDay})
+        daysArray.push({value: day[propertyName], day: thatDay})
     }
     return daysArray
 }
@@ -100,10 +101,10 @@ const defaultChartColors = {
     backgroundColor: "#170015",
 }
 
-let dailyMessagesChart = initializeChart(messagesChartContext, serverData.messagesDays, "messages", defaultChartColors)
-let membersChart = initializeChart(membersChartContext, serverData.membersDays, "members", defaultChartColors)
-let pageSearchViewsChart = initializeChart(pageSearchViewsChartContext, serverData.pageSearchViewsDays, "pageSearchViews", defaultChartColors)
-let joinButtonClicksChart = initializeChart(joinButtonClicksChartContext, serverData.joinClicksDays, "joinClicks", defaultChartColors)
+let dailyMessagesChart = initializeChart(messagesChartContext, serverData.messagesDays, "messages", false, defaultChartColors)
+let membersChart = initializeChart(membersChartContext, serverData.membersDays, "members", true, defaultChartColors)
+let pageSearchViewsChart = initializeChart(pageSearchViewsChartContext, serverData.pageSearchViewsDays, "pageSearchViews", false, defaultChartColors)
+let joinButtonClicksChart = initializeChart(joinButtonClicksChartContext, serverData.joinClicksDays, "joinClicks", false, defaultChartColors)
 
 let joinsDays = getDaysArray(serverData.joinsDays, "joins")
 let leavesDays = getDaysArray(serverData.leavesDays, "leaves")
@@ -150,8 +151,8 @@ function isSameDay(date1, date2) {
 
 
 
-function initializeChart(context, data, propertyName, ...datasets) {
-    let daysArray = getDaysArray(data, propertyName)
+function initializeChart(context, data, propertyName, takeValueFromPreviousDay, ...datasets) {
+    let daysArray = getDaysArray(data, propertyName, takeValueFromPreviousDay)
     let chart = new Chart(context, {
         type: "line",
         data: {
@@ -174,11 +175,13 @@ function initializeChart(context, data, propertyName, ...datasets) {
     return chart
 }
 
-let alreadyBumped = false
-
 bumpButton.addEventListener("click", async (event) => {
-    if(alreadyBumped || Date.now() - serverData.lastBump < 7200000) {
+    if(Date.now() - serverData.lastBump < 7200000) {
         showToast("You have already bumped your server in the past 2 hours.")
+        return
+    }
+    if(!serverData.invite) {
+        showToast("You must have an invite link set for your server before bumping your server. Try again later.")
         return
     }
     let response = await ajax(`/api/bump-server/${serverData.id}`, "POST")
@@ -187,6 +190,7 @@ bumpButton.addEventListener("click", async (event) => {
         bumpParagraph.innerHTML = `Total bumps: <span class="special">${serverData.bumps.length + 1}</span><br>Last bump: <span class="special">Just now</span>`
         bumpButton.classList.add("blocked")
         showToast("Server bumped!")
-        alreadyBumped = true
+        serverData.lastBump = Date.now()
+        serverData.bumps.push(Date.now())
     }
 })
