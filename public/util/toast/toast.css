@@ -1,6 +1,6 @@
 #toast {
     font-family: var(--display-font);
-    position: absolute;
+    position: fixed;
     top: -70px;
     left: 50vw;
     transform: translateX(-50%);

@@ -128,6 +128,33 @@
                         Invite settings
                         <img src="icons/warning.svg" id="bump-warning" class="warning <% if(serverData.invite) { %>hidden<% } %>">
                     </h3>
+                    <p id="invite-paragraph">
+                        Invite channel:
+                        <% let inviteChannelObject = channelsData.find(channel => channel.id == serverData.inviteChannel) %>
+                        <img src="icons/channel-types/<%- inviteChannelObject.type %>.svg" id="current-channel-icon">
+                        <span class="special" id="invite-channel-name">
+                            <%- inviteChannelObject.name %>
+                        </span>
+                    </p>
+                    <div id="change-invite-channel-container">
+                        <p>Choose the channel to set the invite link to:</p>
+                        <div id="invite-channel-picker">
+                            <% channelsData.forEach(channel => { %>
+                                <div data-id="<%- channel.id %>" class="element <% if(channel.id == serverData.inviteChannel) { %>checked<% } %>">
+                                    <img src="<%- channel.id == serverData.inviteChannel ? "icons/checkbox2-checked.svg" : "icons/checkbox2.svg" %>" class="check">
+                                    <p class="label">#<%- channel.name %></p>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                    <button id="change-invite-channel">
+                        <span>Change</span>
+                        <img src="icons/edit.svg">
+                    </button>
+                    <button id="confirm-invite-channel" class="hidden">
+                        <span>Confirm</span>
+                        <img src="icons/checkmark-alone.svg">
+                    </button>
                 </div>
             </div>
         </div>

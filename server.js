@@ -368,6 +368,35 @@ app.post("/api/bump-server/:id", loggedIn, async (req, res) => {
     res.send(true)
 })
 
+app.post("/api/change-invite-channel/:id", loggedIn, async (req, res) => {
+    let id = req.params.id
+    let channelId = req.query.channel;
+    if(id.length != 6 || channelId == undefined) {
+        res.sendStatus(400)
+        return
+    }
+    let server = await getServerData(req.params.id)
+    if(!server) {
+        res.sendStatus(400)
+        return
+    }
+    let serverChannels = await getChannelsFromGuild(server.serverId)
+    let channelObject = serverChannels.find(channel => channel.id == channelId)
+    if(!channelObject) {
+        res.sendStatus(400)
+        return
+    }
+    let invite = await createInviteForChannel(server.serverId, channelId)
+    // update invite in database
+    await updateServerData(server.id, {
+        invite,
+        inviteChannel: channelObject.id
+    })
+    res.json({
+        invite: invite,
+        channel: channelObject
+    })
+})
 
 function getGuilds(user) {
     return new Promise((resolve, reject) => {

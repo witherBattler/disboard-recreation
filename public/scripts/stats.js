@@ -12,6 +12,12 @@ let joinButtonClicksHeader = document.getElementById("join-button-clicks-header-
 let bumpButton = document.getElementById("execute-bump")
 let bumpWarning = document.getElementById("bump-warning")
 let bumpParagraph = document.getElementById("bump-paragraph")
+let changeInviteChannelButton = document.getElementById("change-invite-channel")
+let confirmInviteChannelButton = document.getElementById("confirm-invite-channel")
+let changeInviteChannelContainer = document.getElementById("change-invite-channel-container")
+let inviteParagraph = document.getElementById("invite-paragraph")
+let inviteChannelPickerElements = Array.from(document.getElementById("invite-channel-picker").children)
+let inviteChannelName = document.getElementById("invite-channel-name")
 
 const SPECIAL_COLOR_1 = "#FF00EE"
 const TOTAL_DAYS = 7
@@ -194,3 +200,49 @@ bumpButton.addEventListener("click", async (event) => {
         serverData.bumps.push(Date.now())
     }
 })
+
+changeInviteChannelButton.addEventListener("click", (event) => {
+    confirmInviteChannelButton.style.display = "flex"
+    changeInviteChannelButton.style.display = "none"
+    inviteParagraph.style.display = "none"
+    changeInviteChannelContainer.style.display = "flex"
+})
+
+let currentlySelectedInviteChannel = null
+
+for(let i = 0; i != inviteChannelPickerElements.length; i++) {
+    let inviteChannelPickerElement = inviteChannelPickerElements[i]
+    let inviteChannelPickerElementImage = inviteChannelPickerElement.children[0]
+    inviteChannelPickerElement.addEventListener("click", (event) => {
+        for(let j = 0; j != inviteChannelPickerElements.length; j++) {
+            let jInviteChannelPickerElement = inviteChannelPickerElements[j]
+            let jInviteChannelPickerElementImage = jInviteChannelPickerElement.children[0]
+            jInviteChannelPickerElementImage.src = "icons/checkbox2.svg"
+            jInviteChannelPickerElement.classList.remove("checked")
+        }
+        inviteChannelPickerElementImage.src = "icons/checkbox2-checked.svg"
+        inviteChannelPickerElement.classList.add("checked")
+        currentlySelectedInviteChannel = inviteChannelPickerElement.dataset.id
+    })
+}
+
+confirmInviteChannelButton.addEventListener("click", async (event) => {
+    if(!currentlySelectedInviteChannel) {
+        showToast("Invite channel not modified.")
+        closeInviteSettingsMenu()
+        return
+    }
+    showToast("Loading...", true)
+    let newUrl = await ajax(`/api/change-invite-channel/${serverData.id}?channel=${currentlySelectedInviteChannel}`, "POST")
+    showToast("Invite channel updated!")
+    newUrl = JSON.parse(newUrl)
+    inviteChannelName.textContent = newUrl.channel.name
+    currentlySelectedInviteChannel = null
+    closeInviteSettingsMenu()
+})
+function closeInviteSettingsMenu() {
+    confirmInviteChannelButton.style.display = "none"
+    changeInviteChannelButton.style.display = "flex"
+    inviteParagraph.style.display = "flex"
+    changeInviteChannelContainer.style.display = "none"
+}

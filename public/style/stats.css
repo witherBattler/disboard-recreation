@@ -162,6 +162,7 @@ h2 {
 h2 > .special {
     font-size: 40px;
     color: var(--special-color-1);
+    font-family: var(--display-font);
 }
 #bump-invite-container {
     margin-top: 15px;
@@ -194,6 +195,7 @@ h2 > .special {
 #bump-paragraph > .special {
     color: var(--special-color-1);
     font-size: 20px;
+    font-family: var(--display-font);
 }
 #execute-bump {
     background-color: var(--special-color-1);
@@ -236,4 +238,93 @@ h2 > .special {
 }
 .warning.hidden {
     display: none;
+}
+#current-channel-icon {
+    margin-left: 4px
+}
+#invite-paragraph {
+    display: flex;
+    margin-top: 2px;
+    color: #b4b4b4;
+    font-size: 20px;
+}
+#invite-paragraph > .special {
+    color: var(--special-color-1);
+    margin-left: -1px;
+    font-family: var(--display-font);
+    font-size: 20px;
+}
+#change-invite-channel, #confirm-invite-channel {
+    margin-left: 0px;
+    background-color: var(--special-color-1);
+    padding: 10px;
+    padding-inline: 15px;
+    width: fit-content;
+    cursor: pointer;
+    margin-top: 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    display: flex;
+    align-items: center;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+}
+#change-invite-channel:hover, #confirm-invite-channel:hover {
+    opacity: 1
+}
+#change-invite-channel > span, #confirm-invite-channel > span {
+    color: white;
+    font-family: var(--display-font);
+    font-weight: 600;
+    font-size: 25px;
+}
+#change-invite-channel > img, #confirm-invite-channel > img {
+    height: 18px;
+    margin-left: 5px;
+}
+#confirm-invite-channel {
+    display: none;
+}
+#change-invite-channel-container {
+    display: none;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+#change-invite-channel-container > p {
+    color: #b4b4b4;
+    font-size: 20px;
+    margin-top: 2px;
+    display: none;
+}
+#invite-channel-picker {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+#invite-channel-picker > .element {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    cursor: pointer;
+    width: fit-content;
+}
+#invite-channel-picker > .element.checked > .label {
+    font-weight: 600;
+}
+#invite-channel-picker > .element > .check {
+    margin-right: 5px;
+    height: 23px;
+}
+#invite-channel-picker > .element > .label {
+    font-family: var(--display-font);
+    font-size: 20px;
+    user-select: none;
+    width: fit-content;
 }

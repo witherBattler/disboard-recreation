@@ -27,6 +27,7 @@ function leaveAllGuilds() {
 }
 async function getChannelsFromGuild(id) {
     await client.guilds.fetch()
+    console.log(id)
     const guild = client.guilds.cache.get(id)
     let possibleChannels = guild.channels.cache.filter(channel => channel.type != 4 && channel.type != 2)
     let toReturn = possibleChannels.map(channel => {
@@ -249,6 +250,7 @@ client.on("interactionCreate", async(interaction) => {
             // update database
             await updateServerDataByGuildId(interaction.guild.id, {
                 invite: link,
+                inviteChannel: interaction.channel.id,
                 setUp: true,
             })
             
@@ -312,8 +314,6 @@ client.on("interactionCreate", async(interaction) => {
             break
     }
 })
-
-
 
 client.login(process.env.BOT_TOKEN)
 
