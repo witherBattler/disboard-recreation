@@ -47,7 +47,7 @@ class BetterDropdown extends HTMLElement {
 
         let dropdownLabel = document.createElement("div")
         dropdownLabel.setAttribute("class", "dropdownLabel")
-        dropdownLabel.innerText = options[0]
+        dropdownLabel.innerText = this.getAttribute("selected") || options[0]
         this.dropdownLabel = dropdownLabel
 
         let dropdownIconContainer = document.createElement("div")
@@ -77,7 +77,6 @@ class BetterDropdown extends HTMLElement {
                 dropdownLabel.innerText = options[i]
                 dropdownOptions.style.height = "0"
                 dropdownOptions.style.opacity = "0"
-                dropdownOptions.style.width = "360px"
                 dropdownIcon.style.transform = "rotate(0deg)"
                 this.events.change.forEach(callback => callback(options[i]))
             })

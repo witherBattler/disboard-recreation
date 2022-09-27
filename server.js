@@ -262,10 +262,19 @@ app.get("/api/reviews-data", async (req, res) => {
     res.json(data)
 })
 app.get("/edit-server/:id", loggedIn, async (req, res) => {
-    res.render("edit-server", {
-        loggedIn: true,
-        userData: req.user
-    })
+    let server = await getServerData(req.params.id)
+    if(server && server.author == req.user.id) {
+        console.log(server, "server")
+        res.render("edit-server", {
+            loggedIn: true,
+            userData: req.user,
+            serverData: server
+        })
+    } else {
+        res.redirect("/")
+    }
+
+    
 })
 
 function getUserData(user) {

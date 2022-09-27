@@ -15,7 +15,7 @@ class HashtagRenderer extends HTMLElement {
         let container = document.createElement("button")
         container.setAttribute("class", "container")
         container.addEventListener("click", (event) => {
-            this.events.remove.forEach(event => event())
+            this.events.remove.forEach(event => event(this.getAttribute("name")))
             this.remove()
         })
 

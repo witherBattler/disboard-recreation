@@ -26,11 +26,13 @@ function confirmTagNameWrite() {
     writeTagName.style.display = "none"
     tagsContainer.appendChild(tag)
     tag.appendEventListener("remove", (event) => {
+        console.log("asdf")
         tags.splice(tags.indexOf(tag), 1)
     })
 
     tags.push(tagName)
     tag.appendEventListener("remove", (event) => {
+        console.log("asdf")
         tags.splice(tags.indexOf(tagName), 1)
     })
 }

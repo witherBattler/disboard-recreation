@@ -2,10 +2,84 @@
 <html>
     <head>
         <link rel="stylesheet" href="/style/default.css">
-        <title>Disboard - Dashboard</title>
+        <title>Disboard | Edit Server</title>
         <base href="/">
+        <link rel="stylesheet" href="style/edit-server.css">
     </head>
     <body>
         <%- include("./partials/navbar") %>
+        <div id="content">
+            <h2>Edit your server</h2>
+            <hr>
+            <div id="server-indicator">
+                <img id="server-indicator-icon" src="https://cdn.discordapp.com/icons/<%-serverData.serverId%>/<%-serverData.icon%>">
+                <p id="server-indicator-name"><%-serverData.guildName%></p>
+            </div>
+    
+            <div class="two-sided">
+                <div>
+                    <p class="subtitle">Main language</p>
+                    <better-dropdown selected="<%- serverData.mainLanguage %>" id="language-dropdown" width="390px" options="English,аҧсуа,Afaraf,Afrikaans,Akan,Shqip,አማርኛ,العربية,Aragonés,Հայերեն,অসমীয়া,авар мацӀ, магӀарул мацӀ,avesta,aymar aru,azərbaycan dili,bamanankan,башҡорт теле,euskara, euskera,Беларуская,বাংলা,भोजपुरी,Bislama,bosanski jezik,brezhoneg,български език,ဗမာစာ,Català,Chamoru,нохчийн мотт,chiCheŵa, chinyanja,中文 (Zhōngwén), 汉语, 漢語,чӑваш чӗлхи,Kernewek,corsu, lingua corsa,ᓀᐦᐃᔭᐍᐏᐣ,hrvatski,česky, čeština,dansk,ދިވެހި,Nederlands, Vlaams,Esperanto,eesti, eesti keel,Eʋegbe,føroyskt,vosa Vakaviti,suomi, suomen kieli,français,,Fulfulde, Pulaar, Pular,Galego,ქართული,Deutsch,Ελληνικά,Avañeẽ,ગુજરાતી,Kreyòl ayisyen,Hausa, هَوُسَ,עברית,Otjiherero,हिन्दी, हिंदी,Hiri Motu,Magyar,Interlingua,Bahasa Indonesia,Gaeilge,Asụsụ Igbo,Iñupiaq, Iñupiatun,Ido,Íslenska,Italiano,ᐃᓄᒃᑎᑐᑦ,日本語 (にほんご／にっぽんご),basa Jawa,kalaallisut, kalaallit oqaasii,ಕನ್ನಡ,Kanuri,कश्मीरी, كشميري‎,Қазақ тілі,ភាសាខ្មែរ,Gĩkũyũ,Ikinyarwanda,кыргыз тили,коми кыв,KiKongo,한국어 (韓國語), 조선말 (朝鮮語),Kurdî, كوردی‎,Kuanyama,latine, lingua latina,Lëtzebuergesch,Luganda,Limburgs,Lingála,ພາສາລາວ,lietuvių kalba,,latviešu valoda,Gaelg, Gailck,македонски јазик,Malagasy fiteny,bahasa Melayu, بهاس ملايو‎,മലയാളം,Malti,te reo Māori,मराठी,Kajin M̧ajeļ,монгол,Ekakairũ Naoero,Diné bizaad, Dinékʼehǰí,Norsk bokmål,isiNdebele,नेपाली,Owambo,Norsk nynorsk,Norsk,ꆈꌠ꒿ Nuosuhxop,isiNdebele,Occitan,ᐊᓂᔑᓈᐯᒧᐎᓐ,ѩзыкъ словѣньскъ,Afaan Oromoo,ଓଡ଼ିଆ,ирон æвзаг,ਪੰਜਾਬੀ, پنجابی‎,पाऴि,فارسی,polski,پښتو,Português,Runa Simi, Kichwa,rumantsch grischun,kiRundi,română,русский язык,संस्कृतम्,sardu,सिन्धी, سنڌي، سندھی‎,Davvisámegiella,gagana faa Samoa,yângâ tî sängö,српски језик,Gàidhlig,chiShona,සිංහල,slovenčina,slovenščina,Soomaaliga, af Soomaali,Sesotho,español, castellano,Basa Sunda,Kiswahili,SiSwati,svenska,தமிழ்,తెలుగు,тоҷикӣ, toğikī, تاجیکی‎,ไทย,ትግርኛ,བོད་ཡིག,Türkmen, Түркмен,Wikang Tagalog, ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ᜔,Setswana,faka Tonga,Türkçe,Xitsonga,татарча, tatarça, تاتارچا‎,Twi,Reo Tahiti,Uyƣurqə, ئۇيغۇرچە‎,українська,اردو,zbek, Ўзбек, أۇزبېك‎,Tshivenḓa,Tiếng Việt,Volapük,Walon,Cymraeg,Wollof,Frysk,isiXhosa,ייִדיש,Yorùbá,Saɯ cueŋƅ, Saw cuengh"></better-dropdown>    
+                </div>
+                <div>
+                    <p class="subtitle">Category</p>
+                    <better-dropdown selected="<%- serverData.category %>" id="category-dropdown" width="390px" options="Community,Gaming,Anime - Manga,Music,Technology,Language,Movies,Media,Programming,Other"></better-dropdown>
+                </div>
+            </div>
+    
+    
+    
+            
+            <div class="row">
+                <p class="subtitle">Tags</p>
+                <button id="add-tag">
+                    <img src="/icons/add.svg">
+                </button>
+            </div>
+    
+            
+            <div id="tags">
+                <% serverData.tags.forEach(tag => { %>
+                    <hashtag-renderer name="<%- tag %>"></hashtag-renderer>
+                <% }) %>
+            </div>
+            
+    
+            <p class="subtitle">Short description</p>
+            <textarea id="short-description" placeholder="What is your server about?"><%- serverData.shortDescription %></textarea>
+    
+            <p class="subtitle">Description</p>
+            <textarea id="description" placeholder="More details about your server"><%- serverData.description %></textarea>
+    
+            <div id="nsfw">
+                <better-checkbox listen-for-clicks="nsfw" id="nsfw-checkbox" checked="<%- serverData.nsfw %>"></better-checkbox>
+                <p>NSFW</p>
+            </div>
+            <p class="details">Must be checked if the server's main theme is NSFW, such as violent content.</p>
+    
+            <div id="unlisted">
+                <better-checkbox listen-for-clicks="unlisted" id="unlisted-checkbox" checked="<%- serverData.unlisted %>"></better-checkbox>
+                <p>Unlisted</p>
+            </div>
+            <p class="details">If checked, will be hidden from the public server list, and will only be available to people who have the link.</p>
+            <div id="submit-button-container">
+                <button id="submit-button">
+                    <span>Submit</span>
+                    <img src="/icons/right.svg">
+                </button>
+            </div>
+        </div>
+        
     </body>
+    
+    <script src="util/betterCheckbox/betterCheckbox.js"></script>
+    <script src="util/betterDropdown/betterDropdown.js"></script>
+    <script src="util/hashtagRenderer/hashtagRenderer.js"></script>
+    <%- include("partials/tag-editor") %>
+    <script>
+        tags = <%- JSON.stringify(serverData.tags) %>
+        serverData = <%- JSON.stringify(serverData) %>
+    </script>
+    <script src="scripts/edit-server.js"></script>
+    
 </html>

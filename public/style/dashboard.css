@@ -294,7 +294,7 @@
     margin-left: 20px;
     font-family: var(--display-font);
     font-size: 18px;
-    color: white;
+    color: rgb(210, 210, 210);
 }
 #submit-button-container {
     display: flex;
