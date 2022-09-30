@@ -15,6 +15,11 @@ for(let i = 0; i != tagsElements.length; i++) {
     })
 }
 
+onTagAdd(function(tag) {
+    console.log("asdf")
+    changes.tags = tags
+})
+
 nsfwCheckbox.appendEventListener("change", (value) => {
     changes.nsfw = value
 })
@@ -23,16 +28,23 @@ unlistedCheckbox.appendEventListener("change", (value) => {
     changes.unlisted = value
 })
 
-languageDropdown.appendEventListener("change", (value) => {
+languageDropdown.appendEvent("change", (value) => {
     changes.mainLanguage = value
 })
 
-categoryDropdown.appendEventListener("change", (value) => {
+categoryDropdown.appendEvent("change", (value) => {
     changes.category = value
 })
-/* 
-submitButton.addEventListener("click", async (event) => {
-    let response = await ajax(`/api/edit-server/${serverData.id}`, JSON.stringify({
 
-    }))
-}) */
+submitButton.addEventListener("click", async (event) => {
+    if(Object.keys(changes).length == 0) {
+        showToast("No changes have been made.")
+        return
+    }
+    let response = await ajax(`/api/edit-server/${serverData.id}`, "POST", JSON.stringify(changes))
+    if(response.status == 200) {
+        window.location = "/"
+    } else {
+        showToast("A problem happened while trying to edit your server. Try again later.")
+    }
+})

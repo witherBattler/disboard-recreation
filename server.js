@@ -273,8 +273,20 @@ app.get("/edit-server/:id", loggedIn, async (req, res) => {
     } else {
         res.redirect("/")
     }
-
-    
+})
+app.post("/api/edit-server/:id", loggedIn, async (req, res) => {
+    if(!req.body) {
+        res.sendStatus(400)
+        return
+    }
+    let server = await getServerData(req.params.id)
+    if(server && server.author == req.user.id) {
+        console.log('its true')
+        console.log(req.body)
+        await updateServerData(server.id, req.body)
+    } else {
+        res.sendStatus(400)
+    }
 })
 
 function getUserData(user) {

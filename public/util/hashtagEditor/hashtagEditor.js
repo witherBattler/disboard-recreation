@@ -35,6 +35,10 @@ function confirmTagNameWrite() {
         console.log("asdf")
         tags.splice(tags.indexOf(tagName), 1)
     })
+    
+    for(let i = 0; i != newTagEventListeners.length; i++) {
+        newTagEventListeners[i]()
+    }
 }
 writeTagNameInput.addEventListener("keydown", (event) => {
     if(event.key == "Enter") {
@@ -49,3 +53,8 @@ document.body.addEventListener("mousedown", (event) => {
     writeTagNameInput.value = ""
     writeTagName.style.display = "none"
 })
+
+let newTagEventListeners = []
+function onTagAdd(func) {
+    newTagEventListeners.push(func)
+}

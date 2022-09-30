@@ -72,10 +72,12 @@
         
     </body>
     
+    <script src="util/util.js"></script>
     <script src="util/betterCheckbox/betterCheckbox.js"></script>
     <script src="util/betterDropdown/betterDropdown.js"></script>
     <script src="util/hashtagRenderer/hashtagRenderer.js"></script>
     <%- include("partials/tag-editor") %>
+    <%- include("partials/toast") %>
     <script>
         tags = <%- JSON.stringify(serverData.tags) %>
         serverData = <%- JSON.stringify(serverData) %>
