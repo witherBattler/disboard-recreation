@@ -179,10 +179,16 @@ a {
     -o-border-radius: 15px;
 }
 .server > .server-top > h3 {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-family: var(--display-font);
     font-size: 30px;
     margin-left: 10px;
     font-weight: 600;
+    padding-right: 5px;
+    box-sizing: border-box;
 }
 .server > .server-top > div {
     display: flex;
@@ -190,6 +196,7 @@ a {
     justify-content: end;
     height: 100%;
     align-items: center;
+    min-width: fit-content;
 }
 .server > .server-top > div > button {
     border: white 4px solid;

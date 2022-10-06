@@ -218,6 +218,10 @@
     font-weight: 600;
     color: var(--text-color);
     margin-left: 10px;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #nsfw, #unlisted {
     display: flex;
