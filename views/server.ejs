@@ -155,6 +155,11 @@
         <% if(loggedIn) { %>
             let userData = <%- JSON.stringify(userData) %>
         <% } %>
+        if(!serverData.botJoined) {
+            showToast("Please add the bot to your server through the dashboard.")
+        } else if(!serverData.setUp) {
+            showToast("Please finish setting up your server (configure the invite URL).")
+        }
     </script>
     <script src="scripts/server.js"></script>
 </html>
