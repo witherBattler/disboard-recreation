@@ -145,6 +145,9 @@ popupBackground.addEventListener("click", (event) => {
 })
 
 function renderReviews(reviews) {
+    if(reviews == undefined) {
+        return
+    }
     for(let i = 0; i != reviews.length; i++) {
         let review = reviews[i]
         let user = reviewUsers[review.author]

@@ -52,10 +52,9 @@
             <% var addBotParsed = typeof(addBot) == "undefined" ? "hidden" : addBot %>
             <div id="add-bot-popup"<% if(addBotParsed == "hidden") { %>class="hidden"<% } %>>
                 <div id="add-bot-popup-top">
-                    <h2>Add Disdex bot</h2>
-                    <img src="/icons/close.svg" id="close-button" onclick="closeAddBotPopup()">
+                    <p>Add Disdex bot</p>
+                    <img src="/icons/x-white.svg" id="close-button" onclick="closeAddBotPopup()">
                 </div>
-                <hr>
                 <div id="add-bot-popup-bottom">
                     <p>To finish setting up your server on disdex<span id="add-bot-server-name"><% if(addBotParsed != "hidden") { %> addBotParsed <% } %></span>, add the bot to your discord server and complete a few steps.</p>
                     <div id="add-bot-button-container">
