@@ -151,7 +151,7 @@ app.get("/api/join-server/:id", async (req, res) => {
     let server = await getServerData(req.params.id)
     if(server && server.setUp) {
         res.redirect(server.invite)
-        changeGlobalServerUpdate(server.guildId, "joinClicks", 1)
+        changeGlobalServerUpdate(server.serverId, "joinClicks", 1)
         realUpdateServerData(server.id, {
             $inc: {
                 joinClicks: 1

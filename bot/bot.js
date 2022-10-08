@@ -81,6 +81,7 @@ function changeGlobalServerUpdate(id, name, value) {
     globalServerUpdates[id] = globalServerUpdates[id] || {}
     if(globalServerUpdates[id][name] == undefined) {
         globalServerUpdates[id][name] = value
+        console.log(globalServerUpdates)
     } else {
         globalServerUpdates[id][name] += value
     }
@@ -91,6 +92,7 @@ function setGlobalServerUpdate(id, name, value) {
 }
 
 setInterval(async function() {
+    console.log(globalServerUpdates)
     let serversUpdates = globalServerUpdates // {7fJ9Skk0ms3: }
     for(let serverId in serversUpdates) { // 814864721240260619
         let serverData = await getServerDataByGuildId(serverId)

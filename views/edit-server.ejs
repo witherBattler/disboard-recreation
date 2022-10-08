@@ -12,7 +12,7 @@
             <h2>Edit your server</h2>
             <hr>
             <div id="server-indicator">
-                <img id="server-indicator-icon" src="https://cdn.discordapp.com/icons/<%-serverData.serverId%>/<%-serverData.icon%>">
+                <img id="server-indicator-icon" src=<%- serverData.icon ? "https://cdn.discordapp.com/icons/" + serverData.serverId + "/" + serverData.icon : "images/discord-icon.svg" %>>
                 <p id="server-indicator-name"><%-serverData.guildName%></p>
             </div>
     

@@ -46,24 +46,12 @@ function ajax(url, method, data) {
 
 const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
 
-function constructServerElement(id, icon, name, description, tags, join, addBot, disdexServerId, settings, stats) {
+function constructServerElement(id, name, mode, addBot, icon, description, tags, join, disdexServerId) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
-    // server top
     const serverTopElement = document.createElement("div")
     serverTopElement.className = "server-top"
-    if(disdexServerId) {
-        serverTopElement.addEventListener("click", (event) => {
-            if(join && joinButton.matches(":hover")) {
-                return
-            }
-            if(addBot && addBotButton.matches(":hover")) {
-                return
-            }
-            window.open("/server/" + disdexServerId)
-        })
-    }
 
     const iconElement = document.createElement("img")
     iconElement.draggable = "false"
@@ -80,30 +68,61 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
     serverTopElement.appendChild(serverNameElement)
 
     const buttonsContainer = document.createElement("div")
-
-    let joinButton
-    if(join) {
-        joinButton = document.createElement("button")
-        joinButton.textContent = "Join"
-        joinButton.addEventListener("click", (event) => {
-            window.open(join)
-        })
-        buttonsContainer.appendChild(joinButton)
-    }
-
-
-    let addBotButton
-    if(addBot) {
-        addBotButton = document.createElement("button")
-        addBotButton.textContent = "Add bot"
-        addBotButton.addEventListener("click", (event) => {
-            console.log(addBot)
-            window.location = addBot
-        })
-        buttonsContainer.appendChild(addBotButton)
-    }
-
     serverTopElement.appendChild(buttonsContainer)
+
+    switch(mode) {
+        case "dashboard":
+            let addBotButton
+            if(addBot) {
+                addBotButton = document.createElement("button")
+                addBotButton.textContent = "Add bot"
+                addBotButton.addEventListener("click", (event) => {
+                    window.location = addBot
+                })
+                buttonsContainer.appendChild(addBotButton)
+            }
+            break
+        case "display":
+            
+            serverTopElement.addEventListener("click", (event) => {
+                if(joinButton.matches(":hover") || viewButton.matches(":hover")) {
+                    return
+                }
+                window.open("/api/join-server/" + disdexServerId)
+            })
+            let joinButton
+            joinButton = document.createElement("button")
+            joinButton.textContent = "Join"
+            joinButton.addEventListener("click", (event) => {
+                window.open(join)
+            })
+            buttonsContainer.appendChild(joinButton)
+            break
+    }
+    let viewButton
+    viewButton = document.createElement("button")
+    viewButton.textContent = "View"
+    viewButton.addEventListener("click", (event) => {
+        window.open("/server/" + disdexServerId)
+    })
+    buttonsContainer.appendChild(viewButton)
+
+    
+    // server top
+    
+
+    
+
+    
+
+
+    
+
+
+    
+
+    
+
 
     // server bottom
     const serverBottomElement = document.createElement("div")
@@ -125,34 +144,31 @@ function constructServerElement(id, icon, name, description, tags, join, addBot,
         tagsContainerElement.appendChild(tagElement)
     }
 
-    let settingsContainer = document.createElement("div")
-    settingsContainer.classList.add("settings-container")
-    tagsContainerElement.appendChild(settingsContainer)
+    
+    if(mode == "dashboard") {
+        let settingsContainer = document.createElement("div")
+        settingsContainer.classList.add("settings-container")
+        tagsContainerElement.appendChild(settingsContainer)
 
-    if(stats) {
         statsButton = document.createElement("img")
         statsButton.classList.add("settings-button")
         statsButton.src = "icons/stats.svg"
-
         statsButton.addEventListener("click", (event) => {
-            window.open(stats)
+            window.open("/stats/" + disdexServerId)
         })
 
         settingsContainer.appendChild(statsButton)
-    } 
 
-    if(settings) {
         let settingsButton = document.createElement("img")
         settingsButton.classList.add("settings-button")
         settingsButton.src = "/icons/server-settings.svg"
 
         settingsButton.addEventListener("click", (event) => {
-            window.open(settings)
+            window.open("/edit-server/" + disdexServerId)
         })
 
         settingsContainer.appendChild(settingsButton)
     }
-
     
 
     serverBottomElement.appendChild(descriptionElement)

@@ -217,6 +217,10 @@ a {
     -moz-transition: background-color 0.2s, color 0.2s;
     -ms-transition: background-color 0.2s, color 0.2s;
     -o-transition: background-color 0.2s, color 0.2s;
+    margin-right: 10px;
+}
+.server > .server-top > div > button:last-child {
+    margin-right: 0px;
 }
 .server > .server-top > div > button:hover {
     background-color: white;

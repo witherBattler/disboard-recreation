@@ -72,12 +72,13 @@ function displayServers(servers) {
         const server = servers[i]
         const serverElement = constructServerElement(
             server.serverId,
-            server.icon,
             server.guildName,
+            "display",
+            false,
+            server.icon,
             server.shortDescription,
             server.tags,
-            `/api/join-server/${server.id}`,
-            false,
+            server.invite,
             server.id
         )
         serversContainer.appendChild(serverElement)

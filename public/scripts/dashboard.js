@@ -156,15 +156,14 @@ ajax("/api/owned-servers").then(ownedServers => {
         let ownedServerElement = 
             constructServerElement(
                 ownedServerObject.serverId,
-                ownedServerObject.icon,
                 ownedServerObject.guildName,
+                "dashboard",
+                ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId),
+                ownedServerObject.icon,
                 ownedServerObject.shortDescription,
                 ownedServerObject.tags,
-                false,
-                ownedServerObject.botJoined ? false : generateBotUrl(ownedServerObject.serverId),
-                ownedServerObject.id,
-                `/edit-server/${ownedServerObject.id}`,
-                `/stats/${ownedServerObject.id}`
+                ownedServerObject.invite,
+                ownedServerObject.id
             )
         serversContainer.appendChild(ownedServerElement)
     }
