@@ -114,11 +114,12 @@
 #server-selector-popup-top > img, #add-bot-popup-top > img {
     height: 30px;
     padding-right: 20px;
+    cursor: pointer;
 }
 #server-selector-popup-bottom, #add-bot-popup-bottom {
     box-sizing: border-box;
-    padding-left: 10px;
     margin: 10px;
+    font-family: var(--display-font);
 }
 #choose-server-dropdown-container {
     display: flex;
@@ -156,12 +157,7 @@
     margin-top: 20px;
 }
 
-#add-bot-popup-bottom {
-    padding: 0px;
-    font-family: var(--display-font);
-    font-size: 22px;
-    margin-top: 5px;
-}
+
 .special-button {
     background-color: var(--special-color-1);
     height: 50px;
