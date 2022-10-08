@@ -431,3 +431,6 @@
 .server-bottom > .tags {
     height: 43px;
 }
+#add-bot-popup.hidden {
+    display: none;
+}

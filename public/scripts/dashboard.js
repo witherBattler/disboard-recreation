@@ -124,15 +124,19 @@ function updateNextButton() {
 }
 
 let addBotPopup = document.getElementById("add-bot-popup")
-if(addBotPopup != null) {
+let addBotServerName = document.getElementById("add-bot-server-name")
+if(!addBotPopup.classList.contains("hidden")) {
+    showAddBotPopup()
+}
+function showAddBotPopup() {
     darkOverlay.style.display = "block"
     addBotPopup.style.display = "block"
     setTimeout(function() {
         darkOverlay.style.opacity = 1
         addBotPopup.style.opacity = 1
     })
-
 }
+
 function closeAddBotPopup() {
     darkOverlay.style.opacity = 0
     addBotPopup.style.opacity = 0
@@ -149,6 +153,11 @@ function generateBotUrl(guildId) {
 
 ajax("/api/owned-servers").then(ownedServers => {
     ownedServers = JSON.parse(ownedServers)
+    let serverBotNotJoined = ownedServers.find(server => !server.botJoined)
+    if(serverBotNotJoined) {
+        addBotServerName.textContent = ` (${serverBotNotJoined.guildName})`
+        showAddBotPopup()
+    }
     for(let i = 0; i != ownedServers.length; i++) {
         let ownedServerObject = ownedServers[i]
         console.log(`/edit-server/${ownedServerObject.id}`)

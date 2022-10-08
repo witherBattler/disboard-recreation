@@ -19,40 +19,7 @@
                         </button>
                     </p>
                     <div id="servers">
-                        <!-- <div class="server">
-                            <div class="server-top">
-                                <img src="images/discord-icon.svg">
-                                <h3>CDM-107</h3>
-                            </div>
-                            <div class="server-bottom">
-                                <p>CDM-107 is an amazing group for meeting people from the best group in Collège de Montreal: 107. People from all groups are allowed in.</p>
-                                <div class="tags">
-                                    <div class="tag">
-                                        #CDM
-                                    </div>
-                                    <div class="tag">
-                                        #Montreal
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="server">
-                            <div class="server-top">
-                                <img src="images/discord-icon.svg" draggable="false">
-                                <h3>CDM-107</h3>
-                            </div>
-                            <div class="server-bottom">
-                                <p>CDM-107 is an amazing group for meeting people from the best group in Collège de Montreal: 107. People from all groups are allowed in.</p>
-                                <div class="tags">
-                                    <div class="tag">
-                                        #CDM
-                                    </div>
-                                    <div class="tag">
-                                        #Montreal
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+
                     </div>
                 </div>
             </div>
@@ -82,24 +49,23 @@
                     </div>
                 </div>
             </div>
-            <% if(typeof(addBot) != "undefined") { %>
-                <div id="add-bot-popup">
-                    <div id="add-bot-popup-top">
-                        <h2>Add Disdex bot</h2>
-                        <img src="/icons/close.svg" id="close-button" onclick="closeAddBotPopup()">
-                    </div>
-                    <hr>
-                    <div id="add-bot-popup-bottom">
-                        <p>To finish setting up your server on disdex, add the bot to your discord server and complete a few steps.</p>
-                        <div id="add-bot-button-container">
-                            <a id="add-bot-button" class="special-button" href="<%- generateBotUrl(addBot) %>">
-                                <span>Add bot</span>
-                                <img src="/icons/right.svg">
-                            </a>
-                        </div>
+            <% var addBotParsed = typeof(addBot) == "undefined" ? "hidden" : addBot %>
+            <div id="add-bot-popup"<% if(addBotParsed == "hidden") { %>class="hidden"<% } %>>
+                <div id="add-bot-popup-top">
+                    <h2>Add Disdex bot</h2>
+                    <img src="/icons/close.svg" id="close-button" onclick="closeAddBotPopup()">
+                </div>
+                <hr>
+                <div id="add-bot-popup-bottom">
+                    <p>To finish setting up your server on disdex<span id="add-bot-server-name"><% if(addBotParsed != "hidden") { %> addBotParsed <% } %></span>, add the bot to your discord server and complete a few steps.</p>
+                    <div id="add-bot-button-container">
+                        <a id="add-bot-button" class="special-button" href="<%- generateBotUrl() %>">
+                            <span>Add bot</span>
+                            <img src="/icons/right.svg">
+                        </a>
                     </div>
                 </div>
-            <% } %>
+            </div>
         </div>
         <div id="dashboard-configure-server">
             <div id="dashboard-configure-server-content-container">

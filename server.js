@@ -54,21 +54,18 @@ app.get("/server", async (req, res) => {
     })
 })
 app.get("/dashboard", loggedIn, async (req, res) => {
+    let userData = await getUserData(req.user)
     let toRender = {
-        loggedIn: true
+        loggedIn: true,
+        userData
     }
     if(req.query.addbot) {
         let serverData = await getServerData(req.query.addbot)
         if(serverData) {
             toRender.addBot = serverData.serverId
-        } else {
-            res.redirect("/dashboard")
-            return
         }
     }
 
-    let userData = await getUserData(req.user)
-    toRender.userData = userData
     
     res.render("dashboard", toRender);
 })

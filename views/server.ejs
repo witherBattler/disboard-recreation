@@ -18,15 +18,17 @@
                     <div id="server-category">
                         <%= serverData.category %>
                     </div>
-                    <div id="members-container">
-                        <span id="members-identifier"><%= serverData.members %></span>
-                        <span id="members-label">MEMBERS</span>
-                    </div>
-                    <div id="online-members-container">
-                        <span id="online-members-identifier"><%= serverData.onlineMembers %></span>
-                        <span id="online-members-label">ONLINE</span>
-                    </div>
-                    <div id="boosts-container">
+                    <% if(serverData.botJoined) { %>
+                        <div id="members-container">
+                            <span id="members-identifier"><%= serverData.members %></span>
+                            <span id="members-label">MEMBERS</span>
+                        </div>
+                        <div id="online-members-container">
+                            <span id="online-members-identifier"><%= serverData.onlineMembers %></span>
+                            <span id="online-members-label">ONLINE</span>
+                        </div>
+                    <% } %>
+                    <div id="boosts-container" <% if(!serverData.botJoined) { %> style="margin-top: 8px; margin-bottom: -5px;" <% } %>>
                         <span id="boosts-identifier">0</span>
                         <span id="boosts-label">BOOSTS</span>
                     </div>
@@ -49,7 +51,9 @@
                     <p id="server-description">
                         <%= serverData.description %>
                     </p>
-                    <p id="server-creation-date">Server created <%- convertTimeFromMS(Date.now() - serverData.guildCreatedAt) %> ago...</p>
+                    <% if(serverData.botJoined) { %>
+                        <p id="server-creation-date">Server created <%- convertTimeFromMS(Date.now() - serverData.guildCreatedAt) %> ago...</p>
+                    <% } %>
                 </div>
             </div>
         </div>
