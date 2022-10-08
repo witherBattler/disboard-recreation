@@ -95,6 +95,7 @@ body {
     display: flex;
     margin-top: 10px;
     overflow-x: hidden;
+    min-height: 60px;
 }
 #server-tags > .tag {
     margin-right: 10px;
