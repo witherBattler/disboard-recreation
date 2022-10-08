@@ -102,7 +102,6 @@ app.get("/stats/:id", loggedIn, async (req, res) => {
     } else {
         res.sendStatus(403)
     }
-
 })
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)

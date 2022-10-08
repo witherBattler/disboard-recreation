@@ -8,7 +8,7 @@ body {
 #server-container {
     margin-top: 150px;
     width: 1200px;
-    background-color: #0F1012;
+    background-color: var(--background-3);
     border-radius: 15px;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;

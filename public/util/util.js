@@ -152,9 +152,16 @@ function constructServerElement(id, name, mode, addBot, icon, description, tags,
 
         statsButton = document.createElement("img")
         statsButton.classList.add("settings-button")
+        if(addBot) {
+            statsButton.classList.add("blocked")
+        }
         statsButton.src = "icons/stats.svg"
         statsButton.addEventListener("click", (event) => {
-            window.open("/stats/" + disdexServerId)
+            if(!addBot) {
+                window.open("/stats/" + disdexServerId)
+            } else {
+                showToast("Cannot view stats: the bot hasn't joined this server.")
+            }
         })
 
         settingsContainer.appendChild(statsButton)

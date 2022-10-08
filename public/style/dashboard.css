@@ -1,3 +1,4 @@
+
 #dashboard-content-container, #dashboard-configure-server-content-container {
     flex-grow: 1;
     display: flex;
@@ -430,6 +431,10 @@
     -o-transition: opacity 0.2s;
     margin-left: 20px;
 }
+.settings-button.blocked {
+    filter: grayscale(0.65);
+    -webkit-filter: grayscale(0.65);
+}
 .settings-button:hover {
     opacity: 1;
 }
@@ -439,3 +444,4 @@
 #add-bot-popup.hidden {
     display: none;
 }
+

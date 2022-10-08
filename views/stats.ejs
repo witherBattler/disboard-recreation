@@ -8,163 +8,183 @@
     </head>
     <body>
         <%- include("./partials/navbar") %>
-        <div id="main-content">
-            <h2>Showing statistics for <span class="special"><%- serverData.guildName %></span></h2>
-            <div id="top-charts-container">
-                <div id="page-search-views-chart-container" class="chart-container">
-                    <div class="header">
-                        <div class="header-element default" id="page-search-views-header-element">
-                            <div class="box">
+        <% if(serverData.botJoined) { %>
+            <div id="main-content">
+                <h2>Showing statistics for <span class="special"><%- serverData.guildName %></span></h2>
+                <div id="top-charts-container">
+                    <div id="page-search-views-chart-container" class="chart-container">
+                        <div class="header">
+                            <div class="header-element default" id="page-search-views-header-element">
+                                <div class="box">
 
-                            </div>
-                            <div class="label">
-                                Page search views
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-chart-container">
-                        <canvas id="page-search-views-chart"></canvas>
-                    </div>
-                </div>
-                <div id="join-button-clicks-chart-container" class="chart-container">
-                    <div class="header">
-                        <div class="header-element default" id="join-button-clicks-header-element">
-                            <div class="box">
-
-                            </div>
-                            <div class="label">
-                                Join button clicks
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-chart-container">
-                        <canvas id="join-button-clicks-chart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="totals">
-                <div class="left">
-                    <span class="special" id="page-search-views-total"><%- serverData.pageSearchViews %></span>
-                    searches for your server
-                </div>
-                <div class="right">
-                    <span class="special" id="join-button-clicks-total"><%- serverData.joinClicks %></span>
-                    joins from Disdex
-                </div>
-            </div>
-            <div id="bottom-charts-container">
-                <div id="messages-chart-container" class="chart-container">
-                    <div class="header">
-                        <div class="header-element default" id="daily-messages-header-element">
-                            <div class="box">
-
-                            </div>
-                            <div class="label">
-                                Daily messages
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-chart-container">
-                        <canvas id="messages-chart"></canvas>
-                    </div>
-                </div>
-                <div id="joins-leaves-chart-container" class="chart-container">
-                    <div class="header">
-                        <div class="header-element joins" id="joins-header-element">
-                            <div class="box">
-
-                            </div>
-                            <div class="label">
-                                Joins
-                            </div>
-                        </div>
-                        <div class="header-element leaves" id="leaves-header-element">
-                            <div class="box">
-
-                            </div>
-                            <div class="label">
-                                Leaves
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-chart-container">
-                        <canvas id="joins-leaves-chart"></canvas>
-                    </div>
-                </div>
-                <div id="members-chart-container" class="chart-container">
-                    <div class="header">
-                        <div class="header-element default" id="members-header-element">
-                            <div class="box">
-
-                            </div>
-                            <div class="label">
-                                Members
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-chart-container">
-                        <canvas id="members-chart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div id="bump-invite-container">
-                <div class="bump">
-                    <h3>
-                        Bump settings
-                        <img src="icons/warning.svg" id="bump-warning" class="warning <% if(serverData.bumps.length > 0) { %>hidden<% } %>">
-                    </h3>
-                    <% if(serverData.bumps.length == 0) { %>
-                        <p id="bump-paragraph">Warning: No bump has been executed since the creation of this server. Your server is unlikely to be found in the server list. To bump, press the below button:</p>
-                    <% } else { %>
-                        <p id="bump-paragraph">Total bumps: <span class="special"><%- serverData.bumps.length + 1 %></span><br>Last bump: <span class="special"><%- convertTimeFromMS(Date.now() - serverData.lastBump) %> ago</span></p>
-                    <% } %>
-                    <button id="execute-bump" <% if(Date.now() - serverData.lastBump < 7200000) { %> class="blocked" <% } %>>
-                        <span>Bump</span>
-                        <img src="icons/bump.svg">
-                    </button>
-                </div>
-                <div class="invite">
-                    <h3>
-                        Invite settings
-                        <img src="icons/warning.svg" id="bump-warning" class="warning <% if(serverData.invite) { %>hidden<% } %>">
-                    </h3>
-                    <p id="invite-paragraph">
-                        Invite channel:
-                        <% let inviteChannelObject = channelsData.find(channel => channel.id == serverData.inviteChannel) %>
-                        <img src="icons/channel-types/<%- inviteChannelObject.type %>.svg" id="current-channel-icon">
-                        <span class="special" id="invite-channel-name">
-                            <%- inviteChannelObject.name %>
-                        </span>
-                    </p>
-                    <div id="change-invite-channel-container">
-                        <p>Choose the channel to set the invite link to:</p>
-                        <div id="invite-channel-picker">
-                            <% channelsData.forEach(channel => { %>
-                                <div data-id="<%- channel.id %>" class="element <% if(channel.id == serverData.inviteChannel) { %>checked<% } %>">
-                                    <img src="<%- channel.id == serverData.inviteChannel ? "icons/checkbox2-checked.svg" : "icons/checkbox2.svg" %>" class="check">
-                                    <p class="label">#<%- channel.name %></p>
                                 </div>
-                            <% }) %>
+                                <div class="label">
+                                    Page search views
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-chart-container">
+                            <canvas id="page-search-views-chart"></canvas>
                         </div>
                     </div>
-                    <button id="change-invite-channel">
-                        <span>Change</span>
-                        <img src="icons/edit.svg">
-                    </button>
-                    <button id="confirm-invite-channel" class="hidden">
-                        <span>Confirm</span>
-                        <img src="icons/checkmark-alone.svg">
-                    </button>
+                    <div id="join-button-clicks-chart-container" class="chart-container">
+                        <div class="header">
+                            <div class="header-element default" id="join-button-clicks-header-element">
+                                <div class="box">
+
+                                </div>
+                                <div class="label">
+                                    Join button clicks
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-chart-container">
+                            <canvas id="join-button-clicks-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="totals">
+                    <div class="left">
+                        <span class="special" id="page-search-views-total"><%- serverData.pageSearchViews %></span>
+                        searches for your server
+                    </div>
+                    <div class="right">
+                        <span class="special" id="join-button-clicks-total"><%- serverData.joinClicks %></span>
+                        joins from Disdex
+                    </div>
+                </div>
+                <div id="bottom-charts-container">
+                    <div id="messages-chart-container" class="chart-container">
+                        <div class="header">
+                            <div class="header-element default" id="daily-messages-header-element">
+                                <div class="box">
+
+                                </div>
+                                <div class="label">
+                                    Daily messages
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-chart-container">
+                            <canvas id="messages-chart"></canvas>
+                        </div>
+                    </div>
+                    <div id="joins-leaves-chart-container" class="chart-container">
+                        <div class="header">
+                            <div class="header-element joins" id="joins-header-element">
+                                <div class="box">
+
+                                </div>
+                                <div class="label">
+                                    Joins
+                                </div>
+                            </div>
+                            <div class="header-element leaves" id="leaves-header-element">
+                                <div class="box">
+
+                                </div>
+                                <div class="label">
+                                    Leaves
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-chart-container">
+                            <canvas id="joins-leaves-chart"></canvas>
+                        </div>
+                    </div>
+                    <div id="members-chart-container" class="chart-container">
+                        <div class="header">
+                            <div class="header-element default" id="members-header-element">
+                                <div class="box">
+
+                                </div>
+                                <div class="label">
+                                    Members
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-chart-container">
+                            <canvas id="members-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div id="bump-invite-container">
+                    <div class="bump">
+                        <h3>
+                            Bump settings
+                            <img src="icons/warning.svg" id="bump-warning" class="warning <% if(serverData.bumps.length > 0) { %>hidden<% } %>">
+                        </h3>
+                        <% if(serverData.bumps.length == 0) { %>
+                            <p id="bump-paragraph">Warning: No bump has been executed since the creation of this server. Your server is unlikely to be found in the server list. To bump, press the below button:</p>
+                        <% } else { %>
+                            <p id="bump-paragraph">Total bumps: <span class="special"><%- serverData.bumps.length + 1 %></span><br>Last bump: <span class="special"><%- convertTimeFromMS(Date.now() - serverData.lastBump) %> ago</span></p>
+                        <% } %>
+                        <button id="execute-bump" <% if(Date.now() - serverData.lastBump < 7200000) { %> class="blocked" <% } %>>
+                            <span>Bump</span>
+                            <img src="icons/bump.svg">
+                        </button>
+                    </div>
+                    <div class="invite">
+                        <h3>
+                            Invite settings
+                            <img src="icons/warning.svg" id="bump-warning" class="warning <% if(serverData.invite) { %>hidden<% } %>">
+                        </h3>
+                        <p id="invite-paragraph">
+                            Invite channel:
+                            <% let inviteChannelObject = channelsData.find(channel => channel.id == serverData.inviteChannel) %>
+                            <img src="icons/channel-types/<%- inviteChannelObject.type %>.svg" id="current-channel-icon">
+                            <span class="special" id="invite-channel-name">
+                                <%- inviteChannelObject.name %>
+                            </span>
+                        </p>
+                        <div id="change-invite-channel-container">
+                            <p>Choose the channel to set the invite link to:</p>
+                            <div id="invite-channel-picker">
+                                <% channelsData.forEach(channel => { %>
+                                    <div data-id="<%- channel.id %>" class="element <% if(channel.id == serverData.inviteChannel) { %>checked<% } %>">
+                                        <img src="<%- channel.id == serverData.inviteChannel ? "icons/checkbox2-checked.svg" : "icons/checkbox2.svg" %>" class="check">
+                                        <p class="label">#<%- channel.name %></p>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                        <button id="change-invite-channel">
+                            <span>Change</span>
+                            <img src="icons/edit.svg">
+                        </button>
+                        <button id="confirm-invite-channel" class="hidden">
+                            <span>Confirm</span>
+                            <img src="icons/checkmark-alone.svg">
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                serverData = <%- JSON.stringify(serverData) %>
+            </script>
+            <script src="util/util.js"></script>
+            <script src="scripts/stats.js"></script>
+            <%- include("partials/toast") %>
+        <% } else { %>
+            <div class="bot-join-container">
+                <div class="bot-join-box">
+                    <div class="bot-join-header">
+                        <span>Bot hasn't joined yet</span>
+                        <img src="icons/x-white.svg" onclick="window.location = `/dashboard`">
+                    </div>
+                    <div class="bot-join-content">
+                        <p>
+                            Disdex bot powers the statistics page. It is needed for it to join to see stats like member joins and daily messages. Please add it by pressing the button below.
+                        </p>
+                        <button onclick="window.location = `<%-generateBotUrl(serverData.serverId)%>`">
+                            Add bot
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <% } %>
         <!-- <canvas class="statistic" id="messages-chart"></canvas> -->
     </body>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        serverData = <%- JSON.stringify(serverData) %>
-    </script>
-    <script src="util/util.js"></script>
-    <script src="scripts/stats.js"></script>
-    <%- include("partials/toast") %>
+    
 </html>
