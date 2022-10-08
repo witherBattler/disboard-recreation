@@ -27,8 +27,10 @@ function leaveAllGuilds() {
 }
 async function getChannelsFromGuild(id) {
     await client.guilds.fetch()
-    console.log(id)
     const guild = client.guilds.cache.get(id)
+    if(!guild) {
+        return false
+    }
     let possibleChannels = guild.channels.cache.filter(channel => channel.type != 4 && channel.type != 2)
     let toReturn = possibleChannels.map(channel => {
         return {
@@ -92,7 +94,6 @@ function setGlobalServerUpdate(id, name, value) {
 }
 
 setInterval(async function() {
-    console.log(globalServerUpdates)
     let serversUpdates = globalServerUpdates // {7fJ9Skk0ms3: }
     for(let serverId in serversUpdates) { // 814864721240260619
         let serverData = await getServerDataByGuildId(serverId)

@@ -92,12 +92,17 @@ app.get("/stats/:id", loggedIn, async (req, res) => {
         return
     }
     let channels = await getChannelsFromGuild(server.serverId)
-    res.render("stats", {
-        loggedIn: true,
-        userData: req.user,
-        serverData: server,
-        channelsData: channels
-    })
+    if(channels) {
+        res.render("stats", {
+            loggedIn: true,
+            userData: req.user,
+            serverData: server,
+            channelsData: channels
+        })
+    } else {
+        res.sendStatus(403)
+    }
+
 })
 app.get("/api/owned-guilds", loggedIn, async(req, res) => {
     let guilds = await getGuilds(req.user)
