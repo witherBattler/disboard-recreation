@@ -55,7 +55,7 @@
                     <img src="/icons/x-white.svg" id="close-button" onclick="closeAddBotPopup()">
                 </div>
                 <div id="add-bot-popup-bottom">
-                    <p>To finish setting up your server on disdex<span id="add-bot-server-name"><% if(addBotParsed != "hidden") { %> addBotParsed <% } %></span>, add the bot to your discord server and complete a few steps.</p>
+                    <p>To finish setting up your server on disdex<span id="add-bot-server-name"><% if(addBotParsed != "hidden") { %><% } %></span>, add the bot to your discord server and complete a few steps.</p>
                     <div id="add-bot-button-container">
                         <a id="add-bot-button" class="special-button" href="<%- generateBotUrl() %>">
                             <span>Add bot</span>

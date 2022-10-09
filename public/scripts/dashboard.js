@@ -154,13 +154,12 @@ function generateBotUrl(guildId) {
 ajax("/api/owned-servers").then(ownedServers => {
     ownedServers = JSON.parse(ownedServers)
     let serverBotNotJoined = ownedServers.find(server => !server.botJoined)
-    if(serverBotNotJoined) {
+    if(serverBotNotJoined && addBotPopup.classList.contains("hidden")) {
         addBotServerName.textContent = ` (${serverBotNotJoined.guildName})`
         showAddBotPopup()
     }
     for(let i = 0; i != ownedServers.length; i++) {
         let ownedServerObject = ownedServers[i]
-        console.log(`/edit-server/${ownedServerObject.id}`)
 
         let ownedServerElement = 
             constructServerElement(
