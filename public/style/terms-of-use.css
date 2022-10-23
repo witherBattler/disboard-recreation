@@ -1,0 +1,21 @@
+#content-container {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 180px;
+    box-sizing: border-box;
+}
+h2 {
+    color: var(--special-color-1);
+    font-family: var(--display-font);
+    font-weight: 800;
+    font-size: 70px;
+}
+p {
+    margin-bottom: 30px;
+}
+body {
+    align-items: center;
+    width: 100%;
+    display: flex;
+}

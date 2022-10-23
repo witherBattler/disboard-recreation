@@ -42,7 +42,9 @@ app.use(express.static('public'));
 app.get("/", async (req, res) => {
     let data = { loggedIn: false }
     if(req.user) {
+        console.log(1)
         let userData = await getUserData(req.user)
+        console.log(2)
         data.userData = userData
         data.loggedIn = true
     }
@@ -390,6 +392,16 @@ app.post("/api/bump-server/:id", loggedIn, async (req, res) => {
     res.send(true)
 })
 
+app.get("/terms-of-use", async(req, res) => {
+    let data = {
+        loggedIn: !!req.user
+    }
+    if(data.loggedIn) {
+        data.userData = req.user
+    }
+    res.render("terms-of-use", data)
+})
+
 app.post("/api/change-invite-channel/:id", loggedIn, async (req, res) => {
     let id = req.params.id
     let channelId = req.query.channel;
@@ -433,6 +445,8 @@ function getGuilds(user) {
         console.log(err)
     })
 }
+
+resetAllData()
 
 app.locals = {
     generateBotUrl,
