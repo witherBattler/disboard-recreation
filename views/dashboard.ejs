@@ -3,7 +3,7 @@
     <head>
         <link rel="stylesheet" href="/style/default.css">
         <link rel="stylesheet" href="/style/dashboard.css">
-        <title>Disboard - Dashboard</title>
+        <title>Cordify - Dashboard</title>
     </head>
     <body>
         <%- include("./partials/navbar") %>
@@ -51,11 +51,11 @@
             <% var addBotParsed = typeof(addBot) == "undefined" ? "hidden" : addBot %>
             <div id="add-bot-popup"<% if(addBotParsed == "hidden") { %>class="hidden"<% } %>>
                 <div id="add-bot-popup-top">
-                    <p>Add Disdex bot</p>
+                    <p>Add Cordify bot</p>
                     <img src="/icons/x-white.svg" id="close-button" onclick="closeAddBotPopup()">
                 </div>
                 <div id="add-bot-popup-bottom">
-                    <p>To finish setting up your server on disdex<span id="add-bot-server-name"><% if(addBotParsed != "hidden") { %><% } %></span>, add the bot to your discord server and complete a few steps.</p>
+                    <p>To finish setting up your server on Cordify<span id="add-bot-server-name"><% if(addBotParsed != "hidden") { %><% } %></span>, add the bot to your discord server and complete a few steps.</p>
                     <div id="add-bot-button-container">
                         <a id="add-bot-button" class="special-button" href="<%- generateBotUrl(addBotParsed) %>">
                             <span>Add bot</span>

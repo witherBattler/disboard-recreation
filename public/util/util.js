@@ -46,7 +46,7 @@ function ajax(url, method, data) {
 
 const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
 
-function constructServerElement(id, name, mode, addBot, icon, description, tags, join, disdexServerId) {
+function constructServerElement(id, name, mode, addBot, icon, description, tags, join, cordifyServerId) {
     const serverElement = document.createElement("div")
     serverElement.className = "server"
 
@@ -88,7 +88,7 @@ function constructServerElement(id, name, mode, addBot, icon, description, tags,
                 if(joinButton.matches(":hover") || viewButton.matches(":hover")) {
                     return
                 }
-                window.open("/api/join-server/" + disdexServerId)
+                window.open("/api/join-server/" + cordifyServerId)
             })
             let joinButton
             joinButton = document.createElement("button")
@@ -103,7 +103,7 @@ function constructServerElement(id, name, mode, addBot, icon, description, tags,
     viewButton = document.createElement("button")
     viewButton.textContent = "View"
     viewButton.addEventListener("click", (event) => {
-        window.open("/server/" + disdexServerId)
+        window.open("/server/" + cordifyServerId)
     })
     buttonsContainer.appendChild(viewButton)
 
@@ -158,7 +158,7 @@ function constructServerElement(id, name, mode, addBot, icon, description, tags,
         statsButton.src = "icons/stats.svg"
         statsButton.addEventListener("click", (event) => {
             if(!addBot) {
-                window.open("/stats/" + disdexServerId)
+                window.open("/stats/" + cordifyServerId)
             } else {
                 showToast("Cannot view stats: the bot hasn't joined this server.")
             }
@@ -171,7 +171,7 @@ function constructServerElement(id, name, mode, addBot, icon, description, tags,
         settingsButton.src = "/icons/server-settings.svg"
 
         settingsButton.addEventListener("click", (event) => {
-            window.open("/edit-server/" + disdexServerId)
+            window.open("/edit-server/" + cordifyServerId)
         })
 
         settingsContainer.appendChild(settingsButton)
@@ -340,7 +340,7 @@ function constructReviewElement(userId, icon, name, starsCount, createdAt, text,
         })
     } else {
         let func = function() {
-            showNotLoggedInPopup("You need to be logged in to vote on reviews on disdex. Why aren't you?!")
+            showNotLoggedInPopup("You need to be logged in to vote on reviews on Cordify. Why aren't you?!")
         }
         reviewUpvote.addEventListener("click", func)
         reviewDownvote.addEventListener("click", func)

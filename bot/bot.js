@@ -150,7 +150,7 @@ const inviteCommand = new SlashCommandBuilder()
 
 const bumpCommand = new SlashCommandBuilder()
     .setName("bump")
-    .setDescription("Bump the server to the top of the list on Disdex")
+    .setDescription("Bump the server to the top of the list on Cordify")
 
 const commands = [
     inviteCommand.toJSON(),
@@ -202,10 +202,10 @@ client.on("guildCreate", async guild => {
         if(channel) {
             const embed = new EmbedBuilder()
                 .setTitle("Server joined!")
-                .setDescription(`Hello! I am a bot that syncs your server with Disdex (https://disdex.gg/) Use /invite to set the invite link for the server. Use /bump to bump the server.`)
+                .setDescription(`Hello! I am a bot that syncs your server with Cordify (https://cordify.gg/) Use /invite to set the invite link for the server. Use /bump to bump the server.`)
                 .setColor(process.env.THEME_COLOR)
 
-            channel.send(`Welcome to Disdex! use /invite to set the invite link and finish setting up your server on Disdex!`)
+            channel.send(`Welcome to Cordify! use /invite to set the invite link and finish setting up your server on Cordify!`)
         }
     }
 })
@@ -223,7 +223,7 @@ client.on("interactionCreate", async(interaction) => {
             if(!data) {
                 const embed = new EmbedBuilder()
                     .setTitle("Error")
-                    .setDescription("This server is not registered on the Disdex website! Add this server to the website: https://disdex.gg/")
+                    .setDescription("This server is not registered on the Cordify website! Add this server to the website: https://cordify.gg/")
                     .setColor("#ff0000")
                     .setTimestamp()
                 interaction.reply({
@@ -242,7 +242,7 @@ client.on("interactionCreate", async(interaction) => {
             // reply with embed
             const embed = new EmbedBuilder()
                 .setTitle("Invite link set")
-                .setDescription(`Set your invite link to ${link} ! The server is now published on Disdex. Use /bump to bump the server to the top of the servers list.`)
+                .setDescription(`Set your invite link to ${link} ! The server is now published on Cordify. Use /bump to bump the server to the top of the servers list.`)
                 .setColor(process.env.THEME_COLOR)
                 .setTimestamp()
             interaction.reply({
@@ -263,7 +263,7 @@ client.on("interactionCreate", async(interaction) => {
             if(!data) {
                 const embed = new EmbedBuilder()
                     .setTitle("Error")
-                    .setDescription("This server is not registered on the Disdex website! Add this server to the website: https://disdex.gg/")
+                    .setDescription("This server is not registered on the Cordify website! Add this server to the website: https://cordify.gg/")
                     .setColor("#ff0000")
                     .setTimestamp()
                 interaction.reply({
@@ -307,7 +307,7 @@ client.on("interactionCreate", async(interaction) => {
             })
             const successEmbed = new EmbedBuilder()
                 .setTitle("Server bumped")
-                .setDescription("Successfully bumped your server to the top of the disdex list! Please wait 120 minutes before bumping again.")
+                .setDescription("Successfully bumped your server to the top of the Cordify list! Please wait 120 minutes before bumping again.")
                 .setColor(process.env.THEME_COLOR)
                 .setTimestamp()
             interaction.reply({

@@ -15,7 +15,7 @@ async function getMembers(guild) {
 }
 
 function generateBotUrl(guildId) {
-    return `https://discord.com/api/oauth2/authorize?client_id=1008778841109573764&permissions=549755816960&redirect_uri=https://disdex.herokuapp.com/bot-instructions&response_type=code&scope=identify%20bot&guild_id=${guildId}&disable_guild_select=true`
+    return `https://discord.com/api/oauth2/authorize?client_id=1008778841109573764&permissions=549755816960&redirect_uri=https://cordify.gg/bot-instructions&response_type=code&scope=identify%20bot&guild_id=${guildId}&disable_guild_select=true`
 }
 
 

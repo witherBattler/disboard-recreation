@@ -3,6 +3,7 @@
         "disboard",
         "disdex",
         "downvotes",
-        "upvotes"
+        "upvotes",
+        "cordify"
     ]
 }
