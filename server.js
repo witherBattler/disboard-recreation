@@ -12,8 +12,6 @@ const { loggedIn, categoryIsValid, generateId, mergeObjects, convertTimeFromMS, 
 const { getUser, updateUser, getServerData, postServer, getListingServers, getUsers, resetAllData, getServerDataByGuildId, getUnregisteredGuilds, getServersData, postReview, getReviewsData, reviewAddUpvote, reviewRemoveUpvote, reviewAddDownvote, reviewRemoveDownvote, addServerJoin, getServerDataWithAuthor, updateServerData, realUpdateServerData } = require("./database")
 const { leaveAllGuilds, generateBotUrl, changeGlobalServerUpdate, getChannelsFromGuild, createInviteForChannel } = require("./bot/bot.js")
 
-console.log(serverPostingRateLimitMiddleware)
-
 let ipsSearches = {}
 setInterval(function() {
     ipsSearches = {}
