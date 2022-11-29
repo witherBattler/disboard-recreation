@@ -132,10 +132,12 @@
                         <p id="invite-paragraph">
                             Invite channel:
                             <% let inviteChannelObject = channelsData.find(channel => channel.id == serverData.inviteChannel) %>
-                            <img src="icons/channel-types/<%- inviteChannelObject.type %>.svg" id="current-channel-icon">
-                            <span class="special" id="invite-channel-name">
-                                <%- inviteChannelObject.name %>
-                            </span>
+                            <% if(inviteChannelObject) { %>
+                                <img src="icons/channel-types/<%- inviteChannelObject.type %>.svg" id="current-channel-icon">
+                                <span class="special" id="invite-channel-name">
+                                    <%- inviteChannelObject.name %>
+                                </span>
+                            <% } %>
                         </p>
                         <div id="change-invite-channel-container">
                             <p>Choose the channel to set the invite link to:</p>

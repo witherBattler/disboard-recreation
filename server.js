@@ -92,6 +92,7 @@ app.get("/stats/:id", loggedIn, async (req, res) => {
         return
     }
     let channels = await getChannelsFromGuild(server.serverId)
+    console.log(channels)
     if(channels) {
         res.render("stats", {
             loggedIn: true,
@@ -444,7 +445,6 @@ function getGuilds(user) {
     })
 }
 
-resetAllData()
 
 app.locals = {
     generateBotUrl,

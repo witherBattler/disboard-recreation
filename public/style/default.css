@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 
 /* :root {
@@ -22,23 +22,23 @@
     --text-2: white;
 } */
 :root {
-    --background: #000000;
-    --display-font: 'Poppins', sans-serif;
-    --main-font: 'Roboto', sans-serif;
+    --background: #24242E;
+    --display-font: 'montserrat', sans-serif;
+    --main-font: 'montserrat', sans-serif;
     --text-color: #ffffff;
-    --navbar-background: #303030;
+    --navbar-background: transparent;
     --navbar-color: #ffffff;
     --special-color-1: #ff00ee;
     --special-color-2: #892682;
     --special-button-decoration-color: #000000;
-    --intro-background: black;
+    --intro-background: url(./images/background.png);
     --intro-text-color: white;
     --navbar-background-2: #222;
     --divider-color: white;
     --ribbon-top-background: #ff00ee;
     --ribbon-bottom-text-color: white;
-    --search-bar-background: #1B1B1B;
-    --search-bar-text-color: white;
+    --search-bar-background: #F0F0F0;
+    --search-bar-text-color: black;
     --background-2: #1B1B1B;
     --text-2: white;
     --background-3: #0F1012;
@@ -71,7 +71,7 @@ a {
     color: var(--navbar-color);
     display: flex;
     align-items: center;
-    position: fixed;
+    position: absolute;
     top: 0px;
     left: 0px;
 }
@@ -79,16 +79,26 @@ a {
     font-family: var(--display-font);
     font-size: 40px;
     margin-left: 20px;
-    font-weight: 600;
+    font-weight: 800;
     color: var(--navbar-color);
+    border-right: 5px white solid;
+    padding-right: 20px;
+}
+#logo > span {
+    font-size: 40px;
+    color: var(--special-color-1);
+}
+#navbar-buttons {
+    margin-left: 20px;
 }
 #navbar-right-align {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     flex-grow: 1;
-    padding-right: 20px;
+    padding-right: 10px;
     box-sizing: border-box;
+    height: 100%;
 }
 #navbar-right-align > .special-button {
     background-color: var(--special-color-1);
@@ -98,25 +108,23 @@ a {
     align-items: center;
     justify-content: center;
     width: fit-content;
-    border-radius: 1000px;
-    -webkit-border-radius: 1000px;
-    -moz-border-radius: 1000px;
-    -ms-border-radius: 1000px;
-    -o-border-radius: 1000px;
     cursor: pointer;
     user-select: none;
     font-weight: 600;
     color: var(--navbar-color);
+    border-radius: 5px;
+    padding-inline: 30px;
 }
 #navbar-right-align > .special-button > span {
-    margin-left: 15px;
-    margin-right: -10px;
     font-family: var(--display-font);
+    filter: drop-shadow(0px 2px var(--special-color-2));
 }
 #navbar-right-align > .special-button > img {
-    height: 100%;
-    margin-right: -3px
+    height: 45%;
+    margin-left: 10px;
+    filter: drop-shadow(0px 2px var(--special-color-2));
 }
+
 .normal-button {
     margin-right: 40px;
     user-select: none;
@@ -130,6 +138,9 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+#profile > #username {
+    margin-right: 20px;
 }
 #profile > img {
     height: 45px;
@@ -285,4 +296,19 @@ a {
     float: right;
     margin-left: 5px;
     width: 40%;
+}
+
+#language-switch-button {
+    height: 80%;
+    background: transparent;
+    border: 0px;
+}
+.stick {
+    height: 40px;
+    background-color: white;
+    width: 5px;
+    margin-inline: 20px;
+}
+#language-switch-button > #language-switch-icon {
+    height: 100%;
 }

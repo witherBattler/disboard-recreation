@@ -36,7 +36,6 @@ for(let i = 0; i != categoriesSearchButtons.length; i++) {
         if(lastCategoryButton != null) {
             lastCategoryButton.style.color = null
             lastCategoryButton.style.backgroundColor = null
-            lastCategoryButton.style.transform = null
         }
         if(currentSearchTerms.category == buttonValue) {
             currentSearchTerms.category = null
@@ -46,7 +45,6 @@ for(let i = 0; i != categoriesSearchButtons.length; i++) {
             lastCategoryButton = button
             lastCategoryButton.style.color = "var(--special-color-1)"
             lastCategoryButton.style.backgroundColor = "white"
-            lastCategoryButton.style.transform = "scale(1.1)"
         }
         serversContainer.innerHTML = ""
         await reloadSearch(currentSearchTerms)

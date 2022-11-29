@@ -1,24 +1,25 @@
 <div id="navbar">
     <a href="/">
-        <h1 id="logo">Cordify</h1>
+        <h1 id="logo">COR<span class="special">DIFY</span></h1>
     </a>
-    <div id="navbar-right-align">
-        <a class="normal-button" id="ads-button">Ads</a>
+    <div id="navbar-buttons">
         <a class="normal-button" id="search-button">Search</a>
+        <a class="normal-button" id="reviews-button">Reviews</a>
+        <a class="normal-button" id="dashboard-button" href="/dashboard">Dashboard</a>
+    </div>
+    <div id="navbar-right-align">
+        
         <% if(!loggedIn) { %>
         <a class="special-button" id="login-button" href="/auth">
-            <span>Login</span>
-            <img src="/icons/right.svg">
+            <span>LOGIN</span>
+            <img src="/icons/discord-logo.png">
         </a>
         <% } else { %>
-            <a class="normal-button" id="dashboard-button" href="/dashboard">Dashboard</a>
             <div id="profile">
-                <img
-                    src="<%- `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}` %>"
-                    class="image"
-                    ondragstart="return false"
-                >
+                <p id="username"><%- userData.username %></p>
+                <img ondragstart="return false" src="<%- `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}` %>" id="profile-icon">
             </div>
         <% } %>
+        
     </div>
 </div>
