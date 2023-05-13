@@ -106,7 +106,7 @@ submitButton.addEventListener("click", async (event) => {
         unlisted: unlistedCheckbox.checked
     }
     let postId = await ajax("/api/post-server", "POST", JSON.stringify(data))
-    window.location = "/dashboard?addbot=" + postId
+    // window.location = "/dashboard?addbot=" + postId
 })
 
 function canGoToNextPage() {
@@ -154,11 +154,13 @@ function generateBotUrl(guildId) {
 
 ajax("/api/owned-servers").then(ownedServers => {
     ownedServers = JSON.parse(ownedServers)
+    console.log(ownedServers)
     let serverBotNotJoined = ownedServers.find(server => !server.botJoined)
+    console.log(serverBotNotJoined)
     if(serverBotNotJoined && addBotPopup.classList.contains("hidden")) {
         addBotServerName.textContent = ` (${serverBotNotJoined.guildName})`
         showAddBotPopup()
-        addBotButton.href = generateBotUrl(serverBotNotJoined.href)
+        addBotButton.href = generateBotUrl(serverBotNotJoined.serverId)
     }
     for(let i = 0; i != ownedServers.length; i++) {
         let ownedServerObject = ownedServers[i]

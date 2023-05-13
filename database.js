@@ -28,9 +28,10 @@ async function createUser(discordID, accessToken, refreshToken, avatar, username
 }
 
 async function postServer(userId, fullData) {
-    servers.insertOne(fullData)
+    await servers.insertOne(fullData)
+    console.log("doing")
     await users.updateOne({ id: userId }, { $push: { servers: fullData.id } })
-
+    console.log("done")
 }
 
 async function updateUser(id, data) {

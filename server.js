@@ -117,6 +117,7 @@ app.get("/api/owned-guilds", loggedIn, async(req, res) => {
 })
 app.get("/api/owned-servers", loggedIn, async(req, res) => {
     let user = await getUser(req.user.id)
+    console.log(user)
     let serverIds = user.servers
     let serversData = await getServersData(serverIds)
     res.json(serversData)
@@ -164,16 +165,25 @@ app.get("/api/join-server/:id", async (req, res) => {
     }
 })
 app.post("/api/post-server", loggedIn, async(req, res) => {
+    console.log(req.body.serverId)
+    console.log(req.body.mainLanguage)
+    console.log(req.body.category)
+    console.log(req.body.tags)
+    console.log(req.body.description)
+    console.log(req.body.nsfw)
+    console.log(req.body.unlisted)
+    console.log(req.body.shortDescription)
     if((
         req.body.serverId != undefined &&
         req.body.mainLanguage != undefined &&
         req.body.category != undefined &&
         req.body.tags != undefined &&
         req.body.description != undefined &&
-        req.body.nsfw != undefined && 
-        req.body.unlisted != undefined &&
-        req.body.shortDescription
+        req.body.nsfw !== undefined && 
+        req.body.unlisted !== undefined &&
+        req.body.shortDescription !== undefined
     ) == false) {
+        console.log("400 error")
         res.sendStatus(400)
         return
     }
@@ -181,27 +191,32 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
     // Check if server exists
     let guilds = await getGuilds(req.user)
     if(guilds.message == "You are being rate limited.") {
+        console.log("getting rate limited")
         res.sendStatus(429)
         return
     }
     let server = guilds.find(guild => guild.id == req.body.serverId)
     if(server == undefined) {
+        console.log("server inexistant")
         res.sendStatus(400)
         return
     }
     // Check if user is owner of server
     if(server.owner == false) {
+        console.log("not owner")
         res.sendStatus(400)
         return
     }
     // Check if server is already in database
     let serverData = await getServerData(req.body.serverId)
     if(serverData != undefined) {
+        console.log("already in database (shouldn't happen)")
         res.sendStatus(400)
         return
     }
     // Check if category is valid
     if(categoryIsValid(req.body.category) == false) {
+        console.log("category is invalid")
         res.sendStatus(400)
         return
     }
@@ -244,7 +259,9 @@ app.post("/api/post-server", loggedIn, async(req, res) => {
         pageSearchViewsDays: [],
         bumps: []
     }
+    console.log("attempting to post server")
     await postServer(req.user.id, post)
+    console.log(id)
     res.send(id)
 })
 app.post("/api/post-review", loggedIn, serverPostingRateLimitMiddleware, async (req, res) => {
