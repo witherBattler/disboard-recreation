@@ -320,15 +320,15 @@ function getUserData(user) {
                 authorization: `Bearer ${accessToken}`
             }
         }).then(async(res) => {
-            if (res.status === 401) {
+            /* if (res.status === 401) {
                 await refreshAccessToken(user)
                 accessToken = user.accessToken
                 let data = await getUserData(user)
                 resolve(data)
-            } else {
+            } else { */
                 let json = await res.json()
                 resolve(json)
-            }
+            // }
         })
     })
 }
